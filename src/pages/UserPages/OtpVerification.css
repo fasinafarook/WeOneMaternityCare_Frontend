@@ -1,0 +1,41 @@
+.otp_div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa;
+  }
+  
+  .otp_verification_div {
+    background-color: #343a40;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+  }
+  
+  .otp_verification_div h3 {
+    color: #ffffff;
+    margin-bottom: 20px;
+  }
+  
+  .otp_verification_div input {
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  .otp_verification_div button {
+    background-color: #dc3545;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .otp_verification_div button:hover {
+    background-color: #c82333;
+  }
+  

@@ -1,0 +1,42 @@
+body, html {
+    display: block !important;
+  }
+  
+.bg-image {
+    background-image: url('https://images.pexels.com/photos/7282632/pexels-photo-7282632.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+    height: 100vh;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.dropdown ::after {
+    display: none !important;
+}
+
+h2 {
+    color: rgb(39, 103, 141);
+}
+
+.home-heading {
+    margin-top: 20vh;
+}
+
+.login-link {
+    text-decoration: none;
+}
+
+.btn-get-start {
+    background-color: rgb(18, 14, 14, 0.566);
+}
+
+.service_description {
+    text-align: justify;
+}
+
+.review_container {
+    background-color: rgb(241, 240, 240);
+
+}
+
