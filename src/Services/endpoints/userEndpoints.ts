@@ -10,6 +10,7 @@ const userEndpoint = {
     editProfile: "/user/edit-profile",
     editPassword: "/user/edit-password",
     serviceProviders:"/user/service-providers",
+    serviceCategorys:"user/categories",
     getServiceProviderDetails: '/user/serviceProviderDetails',
 
     getInterviewerSlotDetails: "/user/get-service-providers-slots-details",
@@ -22,9 +23,23 @@ const userEndpoint = {
     getBlogs:"/user/blogs",
     cancelBooking:"/payment/cancelBooking",
 
-    getPaymentDashboardDetails:"/user/wallet"
+    getPaymentDashboardDetails:"/user/wallet",
 
 
+
+    // getAllPremiumCandidates: "/user/get-all-premium-users",
+
+    // createGroup: "/chat/group",
+  
+    // getAllChats: "/chat",
+
+    // getAllMessages: "/chat/messages",
+
+    // sendMessage: "/chat/send-message",
+
+
+    submitComplaint: '/user/complaints',
+    getComplaints: '/user/complaints', // As
 
     
 };

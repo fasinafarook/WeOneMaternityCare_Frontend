@@ -1,12 +1,12 @@
 import { useState ,useEffect} from 'react';
-import {  Button } from 'react-bootstrap';
+// import {  Button } from 'react-bootstrap';
 import { Row, Col } from 'react-bootstrap';
 import Footer from '../../components/common_pages/Footer';
 import providerhero from "../../../public/images/img2.jpeg";
-import { FaBars } from 'react-icons/fa'; // Import the FaUserCircle icon
+// import { FaBars } from 'react-icons/fa'; // Import the FaUserCircle icon
 import AppNavbar from '../../components/common_pages/ProviderHeader';
 import { getProfileDetails } from '../../api/serviceProviderAPI';
-import Sidebar from '../../components/common_pages/ProviderSidebars';
+// import Sidebar from '../../components/common_pages/ProviderSidebars';
 
 interface ProfileData {
   name: string;
@@ -14,11 +14,11 @@ interface ProfileData {
 
 
 const ProviderPage = () => {
-  const [show, setShow] = useState(false);
+  // const [show, setShow] = useState(false);
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  // const handleClose = () => setShow(false);
+  // const handleShow = () => setShow(true);
 
   useEffect(() => {
     // Fetch user data from backend
@@ -39,7 +39,7 @@ const ProviderPage = () => {
     <AppNavbar/>
       <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         {/* Toggle Button */}
-        <Button 
+        {/* <Button 
           variant="primary" 
           onClick={handleShow} 
           style={{ 
@@ -50,10 +50,10 @@ const ProviderPage = () => {
           }}
         >
           <FaBars /> Menu
-        </Button>
+        </Button> */}
 
         {/* Sidebar */}
-        <Sidebar show={show} handleClose={handleClose} />
+        {/* <Sidebar show={show} handleClose={handleClose} /> */}
 
         {/* Main Content */}
         <div style={{ flex: '1', padding: '2rem' }}>

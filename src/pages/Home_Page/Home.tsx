@@ -25,7 +25,7 @@ const Home: React.FC<HomeProps> = () => {
           <Link to="/">
             <img
               src={logo}
-              style={{ height: "50px", width: "50px" }}
+              style={{ height: "100px", width: "100px" }}
               alt="banner"
             />
           </Link>
@@ -45,7 +45,7 @@ const Home: React.FC<HomeProps> = () => {
               id="dropdown-basic"
             >
               <h1 className=" text-secondary">
-              <FontAwesomeIcon icon={faCircleUser} />
+              <FontAwesomeIcon icon={faCircleUser}   style={{ height: "40px", width: "50px" }}/>
               </h1>
             </Dropdown.Toggle>
             <Dropdown.Menu>

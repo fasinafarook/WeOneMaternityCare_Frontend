@@ -206,7 +206,13 @@ import ListWebinars from './pages/AdminPages/Webinars';
 import WebinarsList from './pages/UserPages/Webinars';
 import BlogList from './pages/UserPages/Blogs';
 import Wallet from './pages/UserPages/Wallet';
+import UserVideoCall from './pages/UserPages/videoCall';
+import ProviderVideoCall from './pages/ServiceProviderPages/ProviderVideo';
+import EditSlot from './pages/ServiceProviderPages/EditSlot';
 
+import FileComplaint from './pages/UserPages/Complaint';
+import ComplaintsList from './pages/UserPages/AllComplaints';
+import ComplaintsPage from './pages/AdminPages/Complaint';
 // Import ProtectedRoute HOC
 import ProtectedRoute, { AdminProtectedRoute, ServiceProviderProtectedRoute } from './components/PrivetProtected';
 
@@ -226,7 +232,7 @@ const App: React.FC = () => {
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route path="/webinars" element={<WebinarsList />} />
                 <Route path="/blogs" element={<BlogList />} />
-
+           
                 {/* Protected Routes - User */}
                 <Route element={<ProtectedRoute />}>
                     <Route path="/user/home" element={<ClientDashboard />} />
@@ -238,7 +244,10 @@ const App: React.FC = () => {
                     <Route path="/user/payment-failed" element={<PaymentFailed />} />
                     <Route path="/user/get-scheduled-Bookings" element={<OutsourcedBookings />} />
                     <Route path="/user/wallet" element={<Wallet />} />
-
+                    
+                    <Route path="/user/video-call/:roomId/:userId" element={<UserVideoCall></UserVideoCall>} />
+                    <Route path="/user/new-complaint"  element={<FileComplaint/>} />
+                    <Route path="/user/complaints" element={<ComplaintsList/>} />
 
 
                 </Route>
@@ -251,6 +260,10 @@ const App: React.FC = () => {
                     <Route path="/serviceProvider/add-slot" element={<AddSlot />} />
                     <Route path="/serviceProvider/get-scheduled-bookings" element={<ScheduledBookings />} />
                     <Route path="/serviceProvider/getPaymentDashboardDetails" element={<PaymentsDashboard />} />
+                    <Route path="/serviceProvider/edit-slot/:slotId" element={<EditSlot />} />
+
+                    <Route path="/video-call/:roomId/:serviceProviderId" element={<ProviderVideoCall></ProviderVideoCall>} />
+
                 </Route>
 
                 {/* Protected Routes - Admin */}
@@ -265,7 +278,7 @@ const App: React.FC = () => {
                     <Route path="/admin/add-blogs" element={<AddBlog />} />
                     <Route path="/admin/add-webinars" element={<AddWebinar />} />
                     <Route path="/admin/webinars" element={<ListWebinars />} />
-
+                    <Route path="/admin/complaints"  element={<ComplaintsPage/>} />
 
                 </Route>
             </Routes>

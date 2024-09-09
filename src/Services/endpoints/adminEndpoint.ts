@@ -1,3 +1,4 @@
+
 const adminEndpoint = {
     adminLogin: '/admin/login',
     getDashboardDetails: '/admin/dashboard',
@@ -19,8 +20,9 @@ const adminEndpoint = {
     unlistWebinar: '/admin/webinars/unlist', // PUT request to unlist a 
     toggleWebinarListing:"/admin/webinars/toggle-listing",
     updateBlogStatus: '/admin/blog', // or whatever your endpoint is
-
-
+    getAllComplaints:'/admin/complaints',
+    respondToComplaint:'/admin/respond-to-complaint'
+    
 }
 
 export default adminEndpoint

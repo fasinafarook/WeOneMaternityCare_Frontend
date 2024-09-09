@@ -90,9 +90,9 @@ export const userServices = [
       path: "/admin/categorys-list",
     },
     
-    // {
-    //   service: "Complaint Box",
-    //   path: "/admin/complaint-box",
-    // },
+    {
+      service: "Complaint Box",
+      path: "/admin/complaints",
+    },
   ];
   

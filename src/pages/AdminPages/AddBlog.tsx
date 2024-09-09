@@ -11,8 +11,8 @@ interface BlogData {
   image: File[]; // Use FileList type to handle file input
   content: string;
 }
-
 const AddBlog = () => {
+  
   const navigate = useNavigate();
   const {
     register,

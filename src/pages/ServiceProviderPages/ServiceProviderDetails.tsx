@@ -262,9 +262,9 @@
 
 
 
-
+import {useState,useEffect} from "react";
 import toast from "react-hot-toast";
-import { verifyDetails } from "../../api/serviceProviderAPI";
+import { verifyDetails,fetchCategories } from "../../api/serviceProviderAPI";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../../components/common_pages/Footer";
@@ -274,7 +274,7 @@ interface IFormInput {
     name: string;
     email: string;
     mobile: number;
-    service: number;
+    service: string;
     specialization: string;
     qualification: string;
     expYear: number;
@@ -286,23 +286,30 @@ interface IFormInput {
   
   const ServiceProviderDetails = () => {
     // const [categories, setCategories] = useState<string[]>([]);
-  
+    const [categories, setCategories] = useState<string[]>([]);
+
     const navigate = useNavigate();
     const {
       register,
       handleSubmit,
       formState: { errors },
     } = useForm<IFormInput>();
-  
-  //   useEffect(() => {
-  //     const loadCategories = async () => {
-  //         const categoriesData = await fetchCategories();
-  //         console.log('catgry:',categoriesData);
+    useEffect(() => {
+      const loadCategories = async () => {
+        try {
+          const categoriesData = await fetchCategories();
+          console.log('categoriesData', categoriesData);
           
-  //         setCategories(categoriesData.map((category: { categoryName: string }) => category.categoryName));
-  //     };
-  //     loadCategories();
-  // }, []);
+          // Check the structure of the first item in the array
+          setCategories(categoriesData);
+
+        } catch (error) {
+          toast.error("Failed to load categories");
+        }
+      };
+      loadCategories();
+    }, []);
+  
   
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
       const response = await verifyDetails(data);
@@ -370,23 +377,29 @@ interface IFormInput {
                 />
                 {errors.mobile && <p className="mt-2 text-sm text-red-600">This field is required and should be a number</p>}
               </div>
+             
+
               <div>
-                <label htmlFor="service" className="block text-sm font-medium text-gray-700">Service</label>
-                <select
-                  id="service"
-                  {...register("service", { required: true })}
-                  className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                >
-                  <option value="">Select a service</option>
-                  <option value="Doctor">Doctor</option>
-                  <option value="Nurse">Nurse</option>
-                  <option value="preDeliveryCare">Pre-Delivery Care</option>
-                  <option value="PostDeliveryCare">Post-Delivery Care</option>
-                  <option value="HomeTaker">Home Taker</option>
-                  <option value="YogaTherapy">Yoga Therapy</option>
-                </select>
-                {errors.service && <p className="mt-2 text-sm text-red-600">This field is required</p>}
-              </div>
+  <label htmlFor="service" className="block text-sm font-medium text-gray-700">Service</label>
+  <select
+    id="service"
+    {...register("service", { required: true })}
+    className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+  >
+    <option value="">Select a service</option>
+    {categories.length > 0 ? (
+      categories.map((category, index) => (
+        <option key={index} value={category}>
+          {category}
+        </option>
+      ))
+    ) : (
+      <option value="">No services available</option>
+    )}
+  </select>
+  {errors.service && <p className="mt-2 text-sm text-red-600">This field is required</p>}
+</div>
+
               <div>
                 <label htmlFor="specialization" className="block text-sm font-medium text-gray-700">Specialization</label>
                 <input

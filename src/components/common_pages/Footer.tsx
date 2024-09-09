@@ -1,31 +1,33 @@
 import { Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInstagram, faFacebookF, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faInstagram,
+  faFacebookF,
+  faWhatsapp,
+} from "@fortawesome/free-brands-svg-icons";
+import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
 function Footer() {
   const footerStyle = {
-    backgroundColor: 'rgb(26, 87, 109)',
-    color: 'white',
-    
+    background: "linear-gradient(to right, #574B60, #D7BCC8)",
+    color: "white",
   };
 
   const linkStyle = {
-    textDecoration: 'none',
-    color: 'white',
-    
+    textDecoration: "none",
+    color: "white",
   };
 
   const iconStyle = {
-    marginRight: '1rem',
-    fontSize: '2rem',
+    marginRight: "1rem",
+    fontSize: "2rem",
   };
 
   return (
     <>
-      <div style={footerStyle} >
-        <Container >
+      <div style={footerStyle}>
+        <Container>
           <Row>
             <Col md={4} className="mt-5 mb-5">
               <h3 className="head text-center">Maternal Care</h3>

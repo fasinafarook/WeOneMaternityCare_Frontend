@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import UserNavbar from "../../components/common_pages/UserHeader";
 import { getScheduledIbookings, cancelBooking } from "../../api/userAPI";
 import { MdOutlineCurrencyRupee } from "react-icons/md";
-import { useSearchParams } from "react-router-dom";
+import { Button, Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react";
+
+import { useNavigate, useSearchParams } from "react-router-dom";
+// import { FaRegClock } from "react-icons/fa";
 import Pagination from "../../components/common_pages/Pagination";
 import TableShimmer from "../../components/common_pages/Table";
 import Footer from "../../components/common_pages/Footer";
@@ -20,11 +23,13 @@ export interface IScheduledBooking {
   serviceProviderId: string;
   userId: string;
   status: string;
+  roomId: string;
 }
 
 const OutsourcedBookings = () => {
   const [scheduledBookings, setScheduledBookings] = useState<IScheduledBooking[]>([]);
   const [loading, setLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [totalPages, setTotalPages] = useState(1);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -34,11 +39,28 @@ const OutsourcedBookings = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const currentPage = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "5");
+  const navigate = useNavigate();
+
+  const checkAndUpdateStatus = (booking: IScheduledBooking) => {
+    const currentTime = new Date();
+    const bookingTime = new Date(booking.fromTime);
+
+    if (bookingTime < currentTime && booking.status === "Scheduled") {
+      booking.status = "Expired";
+    }
+
+    return booking;
+  };
 
   const fetchScheduledBookings = async (page: number, limit: number) => {
     setLoading(true);
     const response = await getScheduledIbookings(page, limit);
-    setScheduledBookings(response.data);
+
+    const updatedBookings = response.data.map((booking: IScheduledBooking) =>
+      checkAndUpdateStatus(booking)
+    );
+
+    setScheduledBookings(updatedBookings);
     setTotalPages(Math.ceil(response.total / limit));
     setLoading(false);
   };
@@ -53,12 +75,45 @@ const OutsourcedBookings = () => {
       return;
     }
 
-    if (selectedBooking) {
-      const result = await cancelBooking(selectedBooking._id, cancellationReason);
-      console.log('Booking cancelled:', result);
-      setShowReasonModal(false);
-      fetchScheduledBookings(currentPage, limit); // Refresh the bookings list
+    if (cancellationReason.length < 15) {
+      setErrorMessage("Cancellation reason must be at least 15 letters.");
+      return;
     }
+
+
+    if (selectedBooking) {
+      try {
+        await cancelBooking(selectedBooking._id, cancellationReason);
+        setShowConfirmationModal(false); // Close the confirmation modal
+        fetchScheduledBookings(currentPage, limit); // Refresh the bookings list
+      } catch (error) {
+        console.error("Failed to cancel booking:", error);
+        setErrorMessage("An error occurred while cancelling the booking.");
+      }
+    }
+  };
+
+  const handleOpenModal = (booking: IScheduledBooking) => {
+    setSelectedBooking(booking);
+    setOpenModal(true);
+  };
+
+  const handleJoinCall = () => {
+    console.log('id', selectedBooking?.roomId);
+    navigate(`/user/video-call/${selectedBooking?.roomId}/${selectedBooking?.userId}`);
+  };
+
+  // const handleJoinCall = useCallback((roomId:string) => {
+  //   console.log('id', selectedBooking?.roomId);
+  //   navigate(`/video-call/${selectedBooking?.roomId}`);
+  // }, [navigate]);
+
+  const isCancellationAllowed = (fromTime: Date) => {
+    const currentTime = new Date();
+    const bookingTime = new Date(fromTime);
+    const timeDifference = bookingTime.getTime() - currentTime.getTime();
+    const hoursDifference = timeDifference / (1000 * 60 * 60);
+    return hoursDifference >= 24;
   };
 
   useEffect(() => {
@@ -99,6 +154,7 @@ const OutsourcedBookings = () => {
                           <tr
                             key={booking._id}
                             className="hover:bg-blue-50 transition-colors duration-200 ease-in-out cursor-pointer"
+                            onClick={() => handleOpenModal(booking)}
                           >
                             <td className="px-2 py-3 text-xs md:text-sm font-medium text-gray-800 whitespace-nowrap">
                               {booking.title}
@@ -128,6 +184,8 @@ const OutsourcedBookings = () => {
                                     ? "bg-blue-100 text-blue-800"
                                     : booking.status === "Cancelled"
                                     ? "bg-yellow-100 text-yellow-800"
+                                    : booking.status === "Expired"
+                                    ? "bg-gray-100 text-gray-800"
                                     : booking.status === "Refunded"
                                     ? "bg-red-100 text-red-800"
                                     : ""
@@ -140,17 +198,27 @@ const OutsourcedBookings = () => {
                               {booking.status === "Refunded" ? (
                                 <span className="text-red-600">Refunded</span>
                               ) : booking.status === "Cancelled" ? (
-                                <span className="text-red-600">You are eligible for a refund within 24 hours.</span>
-                              ) : (
+                                <span className="text-red-600">You are eligible for a refund</span>
+                              ) : booking.status === "Expired" ? (
                                 <button
-                                  onClick={() => {
-                                    setSelectedBooking(booking);
-                                    setShowConfirmationModal(true);
-                                  }}
-                                  className="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50 transition duration-150 ease-in-out"
+                                  disabled
+                                  className="px-4 py-2 bg-gray-400 text-white rounded-lg font-semibold cursor-not-allowed"
                                 >
-                                  Cancel Slot
+                                  Expired
                                 </button>
+                              ) : (
+                                isCancellationAllowed(booking.fromTime) && (
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation(); // Stop the click event from bubbling up
+                                      setSelectedBooking(booking);
+                                      setShowConfirmationModal(true);
+                                    }}
+                                    className="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50 transition duration-150 ease-in-out"
+                                  >
+                                    Cancel Slot
+                                  </button>
+                                )
                               )}
                             </td>
                           </tr>
@@ -174,69 +242,63 @@ const OutsourcedBookings = () => {
       </div>
       <Footer />
 
-      {/* Confirmation Modal */}
-      <Modal show={showConfirmationModal} onHide={() => setShowConfirmationModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirm Cancellation</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Are you sure you want to cancel this booking?</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <button
-            type="button"
-            className="btn btn-secondary bg-gray-200 hover:bg-gray-300 text-gray-700 border border-gray-300 rounded px-4 py-2"
-            onClick={() => setShowConfirmationModal(false)}
+      <Dialog
+        open={openModal}
+        handler={() => setOpenModal(false)}
+        className="relative z-10"
+      >
+        <DialogHeader>Booking Details</DialogHeader>
+        <DialogBody>
+          <div className="p-4">
+            <h2 className="text-lg font-bold">{selectedBooking?.title}</h2>
+            <p className="mt-2 text-gray-600">Scheduled Date: {new Date(selectedBooking?.date).toLocaleDateString()}</p>
+            <p className="text-gray-600">From Time: {new Date(selectedBooking?.fromTime).toLocaleTimeString()}</p>
+            <p className="text-gray-600">To Time: {new Date(selectedBooking?.toTime).toLocaleTimeString()}</p>
+            <p className="mt-2 text-gray-800">Price: <MdOutlineCurrencyRupee className="inline" /> {selectedBooking?.price}</p>
+            <p className="mt-2 text-gray-800">Description: {selectedBooking?.description}</p>
+            {selectedBooking?.status === "Scheduled" && (
+              <Button
+                onClick={handleJoinCall}
+                className="mt-4 bg-blue-500 text-white rounded-lg py-2 px-4 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              >
+                Join Call
+              </Button>
+            )}
+          </div>
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="text"
+            color="blue"
+            onClick={() => setOpenModal(false)}
+            className="mr-4"
           >
-            Cancel
-          </button>
-          <button
-            type="button"
-            className="btn btn-primary bg-red-500 hover:bg-red-600 text-white rounded px-4 py-2"
-            onClick={() => {
-              setShowConfirmationModal(false);
-              setShowReasonModal(true);
-            }}
-          >
-            Confirm
-          </button>
-        </Modal.Footer>
-      </Modal>
+            Close
+          </Button>
+        </DialogFooter>
+      </Dialog>
 
-      {/* Cancellation Reason Modal */}
-      <Modal show={showReasonModal} onHide={() => setShowReasonModal(false)}>
+      <Modal show={showConfirmationModal} onHide={() => setShowConfirmationModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Cancel Booking</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Provide a reason for cancellation:</p>
+          <p>Are you sure you want to cancel this booking?</p>
+          <p className="text-red-500 text-sm">Please provide a reason for cancellation:</p>
           <textarea
             value={cancellationReason}
-            onChange={(e) => {
-              setCancellationReason(e.target.value);
-              setErrorMessage(""); // Clear error message when user starts typing
-            }}
-            placeholder="Reason for cancellation"
-            rows={3}
-            className="w-full p-2 border rounded"
+            onChange={(e) => setCancellationReason(e.target.value)}
+            className="w-full mt-2 border rounded-lg p-2"
           />
           {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
         </Modal.Body>
         <Modal.Footer>
-          <button
-            type="button"
-            className="btn btn-secondary bg-gray-200 hover:bg-gray-300 text-gray-700 border border-gray-300 rounded px-4 py-2"
-            onClick={() => setShowReasonModal(false)}
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            className="btn btn-primary bg-red-500 hover:bg-red-600 text-white rounded px-4 py-2"
-            onClick={handleCancelBooking}
-          >
-            Submit
-          </button>
+          <Button variant="secondary" onClick={() => setShowConfirmationModal(false)}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleCancelBooking}>
+            Confirm
+          </Button>
         </Modal.Footer>
       </Modal>
     </>
