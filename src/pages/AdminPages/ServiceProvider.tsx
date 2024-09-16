@@ -8,7 +8,7 @@ import TableShimmer from "../../components/common_pages/Table";
 import toast from "react-hot-toast";
 import Footer from "../../components/common_pages/Footer";
 import AdminNavbar from "../../components/common_pages/AdminHeader";
-import AdminSidebar from "../../components/common_pages/AdminSidebars";
+// import AdminSidebar from "../../components/common_pages/AdminSidebars";
 import {
   Button,
   Dialog,
@@ -45,10 +45,10 @@ const ServiceProviders: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const currentPage = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "5");
-  const [show, setShow] = useState(false);
+  // const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  // const handleClose = () => setShow(false);
+  // const handleShow = () => setShow(true);
 
   const handleSearch = (name: string) => {
     setSearch(name);
@@ -120,7 +120,7 @@ const ServiceProviders: React.FC = () => {
       <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
 
         {/* Menu Button */}
-        <Button
+        {/* <Button
           variant="primary"
           onClick={handleShow}
           style={{
@@ -132,10 +132,10 @@ const ServiceProviders: React.FC = () => {
           }}
         >
           <FaBars /> Menu
-        </Button>
+        </Button> */}
 
         {/* Sidebar */}
-        <AdminSidebar show={show} handleClose={handleClose} />
+        {/* <AdminSidebar show={show} handleClose={handleClose} /> */}
 <br />
 <br />
         <div className="bg-gray-100 min-h-screen p-8">

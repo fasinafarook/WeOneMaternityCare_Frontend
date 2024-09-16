@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import { fetchComplaints, respondToComplaint } from '../../api/adminAPI';
 import AdminNavbar from '../../components/common_pages/AdminHeader';
 import Footer from '../../components/common_pages/Footer';
-import { Modal, Button } from 'react-bootstrap';
 
 const ComplaintsPage: React.FC = () => {
   const [complaints, setComplaints] = useState<any[]>([]);
@@ -10,9 +10,10 @@ const ComplaintsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedComplaint, setSelectedComplaint] = useState<any | null>(null);
   const [response, setResponse] = useState<string>('');
-  const [showModal, setShowModal] = useState<boolean>(false);
   const [responseError, setResponseError] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | 'responded' | 'unresponded'>('all');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [complaintsPerPage] = useState<number>(10);
 
   useEffect(() => {
     const loadComplaints = async () => {
@@ -21,6 +22,7 @@ const ComplaintsPage: React.FC = () => {
         setComplaints(data);
       } catch (err) {
         setError('Failed to load complaints');
+        console.error('Error loading complaints:', err);
       } finally {
         setLoading(false);
       }
@@ -31,43 +33,38 @@ const ComplaintsPage: React.FC = () => {
 
   const handleRespondClick = (complaint: any) => {
     setSelectedComplaint(complaint);
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedComplaint(null);
-    setResponse('');
-    setResponseError(null);
-    setShowModal(false);
-  };
-
-  const handleResponseChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setResponse(e.target.value);
-    if (e.target.value.length >= 15) {
-      setResponseError(null);
-    }
-  };
-
-  const handleSubmitResponse = async () => {
-    if (response.trim().length < 15) {
-      setResponseError('Response must be at least 15 characters long.');
-      return;
-    }
-
-    if (selectedComplaint) {
-      try {
-        await respondToComplaint({ complaintId: selectedComplaint._id, response });
-
-        alert('Response sent successfully');
-        setSelectedComplaint(null);
-        setResponse('');
-        setShowModal(false);
-        const data = await fetchComplaints();
-        setComplaints(data);
-      } catch (err) {
-        alert('Failed to send response');
+    Swal.fire({
+      title: 'Respond to Complaint',
+      input: 'textarea',
+      inputPlaceholder: 'Write your response here...',
+      inputAttributes: {
+        'aria-label': 'Write your response here...',
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Submit Response',
+      cancelButtonText: 'Close',
+      inputValidator: (value) => {
+        if (!value || value.length < 15) {
+          return 'Response must be at least 15 characters long.';
+        }
+        return null;
       }
-    }
+    }).then(async (result) => {
+      if (result.isConfirmed && result.value) {
+        try {
+          console.log('Sending response:', { complaintId: selectedComplaint._id, response: result.value });
+          await respondToComplaint({ complaintId: selectedComplaint._id, response: result.value });
+          Swal.fire('Response sent successfully');
+          setSelectedComplaint(null);
+          setResponse('');
+          const data = await fetchComplaints();
+          setComplaints(data);
+        } catch (err) {
+          console.error('Error sending response:', err);
+          Swal.fire('Failed to send response');
+        }
+      }
+    });
   };
 
   const getFilteredComplaints = () => {
@@ -79,6 +76,20 @@ const ComplaintsPage: React.FC = () => {
     return complaints;
   };
 
+  const getPaginatedComplaints = () => {
+    const startIndex = (currentPage - 1) * complaintsPerPage;
+    const endIndex = startIndex + complaintsPerPage;
+    return getFilteredComplaints().slice(startIndex, endIndex);
+  };
+
+  const totalPages = Math.ceil(getFilteredComplaints().length / complaintsPerPage);
+
+  const handlePageChange = (page: number) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
   if (loading) return <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Loading...</div>;
   if (error) return <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{error}</div>;
 
@@ -88,62 +99,62 @@ const ComplaintsPage: React.FC = () => {
       <div style={{ minHeight: 'calc(100vh - 60px)', padding: '20px' }}>
         <h1 style={{ textAlign: 'center' }}>Complaints</h1>
         <div style={{ marginBottom: '20px', textAlign: 'center' }}>
-  <button
-    onClick={() => setFilter('all')}
-    style={{
-      marginRight: '10px',
-      padding: '10px 20px',
-      backgroundColor: '#4CAF50',  // Green background
-      color: 'white',  // White text
-      border: 'none',  // Remove default border
-      borderRadius: '5px',  // Rounded corners
-      cursor: 'pointer',  // Pointer cursor on hover
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',  // Subtle shadow
-      transition: 'background-color 0.3s, transform 0.3s',  // Smooth transition for hover effect
-    }}
-    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#45a049')}  // Darker green on hover
-    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#4CAF50')}  // Revert to original color
-  >
-    All
-  </button>
-  <button
-    onClick={() => setFilter('responded')}
-    style={{
-      marginRight: '10px',
-      padding: '10px 20px',
-      backgroundColor: '#2196F3',  // Blue background
-      color: 'white',  // White text
-      border: 'none',  // Remove default border
-      borderRadius: '5px',  // Rounded corners
-      cursor: 'pointer',  // Pointer cursor on hover
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',  // Subtle shadow
-      transition: 'background-color 0.3s, transform 0.3s',  // Smooth transition for hover effect
-    }}
-    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1976D2')}  // Darker blue on hover
-    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2196F3')}  // Revert to original color
-  >
-    Responded
-  </button>
-  <button
-    onClick={() => setFilter('unresponded')}
-    style={{
-      padding: '10px 20px',
-      backgroundColor: '#f44336',  // Red background
-      color: 'white',  // White text
-      border: 'none',  // Remove default border
-      borderRadius: '5px',  // Rounded corners
-      cursor: 'pointer',  // Pointer cursor on hover
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',  // Subtle shadow
-      transition: 'background-color 0.3s, transform 0.3s',  // Smooth transition for hover effect
-    }}
-    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#d32f2f')}  // Darker red on hover
-    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#f44336')}  // Revert to original color
-  >
-    Unresponded
-  </button>
-</div>
+          <button
+            onClick={() => setFilter('all')}
+            style={{
+              marginRight: '10px',
+              padding: '10px 20px',
+              backgroundColor: '#4CAF50',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              transition: 'background-color 0.3s, transform 0.3s',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#45a049')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#4CAF50')}
+          >
+            All
+          </button>
+          <button
+            onClick={() => setFilter('responded')}
+            style={{
+              marginRight: '10px',
+              padding: '10px 20px',
+              backgroundColor: '#2196F3',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              transition: 'background-color 0.3s, transform 0.3s',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1976D2')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2196F3')}
+          >
+            Responded
+          </button>
+          <button
+            onClick={() => setFilter('unresponded')}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#f44336',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              transition: 'background-color 0.3s, transform 0.3s',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#d32f2f')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#f44336')}
+          >
+            Unresponded
+          </button>
+        </div>
 
-        {getFilteredComplaints().length === 0 ? (
+        {getPaginatedComplaints().length === 0 ? (
           <div style={{ textAlign: 'center', marginTop: '20px' }}>No complaints found.</div>
         ) : (
           <>
@@ -158,7 +169,7 @@ const ComplaintsPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {getFilteredComplaints().map((complaint) => (
+                {getPaginatedComplaints().map((complaint) => (
                   <tr key={complaint._id}>
                     <td style={{ padding: '10px', border: '1px solid #ddd' }}>{complaint._id}</td>
                     <td style={{ padding: '10px', border: '1px solid #ddd' }}>{complaint.subject}</td>
@@ -167,12 +178,35 @@ const ComplaintsPage: React.FC = () => {
                       {complaint.isResolved ? 'Yes' : 'No'}
                     </td>
                     <td style={{ padding: '10px', border: '1px solid #ddd' }}>
-                      {!complaint.isResolved && (
+                      {!complaint.isResolved ? (
+                       <button
+                       style={{
+                         padding: '8px 16px',
+                         backgroundColor: '#007bff',
+                         color: 'white',
+                         border: 'none',
+                         borderRadius: '5px',
+                         cursor: 'pointer',
+                         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                         transition: 'background-color 0.3s, transform 0.2s',
+                         fontSize: '14px',
+                         fontWeight: '500',
+                         textAlign: 'center',
+                         display: 'inline-block',
+                       }}
+                       onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#0056b3')}
+                       onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#007bff')}
+                       onClick={() => handleRespondClick(complaint)}
+                     >
+                       Respond
+                     </button>
+                     
+                      ) : (
                         <button
-                          style={{ padding: '5px 10px', cursor: 'pointer', color: 'blue' }}
-                          onClick={() => handleRespondClick(complaint)}
+                          style={{ padding: '5px 10px', cursor: 'default', color: 'green', backgroundColor: 'lightgrey', border: '1px solid #ddd' }}
+                          disabled
                         >
-                          Respond
+                          Resolved
                         </button>
                       )}
                     </td>
@@ -181,26 +215,43 @@ const ComplaintsPage: React.FC = () => {
               </tbody>
             </table>
 
-            <Modal show={showModal} onHide={handleCloseModal}>
-              <Modal.Header closeButton>
-                <Modal.Title>Respond to Complaint</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <div>
-                  <textarea
-                    value={response}
-                    onChange={handleResponseChange}
-                    placeholder="Write your response here..."
-                    style={{ width: '100%', height: '100px' }}
-                  />
-                  {responseError && <div style={{ color: 'red', marginTop: '10px' }}>{responseError}</div>}
-                </div>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
-                <Button variant="primary" onClick={handleSubmitResponse}>Submit Response</Button>
-              </Modal.Footer>
-            </Modal>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                style={{
+                  marginRight: '10px',
+                  padding: '10px 20px',
+                  backgroundColor: '#2196F3',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '5px',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                }}
+              >
+                Previous
+              </button>
+              <span style={{ margin: '0 10px' }}>
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                style={{
+                  marginLeft: '10px',
+                  padding: '10px 20px',
+                  backgroundColor: '#2196F3',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '5px',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                }}
+              >
+                Next
+              </button>
+            </div>
           </>
         )}
       </div>

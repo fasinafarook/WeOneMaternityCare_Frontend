@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { blockUser, getUsers } from "../../api/adminAPI";
 import Footer from "../../components/common_pages/Footer";
 import AdminNavbar from "../../components/common_pages/AdminHeader";
-import AdminSidebar from "../../components/common_pages/AdminSidebars";
+// import AdminSidebar from "../../components/common_pages/AdminSidebars";
 import toast from "react-hot-toast";
 import {
   Button,
@@ -39,8 +39,8 @@ const Users: React.FC = () => {
   const [show, setShow] = useState(false);
   
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  // const handleClose = () => setShow(false);
+  // const handleShow = () => setShow(true);
 
   const handleSearch = (name: string) => {
     setSearch(name);
@@ -114,7 +114,7 @@ const Users: React.FC = () => {
       <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
 
         {/* Menu Button */}
-        <Button
+        {/* <Button
           variant="primary"
           onClick={handleShow}
           style={{
@@ -126,10 +126,10 @@ const Users: React.FC = () => {
           }}
         >
           <FaBars /> Menu
-        </Button>
+        </Button> */}
 
         {/* Sidebar */}
-        <AdminSidebar show={show} handleClose={handleClose} />
+        {/* <AdminSidebar show={show} handleClose={handleClose} /> */}
 <br /><br />
         <div className="bg-gray-100 flex-1 p-8">
           <div className="max-w-7xl mx-auto">

@@ -25,7 +25,8 @@ const userEndpoint = {
 
     getPaymentDashboardDetails:"/user/wallet",
 
-
+    getUserchatt:"/user/message",
+    sendMessage: '/message/send',
 
     // getAllPremiumCandidates: "/user/get-all-premium-users",
 

@@ -270,6 +270,7 @@ export const getUserComplaints = async (userId: string) => {
     throw error;
   }
 };
+
 export const fileComplaint = async (userId: string, subject: string, description: string) => {
   try {
     const response = await Api.post(userEndpoint.submitComplaint, {
@@ -282,5 +283,29 @@ export const fileComplaint = async (userId: string, subject: string, description
   } catch (error) {
     console.error('Failed to file complaint:', error);
     throw new Error('Failed to file complaint');
+  }
+};
+
+
+export const getUserchatt = async () => {
+  try {
+    const { data } = await Api.get(`${userEndpoint.getUserchatt}`);
+    console.log('uj',data);
+    
+    return data;
+  } catch (error) {
+    console.error('Error fetching user complaints:', error);
+    throw error;
+  }
+};
+
+
+export const getUserCompletedBookings = async (userId: string) => {
+  try {
+    const response = await Api.get(`/user/completed/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch completed bookings:", error);
+    throw error;
   }
 };

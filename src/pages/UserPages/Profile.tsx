@@ -97,7 +97,8 @@ const Profile: React.FC = () => {
             console.error('Unexpected error: ', error);
         }
     } else {
-        alert('Please enter both current and new passwords.');
+        toast.error("Please enter both current and new passwords.");
+
     }
 };
 

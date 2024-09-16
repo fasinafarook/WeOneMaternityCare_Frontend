@@ -49,6 +49,7 @@ const ProviderAndSlotDetails = () => {
       fetchProviderSlotDetails(serviceProviderId);
     }
   }, [serviceProviderId]);
+  
 
   const handleCheckout = async (slot: any) => {
     const previousUrl = `${location.pathname}${location.search}`;

@@ -14,6 +14,7 @@ const serviceProviderEndpoint = {
     getSchedulesBookings: '/serviceProvider/get-scheduled-bookings',
     getPaymentDashboardDetails:"/serviceProvider/getPaymentDashboardDetails",
     updateWallet: "/serviceProvider/update-wallet",
+    updateBookingStatus: "/serviceProvider/update-booking-status",
 
     processRefund: '/payment/refund', 
 

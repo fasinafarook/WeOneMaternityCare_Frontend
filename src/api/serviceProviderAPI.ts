@@ -2,133 +2,6 @@ import Api from "../Services/axios";
 
 import serviceProviderEndpoint from "../Services/endpoints/serviceProviderEndpoint";
 
-// // export const signup = async (
-// //   name: string,
-// //   email: string,
-// //   mobile: number,
-// //   password: string,
-// //   service: string,
-// //   specialization: string,
-// //   qualification: string,
-// //   expYear: number,
-// //   rate: number,
-// //   location: string,
-// //   experienceCrt:File
-// // ) => {
-// //   try {
-// //     const response = await Api.post(interviewerEndpoint.interviewerSignUp, {
-// //       name,
-// //       email,
-// //       mobile,
-// //       password,
-// //       service,
-// //       specialization,
-// //       qualification,
-// //       expYear,
-// //       rate,
-// //       location,
-// //       experienceCrt
-
-// //     });
-
-// //     const token = response.data.data;
-// //     localStorage.setItem("interviewerOtp", token);
-// //     return response;
-// //   } catch (error) {
-// //     console.log(error);
-// //   }
-// // };
-
-// export const signup = async (
-//   name: string,
-//   email: string,
-//   mobile: number,
-//   password: string,
-//   service: string,
-//   specialization: string,
-//   qualification: string,
-//   expYear: number,
-//   rate: number,
-//   location: string,
-//   experienceCrt: File
-// ) => {
-//   try {
-//     const formData = new FormData();
-//     formData.append("name", name);
-//     formData.append("email", email);
-//     formData.append("mobile", mobile.toString());
-//     formData.append("password", password);
-//     formData.append("service", service);
-//     formData.append("specialization", specialization);
-//     formData.append("qualification", qualification);
-//     formData.append("expYear", expYear.toString());
-//     formData.append("rate", rate.toString());
-//     formData.append("location", location);
-//     formData.append("experienceCrt", experienceCrt);
-
-//     const response = await Api.post(interviewerEndpoint.interviewerSignUp, formData, {
-//       headers: {
-//         'Content-Type': 'multipart/form-data',
-//       },
-//     });
-
-//     const token = response.data.data;
-//     localStorage.setItem("interviewerOtp", token);
-//     return response;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-// export const verifyOtp = async (otp: string) => {
-//   try {
-//     let token = localStorage.getItem("interviewerOtp");
-//     const response = await Api.post(
-//       interviewerEndpoint.verifyOtp,
-//       { otp },
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
-//     if (response.data.success) {
-//       localStorage.removeItem("interviewerOtp");
-//     }
-//     return response;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-// export const resendOtp = async () => {
-//   try {
-//     const token = localStorage.getItem("interviewerOtp");
-//     const response = await Api.post(interviewerEndpoint.resendOtp, "", {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-//     const newToken = response.data.token;
-//     localStorage.setItem("interviewerOtp", newToken);
-//     return response;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-// export const verifyLogin = async (email: string, password: string) => {
-//   try {
-//     const response = await Api.post(interviewerEndpoint.verifyLogin, {
-//       email,
-//       password,
-//     });
-//     console.log("response: ", response);
-//     return response.data;
-//   } catch (error: any) {
-//     return error.response.data;
-//   }
-// };
 
 export const signup = async (
   name: string,
@@ -204,55 +77,7 @@ export const verifyLogin = async (email: string, password: string) => {
   }
 };
 
-//   interface ServiceProviderDetails {
-//     name: string;
-//     mobile: number;
-//     email: string;
-//     service: number;
-//     specialization: string;
-//     qualification: string;
-//     expYear: number;
-//     location: string;
-//     profilePicture: File[];
-//     rate: number;
-//     experienceCrt: File[];
-//   }
 
-//   export const verifyDetails = async (serviceProviderDetails: ServiceProviderDetails) => {
-//     try {
-//       const formData = new FormData();
-//       for (const key in serviceProviderDetails) {
-//         if (serviceProviderDetails.hasOwnProperty(key)) {
-//           const value = serviceProviderDetails[key as keyof ServiceProviderDetails];
-//           if (
-//             key === "profilePicture" ||
-//             key === "experienceCrt"
-//           ) {
-//             // formData.append(key, interviewerDetails[key][0]);
-//             formData.append(key, (value as File[])[0]);
-//           } else {
-//             // formData.append(key, interviewerDetails[key] );
-//             formData.append(key, value as string);
-//           }
-//         }
-//       }
-
-//       const response = await Api.post(
-//         serviceProviderEndpoint.verifyDetails,
-//         formData,
-//         {
-//           headers: {
-//             "Content-Type": "multipart/form-data",
-
-//           },
-//         }
-//       );
-//       console.log('hlooooo',response);
-//       return response.data;
-//     } catch (error) {
-//       console.log("Error in verifying details: ", error);
-//     }
-//   };
 interface ServiceProviderDetails {
   // Corrected the interface name
   name: string;
@@ -359,21 +184,19 @@ interface SlotData {
   status: "open" | "booked";
   price: number;
   date: Date | null;
-  services: Services[];
+  services: Services[]
+  
 }
 
 export const addSlot = async (slotData: SlotData) => {
   try {
-    const response = await Api.post(serviceProviderEndpoint.addSlot, {
-      slotData,
-    });
+    const response = await Api.post(serviceProviderEndpoint.addSlot, { slotData });
     return response.data;
-  } catch (error: any) {
-    // Cast to `any`
+  } catch (error: any) { // Cast to `any`
     if (error.response && error.response.status === 401) {
       alert(error.response.data.message); // Display the "You are blocked!" message
     } else {
-      console.error("Unexpected error:", error);
+      console.error('Unexpected error:', error);
     }
   }
 };
@@ -388,6 +211,8 @@ export const getSlotsList = async (
       serviceProviderEndpoint.getSlots +
         `?searchQuery=${query}&page=${page}&limit=${limit}`
     );
+    console.log("Backend response", response); 
+    console.log("Backend responsedata", response.data);     
     return response.data;
   } catch (error: any) {
     return error.response.data;
@@ -458,11 +283,28 @@ export const processRefund = async (bookingId: string, amount: number) => {
 
 
 
-export const editSlot = async (id: string, slotData: any) => {
+export const editSlot = async (slotId: string, slotData: any) => {
   try {
-    const response = await Api.put(`/serviceProvider/edit-slot/${id}`, slotData);
+    const response = await Api.put(`/serviceProvider/edit-slot/${slotId}`, slotData);
+    console.log("Backend response", response); 
+    console.log("Backend responsedata", response.data); 
+
+
     return response.data;
   } catch (error:any) {
     throw new Error(error.response?.data?.message || 'Error updating slot');
+  }
+};
+
+export const updateBookingStatus = async (bookingId: string, status: string) => {
+  try {
+    const response = await Api.put(
+      `${serviceProviderEndpoint.updateBookingStatus}/${bookingId}`,
+      { status }
+    );
+    return response.data;
+  } catch (error: any) {
+    console.log("Error updating booking status:", error);
+    return error.response?.data;
   }
 };

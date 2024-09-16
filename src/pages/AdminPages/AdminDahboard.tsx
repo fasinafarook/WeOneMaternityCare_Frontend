@@ -3,12 +3,12 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import { FaBars } from 'react-icons/fa';
 import Footer from "../../components/common_pages/Footer";
 import AdminNavbar from "../../components/common_pages/AdminHeader";
-import AdminSidebar from "../../components/common_pages/AdminSidebars";
+// import AdminSidebar from "../../components/common_pages/AdminSidebars";
 
 const AdminDashBoard: React.FC = () => {
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  // const [show, setShow] = useState(false);
+  // const handleClose = () => setShow(false);
+  // const handleShow = () => setShow(true);
 
   return (
     <>
@@ -19,21 +19,21 @@ const AdminDashBoard: React.FC = () => {
       <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         
         {/* Menu Button */}
-        <Button 
+        {/* <Button 
           variant="primary" 
           onClick={handleShow} 
           style={{ 
             position: 'absolute', 
             top: '1rem', 
             left: '1rem', 
-            zIndex: 1000 // Ensures button stays on top
+            zIndex: 1000 
           }}
         >
           <FaBars /> Menu
-        </Button>
+        </Button> */}
 
         {/* Sidebar */}
-        <AdminSidebar show={show} handleClose={handleClose} />
+        {/* <AdminSidebar show={show} handleClose={handleClose} /> */}
 
         {/* Main Content */}
         <Container>

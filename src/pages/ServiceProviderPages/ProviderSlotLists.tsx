@@ -1,14 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { getSlotsList, getProfileDetails } from "../../api/serviceProviderAPI";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../redux/store";
-import Pagination from "../../components/common_pages/Pagination";
-import TableShimmer from "../../components/common_pages/Table";
-import { debounce } from "lodash";
-import AppNavbar from "../../components/common_pages/ProviderHeader";
-import Footer from "../../components/common_pages/Footer";
-import { updateServiceProviderInfo } from "../../redux/slice/authSlice"; 
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { getSlotsList, getProfileDetails } from '../../api/serviceProviderAPI';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../redux/store';
+import Pagination from '../../components/common_pages/Pagination';
+import TableShimmer from '../../components/common_pages/Table';
+import { debounce } from 'lodash';
+import AppNavbar from '../../components/common_pages/ProviderHeader';
+import Footer from '../../components/common_pages/Footer';
+import { updateServiceProviderInfo } from '../../redux/slice/authSlice';
 
 interface Schedule {
   from: string;
@@ -16,593 +16,178 @@ interface Schedule {
   title: string;
   price: number;
   description: string;
-  status: "open" | "booked";
+  status: 'open' | 'booked';
   services: string[];
 }
 
 interface Slot {
+  _id: string;
   date: Date;
   schedule: Schedule[];
 }
 
 const SlotsList = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const dispatch = useDispatch();
   const [slotsList, setSlotsList] = useState<Slot[]>([]);
   const [showPopUp, setShowPopUp] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [totalPages, setTotalPages] = useState(1);
-  const currentPage = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "4");
+  const currentPage = parseInt(searchParams.get('page') || '1');
+  const limit = parseInt(searchParams.get('limit') || '4');
 
-  const providerInfo = useSelector(
-    (state: RootState) => state.auth.serviceProviderInfo
-  );
+  const providerInfo = useSelector((state: RootState) => state.auth.serviceProviderInfo);
 
   const handleAddSlot = async () => {
-    // Re-fetch or refresh provider info here
     const refreshedProviderInfo = await fetchProviderInfo();
     if (!refreshedProviderInfo || !refreshedProviderInfo.isApproved) {
       setShowPopUp(true);
       return;
     }
-    navigate("/serviceProvider/add-slot");
+    navigate('/serviceProvider/add-slot');
   };
 
-  // Fetch provider info function example
+  const handleEditSlot = (slotId: string) => {
+    navigate(`/serviceProvider/edit-slot/${slotId}`);
+  };
+
   const fetchProviderInfo = async () => {
-    // Logic to fetch the latest provider info, e.g., from an API
-    const response = await getProfileDetails(); // Replace with your API call
+    const response = await getProfileDetails();
     if (response.success) {
-      // Update the global state with the refreshed provider info
       dispatch(updateServiceProviderInfo(response.data));
       return response.data;
     }
     return null;
   };
 
-  // const fetchProviderSlotsList = async (page: number, limit: number, query = "") => {
-  //   setLoading(true);
-  //   const response = await getSlotsList(page, limit, query);
-  //   if (response.success) {
-  //     console.log("data: ", response.data);
-  //     setSlotsList(response.data);
-  //     setTotalPages(Math.ceil(response.total / limit));
-  //   }
-  //   setLoading(false);
-  // };
-
-  const fetchProviderSlotsList = async (page: number, limit: number, query = "") => {
+  const fetchProviderSlotsList = async (page: number, limit: number, query = '') => {
     setLoading(true);
     const response = await getSlotsList(page, limit, query);
+
     if (response.success) {
-      const currentDate = new Date();
-  
-      const updatedSlotsList = response.data.map((slot: Slot) => {
-        const updatedSchedule = slot.schedule.map((schedule: Schedule) => {
-          const slotDateTime = new Date(slot.date);
-          const scheduleEndTime = new Date(schedule.to);
-  
-          // Check if the current date is after the schedule end time
-          if (currentDate > scheduleEndTime && schedule.status === "open") {
-            return { ...schedule, status: "expired" };
-          }
-          return schedule;
-        });
-        return { ...slot, schedule: updatedSchedule };
-      });
-  
-      setSlotsList(updatedSlotsList);
-      setTotalPages(Math.ceil(response.total / limit));
+      setSlotsList(response.data);
+      setTotalPages(response.totalPages);
+    } else {
+      console.error('Error fetching slots:', response.message);
     }
     setLoading(false);
   };
-  
-  const handlePageChange = (newPage: number) => {
-    setSearchParams({ page: newPage.toString(), limit: limit.toString() });
-  };
 
-  const debounceFetch = useCallback(
-    debounce((query: string) => {
-      fetchProviderSlotsList(currentPage, limit, query);
-    }, 800),
-    [currentPage, limit]
+  const debouncedFetchSlotsList = useCallback(
+    debounce((page: number, limit: number, query: string) => {
+      fetchProviderSlotsList(page, limit, query);
+    }, 500),
+    []
   );
 
   useEffect(() => {
-    fetchProviderSlotsList(currentPage, limit, searchQuery);
-  }, [currentPage, limit]);
+    if (location.state?.refresh) {
+      fetchProviderSlotsList(currentPage, limit, searchQuery);
+    } else {
+      debouncedFetchSlotsList(currentPage, limit, searchQuery);
+    }
+  }, [currentPage, limit, searchQuery, location.state]);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value.trim());
-    debounceFetch(e.target.value.trim());
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    setSearchParams({ page: '1', limit: limit.toString(), search: e.target.value });
   };
-  
+
+  // Helper function to check if the slot is expired
+  const isExpired = (endDate: Date) => {
+    return new Date() > new Date(endDate);
+  };
 
   return (
     <>
       <AppNavbar />
-      <div className="bg-gray-100 min-h-screen p-4 sm:p-8">
-        <div className="max-w-7xl mx-auto">
-          {showPopUp && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white p-6 rounded-lg shadow-xl">
-                <h2 className="text-xl font-bold mb-4">Not Approved</h2>
-                <p className="mb-4">
-                  You are not approved by the admin to add slots.
-                </p>
-                <button
-                  onClick={() => setShowPopUp(false)}
-                  className="bg-[#142057] text-white py-2 px-4 ml-auto block rounded-md"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          )}
-
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-            <div className="px-4 sm:px-8 py-6">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-                <div>
-                  <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
-                    Slots List
-                  </h1>
-                  <p className="text-gray-600 mt-1">
-                    See information about all time slots
-                  </p>
-                </div>
-                <button
-                  onClick={handleAddSlot}
-                  className="mt-4 sm:mt-0 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition duration-300 ease-in-out"
-                >
-                  Add Slot
-                </button>
-              </div>
-
-              <div className="mt-4">
-                <div className="relative">
-                  <input
-                    type="text"
-                    className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Search for Bookings"
-                    onChange={handleSearchChange}
-                  />
-                  <div className="absolute left-3 top-2.5">
-                    <svg
-                      className="h-5 w-5 text-gray-400"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    {[
-                      "Date",
-                      "From",
-                      "To",
-                      "Domain",
-                      "Services",
-                      "Price",
-                      "Status",
-                      // "Action",
-                    ].map((header) => (
-                      <th
-                        key={header}
-                        className={`px-6 py-3 ${
-                          header === "Action" ? "text-right" : "text-left"
-                        } text-xs font-medium text-gray-500 uppercase tracking-wider`}
-                      >
-                        {header}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                {loading ? (
-                  <TableShimmer columns={7} />
-                ) : (
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {slotsList?.map((slot, slotIndex) =>
-                      slot?.schedule?.map((schedule, scheduleIndex) => (
-                        <tr
-                          key={`${slotIndex}-${scheduleIndex}`}
-                          className="hover:bg-gray-50 transition-colors duration-200"
-                        >
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-900">
-                              {new Date(slot?.date).toLocaleDateString(
-                                "en-US",
-                                {
-                                  day: "numeric",
-                                  month: "short",
-                                }
-                              )}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {new Date(schedule.from).toLocaleTimeString(
-                              "en-US",
-                              {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              }
-                            )}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {new Date(schedule.to).toLocaleTimeString(
-                              "en-US",
-                              {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              }
-                            )}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <a
-                              href="#"
-                              className="text-sm font-medium text-blue-600 hover:text-blue-900"
-                            >
-                              {schedule.title}
-                            </a>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">
-                              {schedule.services
-                                .map((item) => item.toUpperCase())
-                                .join(", ")}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {schedule.price}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span
-                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                schedule.status === "open"
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-red-100 text-red-800"
-                              }`}
-                            >
-                              {schedule.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                )}
-              </table>
-            </div>
-          </div>
-
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-        </div>
+      <div style={{ maxWidth: '1000px', margin: 'auto', padding: '1.5rem' }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Slots List</h1>
+        <button onClick={handleAddSlot} style={{ padding: '0.75rem 1.5rem', color: '#fff', backgroundColor: '#007bff', border: 'none', borderRadius: '0.25rem', cursor: 'pointer', marginBottom: '1rem' }}>
+          Add Slot
+        </button>
+        <input
+          type="text"
+          placeholder="Search by title or date..."
+          value={searchQuery}
+          onChange={handleSearch}
+          style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '0.25rem', marginBottom: '1rem' }}
+        />
+        {loading ? (
+          <TableShimmer />
+        ) : (
+          <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '1rem' }}>
+            <thead>
+              <tr>
+                <th style={{ borderBottom: '1px solid #ddd', padding: '0.75rem' }}>Title</th>
+                <th style={{ borderBottom: '1px solid #ddd', padding: '0.75rem' }}>From</th>
+                <th style={{ borderBottom: '1px solid #ddd', padding: '0.75rem' }}>To</th>
+                <th style={{ borderBottom: '1px solid #ddd', padding: '0.75rem' }}>Price</th>
+                <th style={{ borderBottom: '1px solid #ddd', padding: '0.75rem' }}>Status</th>
+                <th style={{ borderBottom: '1px solid #ddd', padding: '0.75rem' }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {slotsList.length > 0 ? (
+                slotsList.map((slot) => (
+                  slot.schedule.map((schedule, index) => (
+                    <tr key={`${slot._id}-${index}`}>
+                      <td style={{ borderBottom: '1px solid #ddd', padding: '0.75rem' }}>{schedule.title}</td>
+                      <td style={{ borderBottom: '1px solid #ddd', padding: '0.75rem' }}>{new Date(schedule.from).toLocaleString()}</td>
+                      <td style={{ borderBottom: '1px solid #ddd', padding: '0.75rem' }}>{new Date(schedule.to).toLocaleString()}</td>
+                      <td style={{ borderBottom: '1px solid #ddd', padding: '0.75rem' }}>${schedule.price}</td>
+                      <td style={{ borderBottom: '1px solid #ddd', padding: '0.75rem', color: isExpired(schedule.to) ? 'grey' : (schedule.status === 'open' ? 'green' : 'red') }}>
+                        {isExpired(schedule.to) ? 'Expired' : schedule.status}
+                      </td>
+                      <td style={{ borderBottom: '1px solid #ddd', padding: '0.75rem' }}>
+                        {!isExpired(schedule.to) && schedule.status === 'open' && (
+                          <button
+                            onClick={() => handleEditSlot(slot._id)}
+                            style={{ padding: '0.5rem 1rem', color: '#fff', backgroundColor: '#007bff', border: 'none', borderRadius: '0.25rem', cursor: 'pointer' }}
+                          >
+                            Edit
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={6} style={{ textAlign: 'center', padding: '1rem' }}>No slots available</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        )}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(page) => {
+            setSearchParams({ page: page.toString(), limit: limit.toString(), search: searchQuery });
+          }}
+        />
       </div>
       <Footer />
+      {showPopUp && (
+        <div style={{ position: 'fixed', top: '0', left: '0', right: '0', bottom: '0', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ backgroundColor: '#fff', padding: '2rem', borderRadius: '0.25rem', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
+            <h2>Approval Required</h2>
+            <p>Your profile needs to be approved before you can add a slot.</p>
+            <button onClick={() => setShowPopUp(false)} style={{ padding: '0.75rem 1.5rem', color: '#fff', backgroundColor: '#007bff', border: 'none', borderRadius: '0.25rem', cursor: 'pointer' }}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };
 
 export default SlotsList;
-
-
-
-
-// import { useCallback, useEffect, useState } from "react";
-// import { useNavigate, useSearchParams } from "react-router-dom";
-// import { getSlotsList, getProfileDetails } from "../../api/serviceProviderAPI";
-// import { useSelector, useDispatch } from "react-redux";
-// import { RootState } from "../../redux/store";
-// import Pagination from "../../components/common_pages/Pagination";
-// import TableShimmer from "../../components/common_pages/Table";
-// import { debounce } from "lodash";
-// import AppNavbar from "../../components/common_pages/ProviderHeader";
-// import Footer from "../../components/common_pages/Footer";
-// import { updateServiceProviderInfo } from "../../redux/slice/authSlice";
-
-// interface Schedule {
-//   from: string;
-//   to: string;
-//   title: string;
-//   price: number;
-//   description: string;
-//   status: "open" | "booked";
-//   services: string[];
-// }
-
-// interface Slot {
-//   _id: string;
-
-//   date: Date;
-//   schedule: Schedule[];
-// }
-
-// const SlotsList = () => {
-//   const navigate = useNavigate();
-//   const dispatch = useDispatch();
-//   const [slotsList, setSlotsList] = useState<Slot[]>([]);
-//   const [showPopUp, setShowPopUp] = useState(false);
-//   const [loading, setLoading] = useState(false);
-
-//   const [searchQuery, setSearchQuery] = useState("");
-
-//   const [searchParams, setSearchParams] = useSearchParams();
-//   const [totalPages, setTotalPages] = useState(1);
-//   const currentPage = parseInt(searchParams.get("page") || "1");
-//   const limit = parseInt(searchParams.get("limit") || "4");
-
-//   const providerInfo = useSelector(
-//     (state: RootState) => state.auth.serviceProviderInfo
-//   );
-
-//   const handleAddSlot = async () => {
-//     // Re-fetch or refresh provider info here
-//     const refreshedProviderInfo = await fetchProviderInfo();
-//     if (!refreshedProviderInfo || !refreshedProviderInfo.isApproved) {
-//       setShowPopUp(true);
-//       return;
-//     }
-//     navigate("/serviceProvider/add-slot");
-//   };
-
-//   // Fetch provider info function example
-//   const fetchProviderInfo = async () => {
-//     const response = await getProfileDetails();
-//     if (response.success) {
-//       dispatch(updateServiceProviderInfo(response.data));
-//       return response.data;
-//     }
-//     return null;
-//   };
-
-//   const fetchProviderSlotsList = async (
-//     page: number,
-//     limit: number,
-//     query = ""
-//   ) => {
-//     setLoading(true);
-//     const response = await getSlotsList(page, limit, query);
-//     console.log("lo", response);
-
-//     if (response.success) {
-//       console.log("lol", response.data);
-
-//       setSlotsList(response.data);
-//       setTotalPages(Math.ceil(response.total / limit));
-//     }
-//     setLoading(false);
-//   };
-
-//   const handlePageChange = (newPage: number) => {
-//     setSearchParams({ page: newPage.toString(), limit: limit.toString() });
-//   };
-
-//   const debounceFetch = useCallback(
-//     debounce((query: string) => {
-//       fetchProviderSlotsList(currentPage, limit, query);
-//     }, 800),
-//     [currentPage, limit]
-//   );
-
-//   useEffect(() => {
-//     fetchProviderSlotsList(currentPage, limit, searchQuery);
-//   }, [currentPage, limit]);
-
-//   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     setSearchQuery(e.target.value.trim());
-//     debounceFetch(e.target.value.trim());
-//   };
-
-//   const handleEditSlot = (slotId: string) => {
-//     navigate(`/serviceProvider/edit-slot/${slotId}`);
-//   };
-
-//   return (
-//     <>
-//       <AppNavbar />
-//       <div className="bg-gray-100 min-h-screen p-4 sm:p-8">
-//         <div className="max-w-7xl mx-auto">
-//           {showPopUp && (
-//             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-//               <div className="bg-white p-6 rounded-lg shadow-xl">
-//                 <h2 className="text-xl font-bold mb-4">Not Approved</h2>
-//                 <p className="mb-4">
-//                   You are not approved by the admin to add slots.
-//                 </p>
-//                 <button
-//                   onClick={() => setShowPopUp(false)}
-//                   className="bg-[#142057] text-white py-2 px-4 ml-auto block rounded-md"
-//                 >
-//                   Close
-//                 </button>
-//               </div>
-//             </div>
-//           )}
-
-//           <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-//             <div className="px-4 sm:px-8 py-6">
-//               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-//                 <div>
-//                   <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
-//                     Slots List
-//                   </h1>
-//                   <p className="text-gray-600 mt-1">
-//                     See information about all time slots
-//                   </p>
-//                 </div>
-//                 <button
-//                   onClick={handleAddSlot}
-//                   className="mt-4 sm:mt-0 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition duration-300 ease-in-out"
-//                 >
-//                   Add Slot
-//                 </button>
-//               </div>
-
-//               <div className="mt-4">
-//                 <div className="relative">
-//                   <input
-//                     type="text"
-//                     className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-//                     placeholder="Search for Bookings"
-//                     onChange={handleSearchChange}
-//                   />
-//                   <div className="absolute left-3 top-2.5">
-//                     <svg
-//                       className="h-5 w-5 text-gray-400"
-//                       fill="none"
-//                       strokeLinecap="round"
-//                       strokeLinejoin="round"
-//                       strokeWidth="2"
-//                       viewBox="0 0 24 24"
-//                       stroke="currentColor"
-//                     >
-//                       <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-//                     </svg>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-
-//           <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-//             <div className="overflow-x-auto">
-//               <table className="w-full">
-//                 <thead className="bg-gray-50">
-//                   <tr>
-//                     {[
-//                       "Date",
-//                       "From",
-//                       "To",
-//                       "Domain",
-//                       "Services",
-//                       "Price",
-//                       "Status",
-//                       "Action",
-//                     ].map((header) => (
-//                       <th
-//                         key={header}
-//                         className={`px-6 py-3 ${
-//                           header === "Action" ? "text-right" : "text-left"
-//                         } text-xs font-medium text-gray-500 uppercase tracking-wider`}
-//                       >
-//                         {header}
-//                       </th>
-//                     ))}
-//                   </tr>
-//                 </thead>
-//                 {loading ? (
-//                   <TableShimmer columns={8} />
-//                 ) : (
-//                   <tbody className="bg-white divide-y divide-gray-200">
-//                     {slotsList?.map((slot, slotIndex) =>
-//                       slot?.schedule?.map((schedule, scheduleIndex) => (
-//                         <tr
-//                           key={`${slotIndex}-${scheduleIndex}`}
-//                           className="hover:bg-gray-50 transition-colors duration-200"
-//                         >
-//                           <td className="px-6 py-4 whitespace-nowrap">
-//                             <div className="text-sm font-medium text-gray-900">
-//                               {new Date(slot?.date).toLocaleDateString(
-//                                 "en-US",
-//                                 {
-//                                   day: "numeric",
-//                                   month: "short",
-//                                 }
-//                               )}
-//                             </div>
-//                           </td>
-//                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-//                             {new Date(schedule.from).toLocaleTimeString(
-//                               "en-US",
-//                               {
-//                                 hour: "2-digit",
-//                                 minute: "2-digit",
-//                               }
-//                             )}
-//                           </td>
-//                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-//                             {new Date(schedule.to).toLocaleTimeString("en-US", {
-//                               hour: "2-digit",
-//                               minute: "2-digit",
-//                             })}
-//                           </td>
-//                           <td className="px-6 py-4 whitespace-nowrap">
-//                             <a
-//                               href="#"
-//                               className="text-sm font-medium text-blue-600 hover:text-blue-900"
-//                             >
-//                               {schedule.title}
-//                             </a>
-//                           </td>
-//                           <td className="px-6 py-4 whitespace-nowrap">
-//                             <div className="text-sm text-gray-900">
-//                               {schedule.services
-//                                 .map((item) => item.toUpperCase())
-//                                 .join(", ")}
-//                             </div>
-//                           </td>
-//                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-//                             {schedule.price} $
-//                           </td>
-//                           <td
-//                             className={`px-6 py-4 whitespace-nowrap text-sm font-medium ${
-//                               schedule.status === "booked"
-//                                 ? "text-red-600"
-//                                 : "text-green-600"
-//                             }`}
-//                           >
-//                             {schedule.status === "booked" ? "Booked" : "Open"}
-//                           </td>
-//                           <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-//                             {schedule.status === "open" && (
-//                               <button
-//                                 className="text-indigo-600 hover:text-indigo-900"
-//                                 onClick={() => handleEditSlot(slot._id)}
-//                               >
-//                                 Edit
-//                               </button>
-//                             )}
-//                           </td>
-//                         </tr>
-//                       ))
-//                     )}
-//                   </tbody>
-//                 )}
-//               </table>
-//             </div>
-//           </div>
-//           <Pagination
-//             currentPage={currentPage}
-//             totalPages={totalPages}
-//             onPageChange={handlePageChange}
-//           />
-//         </div>
-//       </div>
-//       <Footer />
-//     </>
-//   );
-// };
-
-// export default SlotsList;

@@ -3,14 +3,10 @@ import UserNavbar from "../../components/common_pages/UserHeader";
 import { getScheduledIbookings, cancelBooking } from "../../api/userAPI";
 import { MdOutlineCurrencyRupee } from "react-icons/md";
 import { Button, Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react";
-
 import { useNavigate, useSearchParams } from "react-router-dom";
-// import { FaRegClock } from "react-icons/fa";
 import Pagination from "../../components/common_pages/Pagination";
 import TableShimmer from "../../components/common_pages/Table";
 import Footer from "../../components/common_pages/Footer";
-import { Modal } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 export interface IScheduledBooking {
   _id: string;
@@ -33,7 +29,6 @@ const OutsourcedBookings = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [totalPages, setTotalPages] = useState(1);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [showReasonModal, setShowReasonModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<IScheduledBooking | null>(null);
   const [cancellationReason, setCancellationReason] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -43,9 +38,10 @@ const OutsourcedBookings = () => {
 
   const checkAndUpdateStatus = (booking: IScheduledBooking) => {
     const currentTime = new Date();
-    const bookingTime = new Date(booking.fromTime);
+    const bookingEndTime = new Date(booking.toTime); // Use `toTime` for checking expiration
 
-    if (bookingTime < currentTime && booking.status === "Scheduled") {
+    // Check if the booking's end time is before the current time
+    if (bookingEndTime < currentTime && booking.status === "Scheduled") {
       booking.status = "Expired";
     }
 
@@ -54,15 +50,19 @@ const OutsourcedBookings = () => {
 
   const fetchScheduledBookings = async (page: number, limit: number) => {
     setLoading(true);
-    const response = await getScheduledIbookings(page, limit);
+    try {
+      const response = await getScheduledIbookings(page, limit);
+      const updatedBookings = response.data.map((booking: IScheduledBooking) =>
+        checkAndUpdateStatus(booking)
+      );
 
-    const updatedBookings = response.data.map((booking: IScheduledBooking) =>
-      checkAndUpdateStatus(booking)
-    );
-
-    setScheduledBookings(updatedBookings);
-    setTotalPages(Math.ceil(response.total / limit));
-    setLoading(false);
+      setScheduledBookings(updatedBookings);
+      setTotalPages(Math.ceil(response.total / limit));
+    } catch (error) {
+      console.error("Failed to fetch bookings:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handlePageChange = (newPage: number) => {
@@ -76,16 +76,15 @@ const OutsourcedBookings = () => {
     }
 
     if (cancellationReason.length < 15) {
-      setErrorMessage("Cancellation reason must be at least 15 letters.");
+      setErrorMessage("Cancellation reason must be at least 15 characters.");
       return;
     }
-
 
     if (selectedBooking) {
       try {
         await cancelBooking(selectedBooking._id, cancellationReason);
-        setShowConfirmationModal(false); // Close the confirmation modal
-        fetchScheduledBookings(currentPage, limit); // Refresh the bookings list
+        setShowConfirmationModal(false);
+        fetchScheduledBookings(currentPage, limit);
       } catch (error) {
         console.error("Failed to cancel booking:", error);
         setErrorMessage("An error occurred while cancelling the booking.");
@@ -99,14 +98,10 @@ const OutsourcedBookings = () => {
   };
 
   const handleJoinCall = () => {
-    console.log('id', selectedBooking?.roomId);
-    navigate(`/user/video-call/${selectedBooking?.roomId}/${selectedBooking?.userId}`);
+    if (selectedBooking) {
+      navigate(`/user/video-call/${selectedBooking.roomId}/${selectedBooking.userId}`);
+    }
   };
-
-  // const handleJoinCall = useCallback((roomId:string) => {
-  //   console.log('id', selectedBooking?.roomId);
-  //   navigate(`/video-call/${selectedBooking?.roomId}`);
-  // }, [navigate]);
 
   const isCancellationAllowed = (fromTime: Date) => {
     const currentTime = new Date();
@@ -239,68 +234,72 @@ const OutsourcedBookings = () => {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
 
-      <Dialog
-        open={openModal}
-        handler={() => setOpenModal(false)}
-        className="relative z-10"
-      >
+      {/* Modal for Viewing Booking Details */}
+      <Dialog open={openModal} size="sm" handler={() => setOpenModal(false)}>
         <DialogHeader>Booking Details</DialogHeader>
-        <DialogBody>
-          <div className="p-4">
-            <h2 className="text-lg font-bold">{selectedBooking?.title}</h2>
-            <p className="mt-2 text-gray-600">Scheduled Date: {new Date(selectedBooking?.date).toLocaleDateString()}</p>
-            <p className="text-gray-600">From Time: {new Date(selectedBooking?.fromTime).toLocaleTimeString()}</p>
-            <p className="text-gray-600">To Time: {new Date(selectedBooking?.toTime).toLocaleTimeString()}</p>
-            <p className="mt-2 text-gray-800">Price: <MdOutlineCurrencyRupee className="inline" /> {selectedBooking?.price}</p>
-            <p className="mt-2 text-gray-800">Description: {selectedBooking?.description}</p>
-            {selectedBooking?.status === "Scheduled" && (
-              <Button
-                onClick={handleJoinCall}
-                className="mt-4 bg-blue-500 text-white rounded-lg py-2 px-4 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              >
-                Join Call
-              </Button>
-            )}
+        <DialogBody divider>
+          <div>
+            <p className="font-bold">Title: {selectedBooking?.title}</p>
+            <p className="font-bold">Scheduled On: {new Date(selectedBooking?.date).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}</p>
+            <p className="font-bold">From: {new Date(selectedBooking?.fromTime).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</p>
+            <p className="font-bold">To: {new Date(selectedBooking?.toTime).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</p>
+            <p className="font-bold">Description: {selectedBooking?.description}</p>
+            <p className="font-bold">Price: <MdOutlineCurrencyRupee className="inline" /> {selectedBooking?.price}</p>
           </div>
         </DialogBody>
         <DialogFooter>
           <Button
-            variant="text"
-            color="blue"
+            color="red"
             onClick={() => setOpenModal(false)}
-            className="mr-4"
+            className="mr-1"
           >
             Close
           </Button>
+          {selectedBooking?.status === "Scheduled" && (
+            <Button
+              color="green"
+              onClick={handleJoinCall}
+            >
+              Join Call
+            </Button>
+          )}
         </DialogFooter>
       </Dialog>
 
-      <Modal show={showConfirmationModal} onHide={() => setShowConfirmationModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Cancel Booking</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Are you sure you want to cancel this booking?</p>
-          <p className="text-red-500 text-sm">Please provide a reason for cancellation:</p>
-          <textarea
-            value={cancellationReason}
-            onChange={(e) => setCancellationReason(e.target.value)}
-            className="w-full mt-2 border rounded-lg p-2"
-          />
-          {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowConfirmationModal(false)}>
-            Close
+      {/* Confirmation Modal */}
+      <Dialog open={showConfirmationModal} size="sm" handler={() => setShowConfirmationModal(false)}>
+        <DialogHeader>Cancel Booking</DialogHeader>
+        <DialogBody divider>
+          <div>
+            <p className="font-bold">Are you sure you want to cancel this booking?</p>
+            <textarea
+              value={cancellationReason}
+              onChange={(e) => setCancellationReason(e.target.value)}
+              placeholder="Enter cancellation reason"
+              className="mt-2 w-full h-20 p-2 border rounded-lg"
+            />
+            {errorMessage && <p className="text-red-500 text-sm mt-2">{errorMessage}</p>}
+          </div>
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            color="red"
+            onClick={() => setShowConfirmationModal(false)}
+            className="mr-1"
+          >
+            Cancel
           </Button>
-          <Button variant="primary" onClick={handleCancelBooking}>
+          <Button
+            color="green"
+            onClick={handleCancelBooking}
+          >
             Confirm
           </Button>
-        </Modal.Footer>
-      </Modal>
+        </DialogFooter>
+      </Dialog>
     </>
   );
 };

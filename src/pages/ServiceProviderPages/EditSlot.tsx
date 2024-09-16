@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getSlotsList, editSlot } from '../../api/serviceProviderAPI';
 import AppNavbar from '../../components/common_pages/ProviderHeader';
 import Footer from '../../components/common_pages/Footer';
+import toast from 'react-hot-toast';
 
 const EditSlot: React.FC = () => {
   const [slotData, setSlotData] = useState({
@@ -12,31 +13,23 @@ const EditSlot: React.FC = () => {
     price: '',
     services: [] as string[],
     description: '',
-    status: 'open', // Default status
+    status: 'open',
   });
 
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { slotId } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('slotId:', slotId); // Add this line to debug
-
     const fetchSlotDetails = async () => {
       try {
-        console.log('slotIds:', slotId); // Add this line to debug
-
         const { data } = await getSlotsList(1, 100, '');
-        console.log('slotIdss:', data); // Add this line to debug
-        // Adjust page and limit as needed
         const foundSlot = data.find((slot: any) => slot._id === slotId);
-console.log('foundSlot',foundSlot);
 
         if (foundSlot) {
-          // Assuming `schedule` contains the slot details you need
           const schedule = foundSlot.schedule[0] || {};
-          
-          // Convert UTC date to local date format (yyyy-MM-ddThh:mm)
+
           const formatDate = (date: string) => {
             const localDate = new Date(date);
             return localDate.toISOString().slice(0, 16);
@@ -49,13 +42,13 @@ console.log('foundSlot',foundSlot);
             price: schedule.price || '',
             services: schedule.services || [],
             description: schedule.description || '',
-            status: foundSlot.status || 'open', // Update if needed
+            status: foundSlot.status || 'open',
           });
         }
         setLoading(false);
       } catch (error: any) {
         console.error('Error fetching slot details:', error.message);
-        setLoading(false); // Stop loading on error
+        setLoading(false);
       }
     };
 
@@ -69,13 +62,28 @@ console.log('foundSlot',foundSlot);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const fromDate = new Date(slotData.from);
+    const toDate = new Date(slotData.to);
+
+    if (toDate <= fromDate) {
+      setError('The "To" date must be greater than the "From" date.');
+      return;
+    }
+
+    setError(null); // Clear any previous error
+
     try {
       await editSlot(slotId as string, slotData);
-      navigate('/serviceProvider/get-slots'); // Redirect after successful edit
+      toast.success('Slot updated successfully.');
+      navigate('/serviceProvider/get-slots', { state: { refresh: true } }); // Navigate and pass a state to refresh the slots list
     } catch (error: any) {
       console.error('Error updating slot:', error.message);
+      toast.error('There was an error updating the slot. Please try again.');
     }
   };
+
+  // Get the current date and time
+  const currentDateTime = new Date().toISOString().slice(0, 16);
 
   if (loading) return <div>Loading...</div>;
 
@@ -85,6 +93,7 @@ console.log('foundSlot',foundSlot);
       <div style={{ maxWidth: '800px', margin: 'auto', padding: '1.5rem' }}>
         <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Edit Slot</h1>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {error && <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
           
           <div>
             <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '0.5rem' }}>From</label>
@@ -93,6 +102,7 @@ console.log('foundSlot',foundSlot);
               name="from"
               value={slotData.from}
               onChange={handleInputChange}
+              min={currentDateTime} // Set minimum date-time to current date and time
               style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '0.25rem' }}
               required
             />
@@ -104,6 +114,7 @@ console.log('foundSlot',foundSlot);
               name="to"
               value={slotData.to}
               onChange={handleInputChange}
+              min={currentDateTime} // Set minimum date-time to current date and time
               style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '0.25rem' }}
               required
             />
@@ -137,17 +148,6 @@ console.log('foundSlot',foundSlot);
               style={{ width: '100%', height: '150px', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '0.25rem' }}
             ></textarea>
           </div>
-          {/* Uncomment if you need to edit status */}
-          {/* <div>
-            <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '0.5rem' }}>Status</label>
-            <input
-              type="text"
-              name="status"
-              value={slotData.status}
-              readOnly
-              style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '0.25rem' }}
-            />
-          </div> */}
           <button type="submit" style={{ padding: '0.75rem 1.5rem', color: '#fff', backgroundColor: '#007bff', border: 'none', borderRadius: '0.25rem', cursor: 'pointer' }}>
             Update Slot
           </button>

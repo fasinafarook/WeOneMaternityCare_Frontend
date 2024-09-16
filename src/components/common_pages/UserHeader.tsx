@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
+import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { logout } from "../../api/adminAPI";
@@ -7,40 +7,71 @@ import logo from "../../../public/images/WeOne (1).png";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { userLogout } from "../../redux/slice/authSlice";
-import { getProfileDetails } from "../../api/userAPI";
+import { getProfileDetails, getUserCompletedBookings } from "../../api/userAPI";
+import Swal from 'sweetalert2';
+
 interface ProfileData {
   name: string;
+  userId: string; // Add userId here
 }
 
 const UserNavbar: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const location = useLocation(); // Get the current route location
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
+  const [hasCompletedBooking, setHasCompletedBooking] = useState(false);
 
   const handleLogout = async () => {
-    try {
-      const response = await logout();
-      if (response.success) {
-        dispatch(userLogout());
-        navigate("/");
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to log out?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, log out!',
+      cancelButtonText: 'Cancel',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await logout();
+        if (response.success) {
+          dispatch(userLogout());
+          navigate("/");
+        } else {
+          toast.error("Logout failed. Please try again.");
+        }
+      } catch (error) {
+        console.error("Logout failed:", error);
+        toast.error("Logout failed. Please try again.");
       }
-    } catch (error) {
-      console.error("Logout failed:", error);
-      toast.error("Logout failed. Please try again.");
     }
   };
+
   useEffect(() => {
-    // Fetch user data from backend
     const fetchUserData = async () => {
       try {
+        // Fetch user profile details
         const { data } = await getProfileDetails();
-        console.log("data: ", data);
+        console.log("Profile Data:", data);
         setProfileData(data);
+
+        // Extract userId from the profile and fetch completed bookings
+        const userId = data._id; // Extract userId
+        console.log('id',userId);
+        
+        const { data: completedBookings } = await getUserCompletedBookings(userId);
+        console.log('Completed Bookings:', completedBookings);
+
+        if (completedBookings && completedBookings.length > 0) {
+          setHasCompletedBooking(true);
+        }
       } catch (error) {
-        console.error("Failed to fetch user data:", error);
+        console.error("Failed to fetch data:", error);
       }
     };
+
     fetchUserData();
   }, []);
 
@@ -49,18 +80,31 @@ const UserNavbar: React.FC = () => {
     fontWeight: "500",
     fontSize: "16px",
     marginRight: "20px",
-    position: "relative", // Ensure this is correctly typed
+    position: "relative",
     padding: "5px 10px",
     textTransform: "capitalize",
     transition: "all 0.3s ease",
     overflow: "hidden",
   });
+
+  {console.log('hasCompletedBooking:', hasCompletedBooking)}
+
+  const handleMessageClick = () => {
+    if (hasCompletedBooking) {
+      navigate("/user/messages");
+    } else {
+      Swal.fire({
+        icon: 'info',
+        title: 'Complete a Booking',
+        text: 'You need to complete at least one booking to start chatting with other mothers.',
+        confirmButtonText: 'OK'
+      });    }
+  };
   return (
     <Navbar
       style={{ background: "linear-gradient(to right, #574b60, #D7BCC8)" }}
       expand="lg"
     >
-      <p>..</p>
       <Navbar.Brand as={Link} to="/user/home">
         <img src={logo} alt="Logo" style={{ width: "70px", height: "70px" }} />
       </Navbar.Brand>
@@ -114,49 +158,36 @@ const UserNavbar: React.FC = () => {
             >
               Complaints
             </Nav.Link>
+
+            {/* Conditionally render the Message button */}
+            <Nav.Link
+        as="span"
+        style={{ cursor: "pointer", textDecoration: "none", color: "inherit" }}
+        onClick={handleMessageClick} // Conditionally handle the click
+      >
+        ChatBox
+      </Nav.Link>
           </Nav>
 
-          <Nav>
-            <h1
+          <Nav className="d-flex align-items-center">
+            <Nav.Link
+              as={Link}
+              to="/user/get-profile"
               style={{
-                fontFamily: "'Poppins', sans-serif", // Consistent font family
-                fontSize: "12px", // Larger size for the header
-                fontWeight: "600", // Bold weight for strong emphasis
-                marginBottom: "10px", // Space below the header
-                color: "#333", // A darker shade for better contrast
-                background:
-                  "linear-gradient(90deg, rgba(255,213,79,1) 0%, rgba(245,133,41,1) 100%)", // Gradient background
-                padding: "10px 15px", // Padding for spacing inside the header
-                borderRadius: "8px", // Rounded corners for a softer look
-                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
-                textAlign: "center", // Center the text
-                maxWidth: "400px", // Limit the width for a clean look
-                margin: "auto", // Center the element horizontally
+                display: "flex",
+                alignItems: "center",
+                color: "white",
+                marginRight: "20px",
               }}
             >
-              {profileData ? (
-                <span>user name: {profileData.name}</span>
-              ) : (
-                <span>Loading...</span>
-              )}
-            </h1>
-
-            <NavDropdown
-              title={<FaUserCircle size={40} style={{ color: "white" }} />}
-              id="basic-nav-dropdown"
-              align="end"
-            >
-              <NavDropdown.Item as={Link} to="/user/get-profile">
-                Profile Details
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item
-                onClick={handleLogout}
-                style={{ backgroundColor: "#dc3545", color: "#fff" }}
-              >
-                Logout
-              </NavDropdown.Item>
-            </NavDropdown>
+              <FaUserCircle size={40} />
+              <span style={{ marginLeft: "10px" }}>
+                {profileData?.name || "Profile"}
+              </span>
+            </Nav.Link>
+            <Nav.Link onClick={handleLogout} style={{ color: "white" }}>
+              Logout
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

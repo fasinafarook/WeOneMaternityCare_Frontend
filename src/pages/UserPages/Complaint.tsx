@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate for redire
 import { getProfileDetails, fileComplaint } from '../../api/userAPI';
 import UserNavbar from '../../components/common_pages/UserHeader';
 import Footer from '../../components/common_pages/Footer';
-import { ToastContainer, toast } from 'react-toastify'; // Import toast and ToastContainer
-import 'react-toastify/dist/ReactToastify.css'; // Import toast CSS
+import toast from 'react-hot-toast'; // Import toast from react-hot-toast
 
 const FileComplaint: React.FC = () => {
   const [subject, setSubject] = useState('');
@@ -67,9 +66,25 @@ const FileComplaint: React.FC = () => {
     }
   };
 
+  const containerStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100vh', // Ensure container takes up at least the full viewport height
+  };
+
+  const formContainerStyle = {
+    flex: '1', // Allows the form to take available space
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '20px',
+  };
+
   const formStyle = {
     display: 'flex',
     flexDirection: 'column',
+    maxWidth: '100%',
+    width: '100%',
     maxWidth: '600px',
     margin: 'auto',
     padding: '20px',
@@ -84,6 +99,7 @@ const FileComplaint: React.FC = () => {
     borderRadius: '4px',
     border: '1px solid #ccc',
     fontSize: '16px',
+    width: '100%', // Make input full width
   };
 
   const textareaStyle = {
@@ -101,6 +117,7 @@ const FileComplaint: React.FC = () => {
     fontSize: '16px',
     cursor: 'pointer',
     transition: 'background-color 0.3s',
+    width: '100%', // Make button full width
   };
 
   const buttonHoverStyle = {
@@ -108,40 +125,42 @@ const FileComplaint: React.FC = () => {
   };
 
   return (
-    <>
+    <div style={containerStyle}>
       <UserNavbar />
-      <form onSubmit={handleSubmit} style={formStyle}>
-        <div>
-          <label style={{ marginBottom: '5px', display: 'block' }}>Subject:</label>
-          <input
-            type="text"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-            style={inputStyle}
-          />
-          {errors.subject && <p style={{ color: 'red' }}>{errors.subject}</p>}
-        </div>
-        <div>
-          <label style={{ marginBottom: '5px', display: 'block' }}>Description:</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            style={textareaStyle}
-          />
-          {errors.description && <p style={{ color: 'red' }}>{errors.description}</p>}
-        </div>
-        <button
-          type="submit"
-          style={buttonStyle}
-          onMouseOver={(e) => (e.currentTarget.style.backgroundColor = buttonHoverStyle.backgroundColor)}
-          onMouseOut={(e) => (e.currentTarget.style.backgroundColor = buttonStyle.backgroundColor)}
-        >
-          Submit Complaint
-        </button>
-      </form>
+      <div style={formContainerStyle}>
+        <form onSubmit={handleSubmit} style={formStyle}>
+          <div>
+            <label style={{ marginBottom: '5px', display: 'block' }}>Subject:</label>
+            <input
+              type="text"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              style={inputStyle}
+            />
+            {errors.subject && <p style={{ color: 'red' }}>{errors.subject}</p>}
+          </div>
+          <div>
+            <label style={{ marginBottom: '5px', display: 'block' }}>Description:</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              style={textareaStyle}
+            />
+            {errors.description && <p style={{ color: 'red' }}>{errors.description}</p>}
+          </div>
+          <button
+            type="submit"
+            style={buttonStyle}
+            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = buttonHoverStyle.backgroundColor)}
+            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = buttonStyle.backgroundColor)}
+          >
+            Submit Complaint
+          </button>
+        </form>
+      </div>
       <Footer />
-      <ToastContainer /> {/* Add ToastContainer for toast notifications */}
-    </>
+      {/* No need to add ToastContainer */}
+    </div>
   );
 };
 
