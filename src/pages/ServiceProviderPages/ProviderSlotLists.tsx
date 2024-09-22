@@ -100,9 +100,10 @@ const SlotsList = () => {
   };
 
   // Helper function to check if the slot is expired
-  const isExpired = (endDate: Date) => {
-    return new Date() > new Date(endDate);
+  const isExpired = (endDate: Date, status: string) => {
+    return status === "open" && new Date() > new Date(endDate);
   };
+  
 
   return (
     <>
@@ -142,19 +143,23 @@ const SlotsList = () => {
                       <td style={{ borderBottom: '1px solid #ddd', padding: '0.75rem' }}>{new Date(schedule.from).toLocaleString()}</td>
                       <td style={{ borderBottom: '1px solid #ddd', padding: '0.75rem' }}>{new Date(schedule.to).toLocaleString()}</td>
                       <td style={{ borderBottom: '1px solid #ddd', padding: '0.75rem' }}>${schedule.price}</td>
-                      <td style={{ borderBottom: '1px solid #ddd', padding: '0.75rem', color: isExpired(schedule.to) ? 'grey' : (schedule.status === 'open' ? 'green' : 'red') }}>
-                        {isExpired(schedule.to) ? 'Expired' : schedule.status}
-                      </td>
-                      <td style={{ borderBottom: '1px solid #ddd', padding: '0.75rem' }}>
-                        {!isExpired(schedule.to) && schedule.status === 'open' && (
-                          <button
-                            onClick={() => handleEditSlot(slot._id)}
-                            style={{ padding: '0.5rem 1rem', color: '#fff', backgroundColor: '#007bff', border: 'none', borderRadius: '0.25rem', cursor: 'pointer' }}
-                          >
-                            Edit
-                          </button>
-                        )}
-                      </td>
+                      <td style={{ 
+    borderBottom: '1px solid #ddd', 
+    padding: '0.75rem', 
+    color: isExpired(new Date(schedule.from), schedule.status) ? 'grey' : (schedule.status === 'open' ? 'green' : 'red') 
+}}>
+  {isExpired(new Date(schedule.from), schedule.status) ? 'Expired' : schedule.status}
+</td>
+<td style={{ borderBottom: '1px solid #ddd', padding: '0.75rem' }}>
+  {!isExpired(new Date(schedule.from), schedule.status) && schedule.status === 'open' && (
+    <button
+      onClick={() => handleEditSlot(slot._id)}
+      style={{ padding: '0.5rem 1rem', color: '#fff', backgroundColor: '#007bff', border: 'none', borderRadius: '0.25rem', cursor: 'pointer' }}
+    >
+      Edit
+    </button>
+  )}
+</td>
                     </tr>
                   ))
                 ))

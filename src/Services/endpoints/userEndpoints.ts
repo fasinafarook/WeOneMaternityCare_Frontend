@@ -28,16 +28,8 @@ const userEndpoint = {
     getUserchatt:"/user/message",
     sendMessage: '/message/send',
 
-    // getAllPremiumCandidates: "/user/get-all-premium-users",
-
-    // createGroup: "/chat/group",
-  
-    // getAllChats: "/chat",
-
-    // getAllMessages: "/chat/messages",
-
-    // sendMessage: "/chat/send-message",
-
+    forgorPassword: "/user/forgot-password",
+    resetPassword: "/user/reset-password",
 
     submitComplaint: '/user/complaints',
     getComplaints: '/user/complaints', // As

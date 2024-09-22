@@ -84,13 +84,13 @@ interface ServiceProviderDetails {
   mobile: number;
   email: string;
   service: string;
-  specialization: string;
+  specialization?: string;
   qualification: string;
   expYear: number;
   location: string;
-  profilePicture: File[];
-  rate: number;
-  experienceCrt: File[];
+  profilePicture?: File[];
+  rate?: number;
+  experienceCrt?: File[];
 }
 
 export const verifyDetails = async (
@@ -158,7 +158,7 @@ export const fetchCategories = async () => {
 export const getProfileDetails = async () => {
   try {
     const { data } = await Api.get(serviceProviderEndpoint.getProfileDetails);
-    console.log("data:", data);
+    console.log("datas:", data);
 
     return data;
   } catch (error) {
@@ -306,5 +306,66 @@ export const updateBookingStatus = async (bookingId: string, status: string) => 
   } catch (error: any) {
     console.log("Error updating booking status:", error);
     return error.response?.data;
+  }
+};
+
+
+export const forgorPassword = async (email: string) => {
+  try {
+    const response = await Api.post(serviceProviderEndpoint.ForgotPassword, {email})
+    localStorage.setItem("intResetPassword", response.data.data);
+    return response.data
+  } catch (error: any) {
+    console.log(error)
+    return error.response.data
+  }
+}
+
+
+export const resetPassword = async (otp: string, password: string) => {
+  try {
+      const token = localStorage.getItem("intResetPassword")
+      const response = await Api.post(serviceProviderEndpoint.resetPassword, {otp, password}, {
+          headers: {
+              Authorization: `Bearer ${token}`
+          }
+      })
+      if(response.data.success){
+          localStorage.removeItem("intResetPassword")
+      }
+      return response.data
+  } catch (error: any) {
+      console.log("inseide catch in api: ", error.response.data)
+      return error.response.data
+  }
+}
+
+
+export const editPassword = async (currentPassword: string, newPassword: string) => {
+  try {
+      const {data} = await Api.put(serviceProviderEndpoint.editPassword, {currentPassword, newPassword})
+      return data 
+  } catch (error: any) {
+      console.log(error)
+      return error.response.data
+  }
+}
+
+export const editProfile = async (details: ServiceProviderDetails) => {
+  try {
+    const {data} = await Api.put(serviceProviderEndpoint.editProfile, {details});
+    return data
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const getDashboardData = async () => {
+  try {
+    const response = await Api.get('/serviceProvider/dashboard'); // API route from backend
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch dashboard data:', error);
+    throw error;
   }
 };

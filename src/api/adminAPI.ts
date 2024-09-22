@@ -293,3 +293,25 @@ export const respondToComplaint = async ({ complaintId, response }: RespondToCom
     throw new Error('Failed to respond to complaint');
   }
 };
+
+
+export const getBookings = async (page: number, limit: number) => {
+  try {
+    const response = await Api.get(`${adminEndpoint.getBookings}?page=${page}&limit=${limit}`);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch bookings");
+  }
+};
+
+
+export const getDashboardDetails = async () => {
+  try {
+      const {data} = await Api.get(adminEndpoint.getDashboardDetails)
+      console.log('dfgg',data);
+      
+      return data
+  } catch (error) {
+      console.log(error)
+  }
+}

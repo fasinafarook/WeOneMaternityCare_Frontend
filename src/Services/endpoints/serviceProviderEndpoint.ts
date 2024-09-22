@@ -16,6 +16,13 @@ const serviceProviderEndpoint = {
     updateWallet: "/serviceProvider/update-wallet",
     updateBookingStatus: "/serviceProvider/update-booking-status",
 
+    ForgotPassword: '/serviceProvider/forgot-password',
+    resetPassword: '/serviceProvider/reset-password',
+
+    editPassword: "/serviceProvider/edit-password",
+
+    editProfile: "/serviceProvider/edit-profile",
+
     processRefund: '/payment/refund', 
 
     

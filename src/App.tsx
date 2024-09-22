@@ -19,7 +19,7 @@ import ServiceProviderOtp from "./pages/ServiceProviderPages/ServiceProviderOTP"
 import ServiceProviderLogin from "./pages/ServiceProviderPages/ServiceProviderLogin";
 import ServiceProviderDetails from "./pages/ServiceProviderPages/ServiceProviderDetails";
 import AdminDashBoard from "./pages/AdminPages/AdminDahboard";
-import ProviderPage from "./pages/ServiceProviderPages/ServiceProviderDashboard";
+import ProviderDashboard from "./pages/ServiceProviderPages/ServiceProviderDashboard";
 import ClientDashboard from "./pages/UserPages/UserDashboard";
 import Users from "./pages/AdminPages/Users";
 import ServiceProviders from "./pages/AdminPages/ServiceProvider";
@@ -52,13 +52,18 @@ import FileComplaint from "./pages/UserPages/Complaint";
 import ComplaintsList from "./pages/UserPages/AllComplaints";
 import ComplaintsPage from "./pages/AdminPages/Complaint";
 import Chat from "./pages/UserPages/Chat";
-// Import ProtectedRoute HOC
 import useSocket from "./hooks/useSocket";
+import ForgotPassword from "./pages/UserPages/ForgotPassword";
+import ForgotPasswords from "./pages/ServiceProviderPages/ForgotPassword";
+
+import ProfileManagement from "./pages/ServiceProviderPages/ProfileManagement";
+
+import AdminBookingList from "./pages/AdminPages/BookingList";
 // import ProtectedRoute, { AdminProtectedRoute, ServiceProviderProtectedRoute } from './components/PrivetProtected';
 import {
   UserProtectedRoute,
   PublicUserProtectedRoute,
-  PublicSpProtectedRoute,
+  // PublicSpProtectedRoute,
   PublicAdminProtectedRoute,
   SpProtectedRoute,
   AdminProtectedRoute,
@@ -96,12 +101,17 @@ const App: React.FC = () => {
           path="/serviceProvider/verify-login"
           element={<ServiceProviderLogin />}
         />
+
+<Route path="/serviceProvider/forgot-password" element={<ForgotPasswords />} />
+
         {/* </Route> */}
 
         <Route element={<PublicUserProtectedRoute />}>
           <Route path="/user/client-register" element={<ClientRegister />} />
           <Route path="/user/verify-otp" element={<OtpVerification />} />
           <Route path="/user/verify-login" element={<UserLogin />} />
+          <Route path="/user/forgot-password" element={<ForgotPassword />} />
+
         </Route>
 
         {/* Protected Routes - User */}
@@ -138,7 +148,7 @@ const App: React.FC = () => {
 
         {/* Protected Routes - Service Provider */}
         <Route element={<SpProtectedRoute />}>
-          <Route path="/serviceProvider/home" element={<ProviderPage />} />
+          <Route path="/serviceProvider/home" element={<ProviderDashboard />} />
           <Route path="/serviceProvider/get-slots" element={<SlotsList />} />
           <Route path="/serviceProvider/add-slot" element={<AddSlot />} />
           <Route
@@ -156,6 +166,10 @@ const App: React.FC = () => {
           <Route
             path="/video-call/:roomId/:serviceProviderId"
             element={<ProviderVideoCall></ProviderVideoCall>}
+          />
+          <Route
+            path="/serviceProvider/get-profile"
+            element={<ProfileManagement />}
           />
         </Route>
 
@@ -178,6 +192,8 @@ const App: React.FC = () => {
           <Route path="/admin/add-webinars" element={<AddWebinar />} />
           <Route path="/admin/webinars" element={<ListWebinars />} />
           <Route path="/admin/complaints" element={<ComplaintsPage />} />
+          <Route path="/admin/bookings" element={<AdminBookingList />} />
+
         </Route>
       </Routes>
     </>

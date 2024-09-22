@@ -108,6 +108,12 @@ const SericeProviderLogin = () => {
                 >
                   Login As User
                 </Link>
+                <Link
+                  to="/serviceProvider/forgot-password"
+                  className="text-xs text-gray-500 hover:text-gray-900 text-end w-full mt-2"
+                >
+                  Forgot Password?
+                </Link>
               </div>
 
               <div className="mt-8">

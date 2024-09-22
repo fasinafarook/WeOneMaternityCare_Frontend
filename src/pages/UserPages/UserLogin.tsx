@@ -95,6 +95,13 @@ const UserLogin = () => {
                 >
                   Login as Service Provider
                 </Link>
+
+                <Link
+                  to="/user/forgot-password"
+                  className="text-xs text-gray-500 hover:text-gray-900 text-end w-full mt-2"
+                >
+                  Forgot Password?
+                </Link>
               </div>
 
               <div className="mb-6"  style={{background:" rgb(27 145 187)"}}>

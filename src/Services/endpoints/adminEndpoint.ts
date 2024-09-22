@@ -21,7 +21,8 @@ const adminEndpoint = {
     toggleWebinarListing:"/admin/webinars/toggle-listing",
     updateBlogStatus: '/admin/blog', // or whatever your endpoint is
     getAllComplaints:'/admin/complaints',
-    respondToComplaint:'/admin/respond-to-complaint'
+    respondToComplaint:'/admin/respond-to-complaint',
+    getBookings:"/admin/bookings"
     
 }
 

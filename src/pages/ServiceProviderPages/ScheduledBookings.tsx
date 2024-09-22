@@ -40,13 +40,13 @@ const ScheduledBookings = () => {
   const limit = parseInt(searchParams.get('limit') || '5');
   const navigate = useNavigate();
 
-  const fetchScheduledBookings = async (page: number, limit: number) => {
-    setLoading(true);
-    const response = await getSchedulesBookings(page, limit);
-    setScheduledBookings(response.data);
-    setTotalPages(Math.ceil(response.total / limit));
-    setLoading(false);
-  };
+  // const fetchScheduledBookings = async (page: number, limit: number) => {
+  //   setLoading(true);
+  //   const response = await getSchedulesBookings(page, limit);
+  //   setScheduledBookings(response.data);
+  //   setTotalPages(Math.ceil(response.total / limit));
+  //   setLoading(false);
+  // };
 
   const handlePageChange = (newPage: number) => {
     setSearchParams({ page: newPage.toString(), limit: limit.toString() });
@@ -68,6 +68,36 @@ const ScheduledBookings = () => {
     }
   };
 
+
+  const checkAndUpdateStatus = (booking: ScheduledBooking) => {
+    const currentTime = new Date();
+    const bookingEndTime = new Date(booking.toTime); // Use `toTime` for checking expiration
+
+    // Check if the booking's end time is before the current time
+    if (bookingEndTime < currentTime && booking.status === "Scheduled") {
+      booking.status = "Expired";
+    }
+
+    return booking;
+  };
+
+
+  const fetchScheduledBookings = async (page: number, limit: number) => {
+    setLoading(true);
+    try {
+      const response = await getSchedulesBookings(page, limit);
+
+      // Update the status of each booking using checkAndUpdateStatus
+      const updatedBookings = response.data.map((booking: ScheduledBooking) => checkAndUpdateStatus(booking));
+
+      setScheduledBookings(updatedBookings);
+      setTotalPages(Math.ceil(response.total / limit));
+    } catch (error) {
+      toast.error("Failed to load bookings");
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleStartCall = useCallback(
     (roomId: string, serviceProviderId: string) => {
       navigate(`/video-call/${roomId}/${serviceProviderId}`);
@@ -128,6 +158,8 @@ const ScheduledBookings = () => {
                     const isWithinSchedule = currentTime >= fromTime && currentTime <= toTime;
                     const isExpired = currentTime > toTime;
 
+                    
+
                     return (
                       <tr key={booking._id} className="hover:bg-gray-50 transition-colors duration-200">
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -159,21 +191,21 @@ const ScheduledBookings = () => {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span
-                            className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${
-                              isExpired
-                                ? "bg-gray-100 text-gray-800"
-                                : booking.status === "Completed"
-                                ? "bg-green-100 text-green-800"
-                                : booking.status === "Cancelled"
-                                ? "bg-red-100 text-red-800"
-                                : booking.status === "Scheduled"
-                                ? "bg-green-100 text-green-800"
-                                : "bg-yellow-100 text-yellow-800"
-                            }`}
-                          >
-                            {isExpired ? "Expired" : booking.status}
-                          </span>
+                        <span
+                          className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${
+                            booking.status === "Expired"
+                              ? "bg-gray-100 text-gray-800"
+                              : booking.status === "Completed"
+                              ? "bg-green-100 text-green-800"
+                              : booking.status === "Cancelled"
+                              ? "bg-red-100 text-red-800"
+                              : booking.status === "Scheduled"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-yellow-100 text-yellow-800"
+                          }`}
+                        >
+                          {booking.status}
+                        </span>
 
                           {booking.status === "Cancelled" && booking.cancellationReason && (
                             <div className="mt-2 text-sm text-gray-600">

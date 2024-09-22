@@ -12,6 +12,7 @@ import Swal from "sweetalert2";
 
 interface ProfileData {
   name: string;
+  profilePicture: string;
 }
 
 const AppNavbar: React.FC = () => {
@@ -21,14 +22,14 @@ const AppNavbar: React.FC = () => {
 
   const handleLogout = async () => {
     const result = await Swal.fire({
-      title: 'Are you sure?',
-      text: 'You will be logged out of your account.',
-      icon: 'warning',
+      title: "Are you sure?",
+      text: "You will be logged out of your account.",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, logout!',
-      cancelButtonText: 'Cancel'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, logout!",
+      cancelButtonText: "Cancel",
     });
 
     if (result.isConfirmed) {
@@ -37,7 +38,7 @@ const AppNavbar: React.FC = () => {
         if (response.success) {
           dispatch(serviceProviderLogout());
           navigate("/");
-          Swal.fire('Logged out!', 'You have been logged out.', 'success');
+          Swal.fire("Logged out!", "You have been logged out.", "success");
         }
       } catch (error) {
         console.error("Logout failed:", error);
@@ -86,20 +87,39 @@ const AppNavbar: React.FC = () => {
           id="basic-navbar-nav"
           className="justify-content-between" // Use between to separate navigation items and profile/logout section
         >
-          <Nav className="me-auto" style={{ display: "flex", alignItems: "center" }}>
-            <Nav.Link as={Link} to="/serviceProvider/home" style={navLinkStyle("/serviceProvider/home")}>
+          <Nav
+            className="me-auto"
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            <Nav.Link
+              as={Link}
+              to="/serviceProvider/home"
+              style={navLinkStyle("/serviceProvider/home")}
+            >
               Home
             </Nav.Link>
-            <Nav.Link as={Link} to="/webinars" style={navLinkStyle("/webinars")}>
+            <Nav.Link
+              as={Link}
+              to="/webinars"
+              style={navLinkStyle("/webinars")}
+            >
               Webinar
             </Nav.Link>
             <Nav.Link as={Link} to="/blogs" style={navLinkStyle("/blogs")}>
               Blog
             </Nav.Link>
-            <Nav.Link as={Link} to="/serviceProvider/get-scheduled-bookings" style={navLinkStyle("/serviceProvider/get-scheduled-bookings")}>
+            <Nav.Link
+              as={Link}
+              to="/serviceProvider/get-scheduled-bookings"
+              style={navLinkStyle("/serviceProvider/get-scheduled-bookings")}
+            >
               Bookings
             </Nav.Link>
-            <Nav.Link as={Link} to="/serviceProvider/get-slots" style={navLinkStyle("/serviceProvider/get-slots")}>
+            <Nav.Link
+              as={Link}
+              to="/serviceProvider/get-slots"
+              style={navLinkStyle("/serviceProvider/get-slots")}
+            >
               Slots
             </Nav.Link>
           </Nav>
@@ -108,17 +128,40 @@ const AppNavbar: React.FC = () => {
             <Nav.Link
               as={Link}
               to="/serviceProvider/get-profile"
-              style={{ display: "flex", alignItems: "center", color: "white", marginRight: "20px" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                color: "white",
+                marginRight: "20px",
+              }}
             >
-              <FaUserCircle size={40} />
-              <span style={{ marginLeft: "10px", fontSize: "16px", fontWeight: "500" }}>
+              {profileData && profileData.profilePicture ? (
+                <img
+                  src={profileData.profilePicture}
+                  alt="Profile"
+                  style={{ width: "40px", height: "40px", borderRadius: "50%" }}
+                />
+              ) : (
+                <FaUserCircle size={40} />
+              )}{" "}
+              <span
+                style={{
+                  marginLeft: "10px",
+                  fontSize: "16px",
+                  fontWeight: "500",
+                }}
+              >
                 {profileData ? profileData.name : "Loading..."}
               </span>
             </Nav.Link>
 
             <Button
               onClick={handleLogout}
-              style={{ backgroundColor: "#dc3545", border: "none", color: "#fff" }}
+              style={{
+                backgroundColor: "#dc3545",
+                border: "none",
+                color: "#fff",
+              }}
             >
               Logout
             </Button>
