@@ -29,7 +29,8 @@ interface EditSpProps {
   onProfileEdit: (updatedData: serviceProvider) => void;
 }
 
-const ProfileManagement: React.FC<EditSpProps> = ({  serviceProviderDetails, onProfileEdit }) => {
+
+const ProfileManagement: React.FC<EditSpProps> = ({ serviceProviderDetails = {}, onProfileEdit = () => {} }) => {
   const [categories, setCategories] = useState<string[]>([]);
 
   const {
@@ -158,7 +159,10 @@ const ProfileManagement: React.FC<EditSpProps> = ({  serviceProviderDetails, onP
                 <input
                   type="tel"
                   id="mobile"
-                  {...register("mobile", { required: "Mobile number is required" })}
+                  {...register("mobile", { required: "Mobile number is required" , pattern: {
+                    value: /^[0]?[789]\d{9}$/,
+                    message: "Enter a valid number",
+                  }, })}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300"
                 />
                 {errors.mobile && <p className="text-sm text-red-600">{errors.mobile.message}</p>}

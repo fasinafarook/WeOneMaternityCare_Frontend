@@ -96,12 +96,18 @@ const AddSlot = () => {
       return;
     }
 
-    const response = await addSlot(data);
-    if (response.success) {
-      toast.success("Slot added successfully!"); // Success message
-      navigate("/serviceProvider/get-slots");
-    } else {
-      toast.error(response.message);
+    try {
+      const response = await addSlot(data);
+      
+      if (response && response.success) {
+        toast.success("Slot added successfully!");
+        navigate("/serviceProvider/get-slots");
+      } else {
+        toast.error(response?.message || "Time slot already taken");
+      }
+    } catch (error: any) {
+      console.error('Error adding slot:', error.message);
+      toast.error(error.response?.data?.message || "There was an error adding the slot. Please try again.");
     }
   };
 
@@ -126,7 +132,7 @@ const AddSlot = () => {
       <div className="min-h-screen bg-white-100 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
           <div className="bg-[#91939f] text-white py-6 px-8">
-            <h1 className="text-3xl font-bold">Book a Slot</h1>
+            <h1 className="text-3xl font-bold">Add a Slot</h1>
           </div>
           <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

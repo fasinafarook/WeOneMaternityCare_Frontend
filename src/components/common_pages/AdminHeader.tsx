@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Navbar, Container, Image, Nav, Button, Offcanvas } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import logo from "../../../public/images/logo.jpeg";
+import logo from "../../../public/images/WeOne (1).png";
 import { logout } from "../../api/adminAPI";
 import { adminLogout } from "../../redux/slice/authSlice";
 import { useDispatch } from "react-redux";
@@ -49,7 +49,7 @@ const AdminNavbar: React.FC = () => {
           <Navbar.Brand href="/admin/dashboard">
             <Image
               src={logo}
-              style={{ height: "70px", width: "auto" }} // Ensure width is auto to maintain aspect ratio
+              style={{ width: "70px", height: "70px" }} // Ensure width is auto to maintain aspect ratio
               alt="Logo"
             />
           </Navbar.Brand>

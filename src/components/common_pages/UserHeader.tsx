@@ -158,15 +158,22 @@ const UserNavbar: React.FC = () => {
             >
               Complaints
             </Nav.Link>
+            
 
-            {/* Conditionally render the Message button */}
             <Nav.Link
         as="span"
         style={{ cursor: "pointer", textDecoration: "none", color: "inherit" }}
-        onClick={handleMessageClick} // Conditionally handle the click
+        onClick={handleMessageClick} 
       >
         ChatBox
       </Nav.Link>
+      <Nav.Link
+              as={Link}
+              to="/user/about"
+              style={navLinkStyle("/user/about")}
+            >
+              About
+            </Nav.Link>
           </Nav>
 
           <Nav className="d-flex align-items-center">

@@ -111,6 +111,14 @@ const OutsourcedBookings = () => {
     return hoursDifference >= 24;
   };
 
+  const isTimeWithinSlot = (fromTime: string, toTime: string): boolean => {
+    const currentTime = new Date();
+    const startTime = new Date(fromTime);
+    const endTime = new Date(toTime);
+  
+    return currentTime >= startTime && currentTime <= endTime;
+  };
+
   useEffect(() => {
     fetchScheduledBookings(currentPage, limit);
   }, [currentPage, limit]);
@@ -188,6 +196,17 @@ const OutsourcedBookings = () => {
                               >
                                 {booking.status}
                               </span>
+                              <td>
+                              <button
+            onClick={() => handleOpenModal(booking)}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition duration-150 ease-in-out"
+          >
+            Booking Details
+          </button>
+
+                              </td>
+                              
+          
                             </td>
                             <td className="px-2 py-3 whitespace-nowrap">
                               {booking.status === "Refunded" ? (
@@ -205,7 +224,7 @@ const OutsourcedBookings = () => {
                                 isCancellationAllowed(booking.fromTime) && (
                                   <button
                                     onClick={(e) => {
-                                      e.stopPropagation(); // Stop the click event from bubbling up
+                                      e.stopPropagation(); 
                                       setSelectedBooking(booking);
                                       setShowConfirmationModal(true);
                                     }}
@@ -242,7 +261,7 @@ const OutsourcedBookings = () => {
         <DialogHeader>Booking Details</DialogHeader>
         <DialogBody divider>
           <div>
-            <p className="font-bold">Title: {selectedBooking?.title}</p>
+            <p className="font-bold">Category: {selectedBooking?.title}</p>
             <p className="font-bold">Scheduled On: {new Date(selectedBooking?.date).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}</p>
             <p className="font-bold">From: {new Date(selectedBooking?.fromTime).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</p>
             <p className="font-bold">To: {new Date(selectedBooking?.toTime).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</p>
@@ -259,13 +278,15 @@ const OutsourcedBookings = () => {
             Close
           </Button>
           {selectedBooking?.status === "Scheduled" && (
-            <Button
-              color="green"
-              onClick={handleJoinCall}
-            >
-              Join Call
-            </Button>
-          )}
+  <Button
+    color="green"
+    onClick={handleJoinCall}
+    disabled={!isTimeWithinSlot(selectedBooking.fromTime, selectedBooking.toTime)} // Disable button outside the slot time
+  >
+    Join Call
+  </Button>
+)}
+
         </DialogFooter>
       </Dialog>
 

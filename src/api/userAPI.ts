@@ -99,14 +99,17 @@ export const getProfileDetails = async () => {
     console.log(error);
   }
 };
+interface userDetails {
+  name: string;
+  mobile: string;
+  email?: string;
+}
+export const editProfile = async (details: userDetails) => {
 
-export const editProfile = async (formData: any) => {
   try {
-    const { data } = await Api.put(userEndpoint.editProfile, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const {data} = await Api.put(userEndpoint.editProfile, details);
+     console.log('ed',data);
+
     return data;
   } catch (error) {
     console.log(error);
@@ -134,7 +137,7 @@ export const fetchApprovedAndUnblockedProviders = async (): Promise<
 > => {
   try {
     const response = await Api.get(userEndpoint.serviceProviders);
-    return response.data; // Assumes the API response has data in the body
+    return response.data; 
   } catch (error) {
     console.error("Failed to fetch providers:", error);
     throw new Error("Failed to fetch providers");

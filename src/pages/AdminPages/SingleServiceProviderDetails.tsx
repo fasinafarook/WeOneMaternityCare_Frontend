@@ -4,11 +4,8 @@ import { getServiceProviderDetails, approveServiceProvider } from "../../api/adm
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { FiUser, FiMail, FiPhone, FiBriefcase, FiClock, FiBook, FiFileText } from "react-icons/fi";
-import { FaBars } from 'react-icons/fa';
 import Footer from "../../components/common_pages/Footer";
 import AdminNavbar from "../../components/common_pages/AdminHeader";
-import AdminSidebar from "../../components/common_pages/AdminSidebars";
-import { Button } from "react-bootstrap";
 
 interface ServiceProviderDetails {
     name: string;
@@ -31,7 +28,6 @@ const SingleServiceProviderDetails: React.FC = () => {
     const [serviceProviderDetails, setServiceProviderDetails] = useState<ServiceProviderDetails | null>(null);
     const [openModal, setOpenModal] = useState(false);
     const { id } = useParams<{ id: string }>();
-    const [show, setShow] = useState(false);
 
     // Fetch Service Provider details when component mounts or `openModal` changes
     useEffect(() => {
@@ -85,25 +81,8 @@ const SingleServiceProviderDetails: React.FC = () => {
             {/* Header */}
             <AdminNavbar />
 
-            {/* Main Page Layout */}
             <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-                {/* Menu Button */}
-                <Button
-                    variant="primary"
-                    onClick={() => setShow(true)}
-                    style={{
-                        position: 'absolute',
-                        top: '1rem',
-                        left: '1rem',
-                        zIndex: 1000 // Ensures button stays on top
-                    }}
-                >
-                    <FaBars /> Menu
-                </Button>
-                <br />
 
-                {/* Sidebar */}
-                <AdminSidebar show={show} handleClose={() => setShow(false)} />
 
                 {/* Main Content */}
                 <div className="bg-gradient-to-br min-h-screen py-10 px-4">

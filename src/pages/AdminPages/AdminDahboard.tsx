@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Container, Row, Col } from "react-bootstrap";
+// import { Container, Row, Col } from "react-bootstrap";
 import { FaUsers, FaUserTie, FaCalendarCheck } from 'react-icons/fa';
 import { Bar, Pie } from 'react-chartjs-2';
 
@@ -219,7 +219,7 @@ const AdminDashboard = () => {
   return (
     <>
       <AdminNavbar />
-      <div className="min-h-screen bg-gradient-to-br from-[#EEF5FF] to-[#D9E9FF] p-8">
+      <div className="min-h-screen bg-gradient-to-br from-[#E7DDFF] to-[#E7DDFF] p-8">
         <header className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold text-[#19328F]">Admin Dashboard</h1>
         </header>
@@ -274,7 +274,7 @@ const AdminDashboard = () => {
           )}
         </div>
 
-                {/* Main Content */}
+                {/* Main Content
                 <Container>
           <div className="mt-5 mb-5">
             <Row>
@@ -321,7 +321,7 @@ const AdminDashboard = () => {
               your pregnancy; we are here to answer you.
             </p>
           </div>
-        </Container>
+        </Container> */}
       </div>
       <Footer />
     </>

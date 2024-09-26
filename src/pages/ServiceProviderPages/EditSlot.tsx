@@ -32,8 +32,17 @@ const EditSlot: React.FC = () => {
 
           const formatDate = (date: string) => {
             const localDate = new Date(date);
-            return localDate.toISOString().slice(0, 16);
+          
+            // Adjust the date to local time zone using individual components
+            const year = localDate.getFullYear();
+            const month = String(localDate.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+            const day = String(localDate.getDate()).padStart(2, '0');
+            const hours = String(localDate.getHours()).padStart(2, '0');
+            const minutes = String(localDate.getMinutes()).padStart(2, '0');
+          
+            return `${year}-${month}-${day}T${hours}:${minutes}`;
           };
+          
 
           setSlotData({
             title: foundSlot.title || '',
@@ -70,19 +79,18 @@ const EditSlot: React.FC = () => {
       return;
     }
 
-    setError(null); // Clear any previous error
+    setError(null); 
 
     try {
       await editSlot(slotId as string, slotData);
       toast.success('Slot updated successfully.');
-      navigate('/serviceProvider/get-slots', { state: { refresh: true } }); // Navigate and pass a state to refresh the slots list
+      navigate('/serviceProvider/get-slots', { state: { refresh: true } }); 
     } catch (error: any) {
       console.error('Error updating slot:', error.message);
-      toast.error('There was an error updating the slot. Please try again.');
+      toast.error(error.message);
     }
   };
 
-  // Get the current date and time
   const currentDateTime = new Date().toISOString().slice(0, 16);
 
   if (loading) return <div>Loading...</div>;
@@ -102,7 +110,7 @@ const EditSlot: React.FC = () => {
               name="from"
               value={slotData.from}
               onChange={handleInputChange}
-              min={currentDateTime} // Set minimum date-time to current date and time
+              min={currentDateTime} 
               style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '0.25rem' }}
               required
             />
@@ -114,7 +122,7 @@ const EditSlot: React.FC = () => {
               name="to"
               value={slotData.to}
               onChange={handleInputChange}
-              min={currentDateTime} // Set minimum date-time to current date and time
+              min={currentDateTime} 
               style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '0.25rem' }}
               required
             />

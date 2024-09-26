@@ -98,7 +98,7 @@ const AppNavbar: React.FC = () => {
             >
               Home
             </Nav.Link>
-            <Nav.Link
+            {/* <Nav.Link
               as={Link}
               to="/webinars"
               style={navLinkStyle("/webinars")}
@@ -107,7 +107,7 @@ const AppNavbar: React.FC = () => {
             </Nav.Link>
             <Nav.Link as={Link} to="/blogs" style={navLinkStyle("/blogs")}>
               Blog
-            </Nav.Link>
+            </Nav.Link> */}
             <Nav.Link
               as={Link}
               to="/serviceProvider/get-scheduled-bookings"
@@ -121,6 +121,13 @@ const AppNavbar: React.FC = () => {
               style={navLinkStyle("/serviceProvider/get-slots")}
             >
               Slots
+            </Nav.Link>
+            <Nav.Link
+              as={Link}
+              to="/serviceProvider/about"
+              style={navLinkStyle("/serviceProvider/about")}
+            >
+              About
             </Nav.Link>
           </Nav>
 

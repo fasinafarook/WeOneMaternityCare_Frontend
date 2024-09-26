@@ -55,8 +55,10 @@ import Chat from "./pages/UserPages/Chat";
 import useSocket from "./hooks/useSocket";
 import ForgotPassword from "./pages/UserPages/ForgotPassword";
 import ForgotPasswords from "./pages/ServiceProviderPages/ForgotPassword";
+import About from "./components/common_pages/About";
 
 import ProfileManagement from "./pages/ServiceProviderPages/ProfileManagement";
+import NotFound from "./components/common_pages/NotFoundPage";
 
 import AdminBookingList from "./pages/AdminPages/BookingList";
 // import ProtectedRoute, { AdminProtectedRoute, ServiceProviderProtectedRoute } from './components/PrivetProtected';
@@ -79,6 +81,9 @@ const App: React.FC = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/webinars" element={<WebinarsList />} />
         <Route path="/blogs" element={<BlogList />} />
+        <Route path="*" element={<NotFound />} />
+
+
 
         <Route element={<PublicAdminProtectedRoute />}>
           <Route path="/admin/login" element={<AdminLogin />} />
@@ -117,6 +122,8 @@ const App: React.FC = () => {
         {/* Protected Routes - User */}
         <Route element={<UserProtectedRoute />}>
           <Route path="/user/home" element={<ClientDashboard />} />
+          <Route path="/user/about" element={<About />} />
+
           <Route path="/user/get-profile" element={<Profile />} />
           <Route
             path="/user/service-providers"
@@ -149,6 +156,8 @@ const App: React.FC = () => {
         {/* Protected Routes - Service Provider */}
         <Route element={<SpProtectedRoute />}>
           <Route path="/serviceProvider/home" element={<ProviderDashboard />} />
+          <Route path="/serviceProvider/about" element={<About />} />
+
           <Route path="/serviceProvider/get-slots" element={<SlotsList />} />
           <Route path="/serviceProvider/add-slot" element={<AddSlot />} />
           <Route
@@ -167,10 +176,25 @@ const App: React.FC = () => {
             path="/video-call/:roomId/:serviceProviderId"
             element={<ProviderVideoCall></ProviderVideoCall>}
           />
-          <Route
-            path="/serviceProvider/get-profile"
-            element={<ProfileManagement />}
-          />
+<Route
+  path="/serviceProvider/get-profile"
+  element={
+    <ProfileManagement
+      setShowEdit={(show) => console.log("setShowEdit", show)}
+      serviceProviderDetails={{
+        name: "",
+        mobile: 0,
+        email: "",
+        service: "",
+        location: "",
+        qualification: "",
+        expYear: 0,
+        rate: 0,
+      }}
+      onProfileEdit={(updatedData) => console.log("onProfileEdit", updatedData)}
+    />
+  }
+/>
         </Route>
 
         {/* Protected Routes - Admin */}

@@ -4,11 +4,8 @@ import { getServiceProviderDetails } from "../../api/userAPI";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { FiUser, FiMail, FiPhone, FiBriefcase, FiClock, FiBook } from "react-icons/fi";
-import UserSidebar from "../../components/common_pages/UserSidebar";
 import Footer from '../../components/common_pages/Footer';
 import UserNavbar from '../../components/common_pages/UserHeader';
-import { Button } from 'react-bootstrap';
-import { FaBars } from 'react-icons/fa';
 
 interface ServiceProviderDetails {
     name: string;
@@ -28,7 +25,6 @@ interface ServiceProviderDetails {
 }
 
 const ProviderDetails: React.FC = () => {
-    const [show, setShow] = useState(false);
     const [serviceProviderDetails, setServiceProviderDetails] = useState<ServiceProviderDetails | null>(null);
     const { id } = useParams<{ id: string }>();
 
@@ -54,14 +50,12 @@ const ProviderDetails: React.FC = () => {
         return <div className="flex justify-center items-center h-screen">Loading...</div>;
     }
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
 
     return (
         <>
             <UserNavbar />
             <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-                <Button
+                {/* <Button
                     variant="primary"
                     onClick={handleShow}
                     style={{
@@ -74,7 +68,7 @@ const ProviderDetails: React.FC = () => {
                     <FaBars /> Menu
                 </Button>
                 <UserSidebar show={show} handleClose={handleClose} />
-                <br />
+                <br /> */}
                 <div className="bg-white flex-1 py-10 px-4 flex justify-center items-center">
                 <motion.div
                         initial={{ opacity: 0, y: 20 }}

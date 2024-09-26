@@ -38,27 +38,28 @@ const Profile: React.FC = () => {
 
   const saveProfileChanges: SubmitHandler<ProfileData> = async (data) => {
     try {
-        const formdata = new FormData();
-        formdata.append('name', data.name)
-        formdata.append('mobile', data.mobile)
-       
-
-        const response = await editProfile(formdata)
-        if(response.success){
-          toast.success("Profile Updated Successfully", {
-        style: {
-          border: "1px solid #2F76FF",
-          padding: "16px",
-          color: "#19328F",
-          backgroundColor: "#D9E9FF",
-        },
+      // Ensure the correct data is being sent
+      const response = await editProfile({
+        name: data.name.trim(), // Ensure the name is not just whitespace
+        mobile: data.mobile,
       });
-        }
-
+  
+      if (response.success) {
+        toast.success("Profile Updated Successfully", {
+          style: {
+            border: "1px solid #2F76FF",
+            padding: "16px",
+            color: "#19328F",
+            backgroundColor: "#D9E9FF",
+          },
+        });
+      }
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error("Error updating profile:", error);
     }
   };
+  
+
 
   const changePassword: SubmitHandler<PasswordData> = async (data) => {
     if (data.currentPassword && data.newPassword) {

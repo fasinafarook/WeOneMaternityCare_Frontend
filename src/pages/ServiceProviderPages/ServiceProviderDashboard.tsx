@@ -20,19 +20,19 @@
 //   // const handleClose = () => setShow(false);
 //   // const handleShow = () => setShow(true);
 
-//   useEffect(() => {
-//     // Fetch user data from backend
-//     const fetchUserData = async () => { 
-//       try {
-//         const { data } = await getProfileDetails();
-//         console.log('data: ', data);
-//         setProfileData(data);
-//       } catch (error) {
-//         console.error('Failed to fetch user data:', error);
-//       }
-//     };
-//     fetchUserData();
-//   }, []);
+  // useEffect(() => {
+  //   // Fetch user data from backend
+  //   const fetchUserData = async () => { 
+  //     try {
+  //       const { data } = await getProfileDetails();
+  //       console.log('data: ', data);
+  //       setProfileData(data);
+  //     } catch (error) {
+  //       console.error('Failed to fetch user data:', error);
+  //     }
+  //   };
+  //   fetchUserData();
+  // }, []);
 
 //   return (
 //     <>
@@ -105,11 +105,94 @@
 
 
 
+// import { useEffect, useState } from 'react';
+// import { Bar } from 'react-chartjs-2';
+// import { getDashboardData } from '../../api/serviceProviderAPI';
+// import AppNavbar from '../../components/common_pages/ProviderHeader';
+// import Footer from '../../components/common_pages/Footer';
+
+// interface DashboardData {
+//   totalBookings: number;
+//   scheduledBookings: number;
+//   completedBookings: number;
+//   canceledBookings: number;
+//   refundedBookings: number;
+//   totalRevenue: number;
+// }
+
+
+
+// const ProviderDashboard = () => {
+//   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+
+//   useEffect(() => {
+//     const fetchDashboardData = async () => {
+//       try {
+//         const data = await getDashboardData();
+//         setDashboardData(data);
+//       } catch (error) {
+//         console.error('Failed to fetch dashboard data:', error);
+//       }
+//     };
+
+//     fetchDashboardData();
+//   }, []);
+
+//   if (!dashboardData) {
+//     return <p>Loading...</p>;
+//   }
+
+  
+
+ 
+
+//   return (
+//     <>
+//       <AppNavbar />
+      // <div className="container mx-auto p-4">
+      //   <h1 className="text-center text-2xl font-bold mb-6">Service Provider Dashboard</h1>
+      //   {/* Display the total count and booking stats */}
+        // <div className="flex justify-center space-x-8 mb-8">
+        //   <div className="p-4 bg-blue-100 rounded-md shadow-md">
+        //     <h2 className="text-lg font-semibold">Total Bookings</h2>
+        //     <p className="text-xl">{dashboardData.totalBookings}</p>
+        //   </div>
+        //   <div className="p-4 bg-blue-100 rounded-md shadow-md">
+        //     <h2 className="text-lg font-semibold">Scheduled</h2>
+        //     <p className="text-xl">{dashboardData.scheduledBookings}</p>
+        //   </div>
+        //   <div className="p-4 bg-blue-100 rounded-md shadow-md">
+        //     <h2 className="text-lg font-semibold">Completed</h2>
+        //     <p className="text-xl">{dashboardData.completedBookings}</p>
+        //   </div><div className="p-4 bg-blue-100 rounded-md shadow-md">
+        //     <h2 className="text-lg font-semibold">Cancelled</h2>
+        //     <p className="text-xl">{dashboardData.canceledBookings}</p>
+        //   </div><div className="p-4 bg-blue-100 rounded-md shadow-md">
+        //     <h2 className="text-lg font-semibold">Refunded</h2>
+        //     <p className="text-xl">{dashboardData.refundedBookings}</p>
+        //   </div>
+        //   <div className="p-4 bg-blue-100 rounded-md shadow-md">
+        //     <h2 className="text-lg font-semibold">Total Revenue</h2>
+        //     <p className="text-xl">${dashboardData.totalRevenue.toFixed(2)}</p>
+        //   </div>
+        // </div>
+
+        
+//       </div>
+//       <Footer />
+//     </>
+//   );
+// };
+
+// export default ProviderDashboard;
+
+
 import { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { getDashboardData } from '../../api/serviceProviderAPI';
 import AppNavbar from '../../components/common_pages/ProviderHeader';
 import Footer from '../../components/common_pages/Footer';
+import { ChartOptions } from 'chart.js';
 
 interface DashboardData {
   totalBookings: number;
@@ -118,68 +201,95 @@ interface DashboardData {
   canceledBookings: number;
   refundedBookings: number;
   totalRevenue: number;
+  bookings: { date: string, status: string, price: number }[];
 }
 
+const aggregateChartData = (bookings: DashboardData['bookings'], groupBy: 'month' | 'day') => {
+  const data: Record<string, { bookings: number; revenue: number }> = {};
+  
+  bookings.forEach((booking) => {
+    const date = new Date(booking.date);
+    let key = groupBy === 'month' 
+      ? date.toLocaleString('default', { month: 'short', year: 'numeric' }) 
+      : date.toLocaleDateString('en-IN', { day: '2-digit', month: 'long' });
 
+    if (!data[key]) {
+      data[key] = { bookings: 0, revenue: 0 };
+    }
+
+    data[key].bookings += 1;
+    data[key].revenue += booking.price;
+  });
+
+  const labels = Object.keys(data).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+  return {
+    labels,
+    bookingsData: labels.map(key => data[key].bookings),
+    revenueData: labels.map(key => data[key].revenue),
+  };
+};
 
 const ProviderDashboard = () => {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
-  const [timeFrame, setTimeFrame] = useState<'day' | 'month'>('month'); // State to manage time frame selection
+  const [chartData, setChartData] = useState<any>(null);
+  const [viewMode, setViewMode] = useState<'month' | 'day'>('month');
+
+  const chartOptions: ChartOptions<'bar'> = {
+    responsive: true,
+    plugins: {
+      title: { display: true, text: 'Bookings & Revenue' },
+    },
+    scales: {
+      x: { title: { display: true, text: viewMode === 'month' ? 'Month' : 'Day' } },
+      y: { title: { display: true, text: 'Count / Revenue ($)' }, beginAtZero: true },
+    },
+  };
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         const data = await getDashboardData();
         setDashboardData(data);
+
+        const { labels, bookingsData, revenueData } = aggregateChartData(data.bookings, viewMode);
+        setChartData({
+          labels,
+          datasets: [
+            {
+              label: 'Bookings',
+              data: bookingsData,
+              backgroundColor: 'rgba(75, 192, 192, 0.6)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1,
+            },
+            {
+              label: 'Revenue ($)',
+              data: revenueData,
+              backgroundColor: 'rgba(53, 162, 235, 0.6)',
+              borderColor: 'rgba(53, 162, 235, 1)',
+              borderWidth: 1,
+            },
+          ],
+        });
       } catch (error) {
         console.error('Failed to fetch dashboard data:', error);
       }
     };
 
     fetchDashboardData();
-  }, []);
+  }, [viewMode]);
 
-  if (!dashboardData) {
-    return <p>Loading...</p>;
-  }
+  const toggleViewMode = () => setViewMode(prev => (prev === 'month' ? 'day' : 'month'));
 
-  // Chart data for bookings count by status
-  const chartData = {
-    labels: [ 'Total Revenue'],
-    datasets: [
-      {
-        label: 'Count',
-        data: [
-          
-          dashboardData.totalRevenue,  // Including revenue in the chart
-        ],
-        backgroundColor: ['#36A2EB', '#4BC0C0', '#FF9F40'],
-      },
-    ],
-  };
-
-  // Function to handle timeframe selection
-  const handleTimeFrameChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setTimeFrame(event.target.value as 'day' | 'month');
-    // You may want to call a function here to fetch data based on the selected time frame
-  };
+  if (!dashboardData) return <p>Loading...</p>;
 
   return (
     <>
       <AppNavbar />
+
+      
       <div className="container mx-auto p-4">
         <h1 className="text-center text-2xl font-bold mb-6">Service Provider Dashboard</h1>
-
-        {/* Timeframe selector */}
-        <div className="mb-4">
-          <label htmlFor="timeframe" className="mr-2">Select Time Frame:</label>
-          <select id="timeframe" value={timeFrame} onChange={handleTimeFrameChange}>
-            <option value="day">Daily</option>
-            <option value="month">Monthly</option>
-          </select>
-        </div>
-
-        {/* Display the total count and booking stats */}
         <div className="flex justify-center space-x-8 mb-8">
           <div className="p-4 bg-blue-100 rounded-md shadow-md">
             <h2 className="text-lg font-semibold">Total Bookings</h2>
@@ -192,16 +302,23 @@ const ProviderDashboard = () => {
           <div className="p-4 bg-blue-100 rounded-md shadow-md">
             <h2 className="text-lg font-semibold">Completed</h2>
             <p className="text-xl">{dashboardData.completedBookings}</p>
+          </div><div className="p-4 bg-blue-100 rounded-md shadow-md">
+            <h2 className="text-lg font-semibold">Cancelled</h2>
+            <p className="text-xl">{dashboardData.canceledBookings}</p>
+          </div><div className="p-4 bg-blue-100 rounded-md shadow-md">
+            <h2 className="text-lg font-semibold">Refunded</h2>
+            <p className="text-xl">{dashboardData.refundedBookings}</p>
           </div>
           <div className="p-4 bg-blue-100 rounded-md shadow-md">
             <h2 className="text-lg font-semibold">Total Revenue</h2>
             <p className="text-xl">${dashboardData.totalRevenue.toFixed(2)}</p>
           </div>
         </div>
-
-        {/* Bar Chart for Bookings and Revenue */}
-        <div style={{ width: '60%', margin: '0 auto' }}>
-          <Bar data={chartData} />
+        <div className="mb-6">
+          <button onClick={toggleViewMode} className="mb-4 px-4 py-2 bg-blue-500 text-white rounded">
+            Toggle to {viewMode === 'month' ? 'Day' : 'Month'} View
+          </button>
+          {chartData && <Bar data={chartData} options={chartOptions} />}
         </div>
       </div>
       <Footer />
@@ -210,5 +327,3 @@ const ProviderDashboard = () => {
 };
 
 export default ProviderDashboard;
-
-

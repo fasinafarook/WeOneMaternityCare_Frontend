@@ -181,7 +181,7 @@ interface SlotData {
   timeFrom: Date;
   timeTo: Date;
   title: string;
-  status: "open" | "booked";
+  status?: "open" | "booked";
   price: number;
   date: Date | null;
   services: Services[]
