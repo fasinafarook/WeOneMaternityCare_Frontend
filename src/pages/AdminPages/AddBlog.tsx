@@ -8,11 +8,11 @@ import { addBlog } from "../../api/adminAPI";
 
 interface BlogData {
   title: string;
-  image: File[]; // Use FileList type to handle file input
+  image: File[];
   content: string;
 }
+
 const AddBlog = () => {
-  
   const navigate = useNavigate();
   const {
     register,
@@ -25,25 +25,16 @@ const AddBlog = () => {
   const image = watch("image");
   const content = watch("content");
 
-  console.log('image',image);
-  
-
   const isValidated = title && image.length > 0 && content;
 
   const onSubmit: SubmitHandler<BlogData> = async (data) => {
     try {
-      // Construct FormData
       const formData = new FormData();
       formData.append('title', data.title);
-      formData.append('image', data.image[0]); // Use the first file from FileList
+      formData.append('image', data.image[0]);
       formData.append('content', data.content);
-      console.log('File to be uploaded:', data.image[0]);
 
-      // Pass FormData to the API call
       const response = await addBlog(formData);
-      console.log('dgsha',response);
-      
-
       if (response.success) {
         toast.success("Blog added successfully!");
         navigate("/admin/blogs");
@@ -58,79 +49,129 @@ const AddBlog = () => {
   return (
     <>
       <AdminNavbar />
-      <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-800 flex items-center">
-            <FiPackage className="mr-2" />
-            Add New Blog
-          </h1>
-          <button
-            onClick={() => navigate("/admin/blogs")}
-            className="text-gray-600 hover:text-gray-800 transition duration-300 ease-in-out flex items-center"
-            style={{ background: 'skyblue' }}
-          >
-            <FiChevronLeft className="mr-1" /> Back to Blogs
-          </button>
+      <div
+        style={{
+          backgroundImage: "url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          minHeight: '100vh',
+          padding: '20px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '600px',
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            padding: '30px',
+            borderRadius: '15px',
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+            width: '100%',
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <h1 style={{ fontSize: '24px', fontWeight: 'bold', display: 'flex', alignItems: 'center', color: '#333' }}>
+              <FiPackage style={{ marginRight: '10px' }} />
+              Add New Blog
+            </h1>
+            <button
+              onClick={() => navigate("/admin/blogs")}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: '#00A3FF',
+                color: '#fff',
+                padding: '8px 12px',
+                borderRadius: '5px',
+                fontWeight: '500',
+                cursor: 'pointer',
+              }}
+            >
+              <FiChevronLeft style={{ marginRight: '5px' }} /> Back to Blogs
+            </button>
+          </div>
+          <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+            <div>
+              <label htmlFor="title" style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '600', color: '#555' }}>
+                Title
+              </label>
+              <input
+                id="title"
+                type="text"
+                placeholder="Enter blog title"
+                style={{
+                  width: '100%',
+                  padding: '10px',
+                  border: '1px solid #ccc',
+                  borderRadius: '5px',
+                  fontSize: '14px',
+                }}
+                {...register("title", { required: "Title is required" })}
+              />
+              {errors.title && <p style={{ color: 'red', fontSize: '12px', marginTop: '5px' }}>{errors.title.message}</p>}
+            </div>
+            <div>
+              <label htmlFor="image" style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '600', color: '#555' }}>
+                Image
+              </label>
+              <input
+                id="image"
+                type="file"
+                accept="image/*"
+                style={{
+                  width: '100%',
+                  padding: '10px',
+                  border: '1px solid #ccc',
+                  borderRadius: '5px',
+                  fontSize: '14px',
+                }}
+                {...register("image", { required: "Image is required" })}
+              />
+              {errors.image && <p style={{ color: 'red', fontSize: '12px', marginTop: '5px' }}>{errors.image.message}</p>}
+            </div>
+            <div>
+              <label htmlFor="content" style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '600', color: '#555' }}>
+                Content
+              </label>
+              <textarea
+                id="content"
+                placeholder="Enter blog content"
+                style={{
+                  width: '100%',
+                  padding: '10px',
+                  border: '1px solid #ccc',
+                  borderRadius: '5px',
+                  fontSize: '14px',
+                  resize: 'vertical',
+                }}
+                rows={6}
+                {...register("content", { required: "Content is required" })}
+              />
+              {errors.content && <p style={{ color: 'red', fontSize: '12px', marginTop: '5px' }}>{errors.content.message}</p>}
+            </div>
+            <button
+              type="submit"
+              disabled={!isValidated}
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '12px',
+                backgroundColor: isValidated ? '#28A745' : '#ccc',
+                color: isValidated ? '#fff' : '#666',
+                borderRadius: '5px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                cursor: isValidated ? 'pointer' : 'not-allowed',
+              }}
+            >
+              <FiPlus style={{ marginRight: '8px' }} /> Add Blog
+            </button>
+          </form>
         </div>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
-              Title
-            </label>
-            <input
-              id="title"
-              type="text"
-              placeholder="Enter blog title"
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 ease-in-out"
-              {...register("title", { required: "Title is required" })}
-            />
-            {errors.title && (
-              <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
-            )}
-          </div>
-          <div>
-            <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
-              Image
-            </label>
-            <input
-              id="image"
-              type="file"
-              accept="image/*"
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 ease-in-out"
-              {...register("image", { required: "Image is required" })}
-            />
-            {errors.image && (
-              <p className="text-red-500 text-sm mt-1">{errors.image.message}</p>
-            )}
-          </div>
-          <div>
-            <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">
-              Content
-            </label>
-            <textarea
-              id="content"
-              placeholder="Enter blog content"
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 ease-in-out"
-              rows={6}
-              {...register("content", { required: "Content is required" })}
-            />
-            {errors.content && (
-              <p className="text-red-500 text-sm mt-1">{errors.content.message}</p>
-            )}
-          </div>
-          <button
-            type="submit"
-            disabled={!isValidated}
-            className={`w-full flex items-center justify-center ${
-              isValidated
-                ? "bg-blue-600 hover:bg-blue-700 text-white"
-                : "bg-gray-300 text-gray-500 cursor-not-allowed"
-            } font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out`}
-            style={{ background: 'green' }}
-          >
-            <FiPlus className="mr-2" /> Add Blog
-          </button>
-        </form>
       </div>
       <Footer />
     </>

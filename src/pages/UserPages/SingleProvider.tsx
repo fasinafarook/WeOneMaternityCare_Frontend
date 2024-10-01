@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getServiceProviderDetails } from "../../api/userAPI";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
@@ -8,6 +8,7 @@ import Footer from '../../components/common_pages/Footer';
 import UserNavbar from '../../components/common_pages/UserHeader';
 
 interface ServiceProviderDetails {
+    _id: string;
     name: string;
     email: string;
     mobile: string;
@@ -27,12 +28,17 @@ interface ServiceProviderDetails {
 const ProviderDetails: React.FC = () => {
     const [serviceProviderDetails, setServiceProviderDetails] = useState<ServiceProviderDetails | null>(null);
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (id) {
             fetchServiceProviderDetails(id);
         }
     }, [id]);
+
+    const handleViewSlots = (id: string) => {
+        navigate(`/user/get-service-providers-slots-details/${id}`);
+    };
 
     const fetchServiceProviderDetails = async (id: string) => {
         try {
@@ -50,49 +56,40 @@ const ProviderDetails: React.FC = () => {
         return <div className="flex justify-center items-center h-screen">Loading...</div>;
     }
 
-
     return (
         <>
             <UserNavbar />
-            <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-                {/* <Button
-                    variant="primary"
-                    onClick={handleShow}
-                    style={{
-                        position: 'absolute',
-                        top: '1rem',
-                        left: '1rem',
-                        zIndex: 1000
-                    }}
-                >
-                    <FaBars /> Menu
-                </Button>
-                <UserSidebar show={show} handleClose={handleClose} />
-                <br /> */}
-                <div className="bg-white flex-1 py-10 px-4 flex justify-center items-center">
-                <motion.div
+
+            <div className="relative flex flex-col min-h-screen bg-gray-100">
+                <div className="py-6 px-4 flex justify-center">
+                    <button
+                        onClick={() => handleViewSlots(serviceProviderDetails._id)}
+                        className="bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:bg-indigo-700 transition duration-300"
+                    >
+                        View Slots
+                    </button>
+                </div>
+
+                <div className="flex-1 flex justify-center items-center">
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="max-w-5xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden flex justify-center items-center"
+                        className="max-w-5xl w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row"
                     >
-                        <div className="flex flex-col md:flex-row w-full">
-                            <ProfileSidebar serviceProvider={serviceProviderDetails} />
-                            <MainContent serviceProvider={serviceProviderDetails} />
-                        </div>
+                        <ProfileSidebar serviceProvider={serviceProviderDetails} />
+                        <MainContent serviceProvider={serviceProviderDetails} />
                     </motion.div>
                 </div>
+                <br />
                 <Footer />
             </div>
         </>
     );
 };
 
-
-
 const ProfileSidebar: React.FC<{ serviceProvider: ServiceProviderDetails }> = ({ serviceProvider }) => (
-    
-    <div className="md:w-1/3 p-8 bg-indigo-900 text-black flex justify-center items-center flex-col">
+    <div className="md:w-1/3 p-8 bg-indigo-900 text-white flex flex-col items-center">
         <motion.img
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -108,9 +105,14 @@ const ProfileSidebar: React.FC<{ serviceProvider: ServiceProviderDetails }> = ({
 );
 
 const MainContent: React.FC<{ serviceProvider: ServiceProviderDetails }> = ({ serviceProvider }) => (
-    <div className="md:w-2/3 p-8 flex justify-center items-center flex-col">
+    <div className="md:w-2/3 p-8 flex flex-col">
         {serviceProvider.hasCompletedDetails ? (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.5 }} className="w-full">
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                className="w-full"
+            >
                 <h2 className="text-3xl font-bold mb-6 text-indigo-900 text-center">Professional Profile</h2>
                 <DetailItem icon={<FiBriefcase />} label="Location" value={serviceProvider.location} />
                 <DetailItem icon={<FiClock />} label="Years of Experience" value={serviceProvider.expYear} />
@@ -129,11 +131,11 @@ const MainContent: React.FC<{ serviceProvider: ServiceProviderDetails }> = ({ se
 );
 
 const DetailItem: React.FC<{ icon: React.ReactNode; label: string; value: string }> = ({ icon, label, value }) => (
-    <div className="mb-4 flex items-center w-full justify-center">
-        <div className="text-2xl mr-3">{icon}</div>
+    <div className="mb-4 flex items-center justify-start">
+        <div className="text-2xl text-indigo-600 mr-3">{icon}</div>
         <div>
             <h3 className="text-sm font-semibold opacity-75">{label}</h3>
-            <p className="text-lg">{value}</p>
+            <p className="text-lg font-medium">{value}</p>
         </div>
     </div>
 );

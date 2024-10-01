@@ -129,11 +129,31 @@ const ProfileManagement: React.FC<EditSpProps> = ({ serviceProviderDetails = {},
   return (
     <>
       <AppNavbar />
-      <div className="bg-gray-100 min-h-screen p-6">
-        <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-        <div className="bg-gradient-to-r from-[#0f0f0f] to-[#8c8d93] p-6 text-white">
-            <h1 className="text-3xl font-bold">Profile Settings</h1>
+      <div style={{
+        minHeight: '100vh',
+        background: 'url(https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+        padding: '8px 28px',
+      }}>
+        <div style={{
+          maxWidth: '900px',
+          margin: 'auto',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          borderRadius: '15px',
+          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+          overflow: 'hidden',
+        }}>
+          <div style={{
+            background: 'linear-gradient(to right, #0f0f0f, #8c8d93)',
+            padding: '30px',
+            color: 'white',
+            textAlign: 'center'
+          }}>
+            <h1 style={{ fontSize: '32px', fontWeight: 'bold' }}>Profile Settings</h1>
           </div>
+
 
           <form onSubmit={handleSubmit(handleEdit)} className="p-6 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

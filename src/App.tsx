@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -83,8 +81,6 @@ const App: React.FC = () => {
         <Route path="/blogs" element={<BlogList />} />
         <Route path="*" element={<NotFound />} />
 
-
-
         <Route element={<PublicAdminProtectedRoute />}>
           <Route path="/admin/login" element={<AdminLogin />} />
         </Route>
@@ -107,7 +103,10 @@ const App: React.FC = () => {
           element={<ServiceProviderLogin />}
         />
 
-<Route path="/serviceProvider/forgot-password" element={<ForgotPasswords />} />
+        <Route
+          path="/serviceProvider/forgot-password"
+          element={<ForgotPasswords />}
+        />
 
         {/* </Route> */}
 
@@ -116,14 +115,12 @@ const App: React.FC = () => {
           <Route path="/user/verify-otp" element={<OtpVerification />} />
           <Route path="/user/verify-login" element={<UserLogin />} />
           <Route path="/user/forgot-password" element={<ForgotPassword />} />
-
         </Route>
 
         {/* Protected Routes - User */}
         <Route element={<UserProtectedRoute />}>
           <Route path="/user/home" element={<ClientDashboard />} />
           <Route path="/user/about" element={<About />} />
-
           <Route path="/user/get-profile" element={<Profile />} />
           <Route
             path="/user/service-providers"
@@ -176,25 +173,27 @@ const App: React.FC = () => {
             path="/video-call/:roomId/:serviceProviderId"
             element={<ProviderVideoCall></ProviderVideoCall>}
           />
-<Route
-  path="/serviceProvider/get-profile"
-  element={
-    <ProfileManagement
-      setShowEdit={(show) => console.log("setShowEdit", show)}
-      serviceProviderDetails={{
-        name: "",
-        mobile: 0,
-        email: "",
-        service: "",
-        location: "",
-        qualification: "",
-        expYear: 0,
-        rate: 0,
-      }}
-      onProfileEdit={(updatedData) => console.log("onProfileEdit", updatedData)}
-    />
-  }
-/>
+          <Route
+            path="/serviceProvider/get-profile"
+            element={
+              <ProfileManagement
+                setShowEdit={(show) => console.log("setShowEdit", show)}
+                serviceProviderDetails={{
+                  name: "",
+                  mobile: 0,
+                  email: "",
+                  service: "",
+                  location: "",
+                  qualification: "",
+                  expYear: 0,
+                  rate: 0,
+                }}
+                onProfileEdit={(updatedData) =>
+                  console.log("onProfileEdit", updatedData)
+                }
+              />
+            }
+          />
         </Route>
 
         {/* Protected Routes - Admin */}
@@ -217,7 +216,6 @@ const App: React.FC = () => {
           <Route path="/admin/webinars" element={<ListWebinars />} />
           <Route path="/admin/complaints" element={<ComplaintsPage />} />
           <Route path="/admin/bookings" element={<AdminBookingList />} />
-
         </Route>
       </Routes>
     </>

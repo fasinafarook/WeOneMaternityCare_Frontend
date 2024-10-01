@@ -3,7 +3,7 @@ import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { logout } from "../../api/adminAPI";
-import logo from "../../../public/images/WeOne (1).png";
+import logo from "../../../public/images/logo.jpeg";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { serviceProviderLogout } from "../../redux/slice/authSlice";
@@ -74,7 +74,7 @@ const AppNavbar: React.FC = () => {
 
   return (
     <Navbar
-      style={{ background: "linear-gradient(to right, #574b60, #D7BCC8)" }}
+      style={{ background: "linear-gradient(to right, #2c3e50, #bdc3c7)" }}
       expand="lg"
     >
       <Navbar.Brand as={Link} to="/serviceProvider/home">

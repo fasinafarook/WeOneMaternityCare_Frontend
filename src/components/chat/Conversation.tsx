@@ -1,4 +1,3 @@
-// src/components/Conversation.tsx
 import React from 'react';
 import useConversation from '../../zustand/useConversation';
 import useSocket from '../../hooks/useSocket';
@@ -7,7 +6,6 @@ interface ConversationProps {
   conversation: {
     _id: string;
     name: string;
-    // Add other properties that the conversation object has
   };
   lastIdx: boolean;
 }

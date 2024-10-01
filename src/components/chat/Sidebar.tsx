@@ -9,7 +9,6 @@ const Sidebar: React.FC = () => {
       
       <Conversations/>
 
-      {/* <LogoutButton/> */}
     </div>
   )
 }

@@ -52,8 +52,14 @@ const ProviderAndSlotDetails = () => {
   
 
   const handleCheckout = async (slot: any) => {
+    console.log('hi');
+    
     const previousUrl = `${location.pathname}${location.search}`;
+    console.log('slot',slot);
+
     try {
+      console.log('slot',slot);
+      
       const response = await makePayment(slot, previousUrl);
       if (response.success) {
         window.location.href = response.data;
@@ -66,8 +72,17 @@ const ProviderAndSlotDetails = () => {
   return (
     <>
       <UserNavbar />
-      <div className="min-h-screen bg-gradient-to-br bg-white py-24 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto bg-[#949aa4] rounded-xl shadow-2xl overflow-hidden">
+      <div style={{
+        backgroundImage: `url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        minHeight: "100vh",
+        padding: "20px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}>               
+       <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
           <div className="flex flex-col lg:flex-row">
             <div className="lg:w-2/3 p-6 lg:p-10">
               <div className="flex items-center mb-8">

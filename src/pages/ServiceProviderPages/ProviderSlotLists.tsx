@@ -108,7 +108,18 @@ const SlotsList = () => {
   return (
     <>
       <AppNavbar />
-      <div style={{ maxWidth: '1000px', margin: 'auto', padding: '1.5rem' }}>
+      
+      <div style={{
+        backgroundImage: `url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        minHeight: "100vh",
+        padding: "20px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}>          
+       {/* <div className="absolute inset-0 bg-black opacity-60"></div>         */}
         <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Slots List</h1>
         <button onClick={handleAddSlot} style={{ padding: '0.75rem 1.5rem', color: '#fff', backgroundColor: '#007bff', border: 'none', borderRadius: '0.25rem', cursor: 'pointer', marginBottom: '1rem' }}>
           Add Slot
@@ -123,7 +134,7 @@ const SlotsList = () => {
         {loading ? (
           <TableShimmer />
         ) : (
-          <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '1rem' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '5rem', fontFamily:'sans-serif', fontSize:'large' }}>
             <thead>
               <tr>
                 <th style={{ borderBottom: '1px solid #ddd', padding: '0.75rem' }}>Title</th>

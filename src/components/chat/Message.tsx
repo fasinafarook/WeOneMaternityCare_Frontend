@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { getProfileDetails } from '../../api/userAPI'; // Update with the actual path
+import { getProfileDetails } from '../../api/userAPI'; 
 
 interface MessageProps {
   message: {
     senderId: string;
     message: string;
-    createdAt: string; // Ensure createdAt is included in the message props
+    createdAt: string; 
   };
 }
 
@@ -18,7 +18,7 @@ const Message: React.FC<MessageProps> = ({ message }) => {
         const profile = await getProfileDetails();
         console.log('profile', profile);
         console.log('profileid', profile.data._id);
-        setUserId(profile.data._id); // Assuming _id is the user ID in the profile data
+        setUserId(profile.data._id); 
       } catch (error) {
         console.error("Failed to fetch user ID:", error);
       }
@@ -27,22 +27,19 @@ const Message: React.FC<MessageProps> = ({ message }) => {
     fetchUserId();
   }, []);
 
-  // Check if the message was sent by the authenticated user
   const fromMe = userId === message.senderId;
 
-  // Set class names and styles based on whether it's a sent or received message
-  const chatClassName = fromMe ? 'chat-end' : 'chat-start';  // Right if sent, left if received
-  const bubbleBgColor = fromMe ? 'bg-blue-500' : 'bg-gray-300'; // Blue for sent, gray for received
-  const textColor = fromMe ? 'text-white' : 'text-black';  // White text for sent, black text for received
+  const chatClassName = fromMe ? 'chat-end' : 'chat-start';  
+  const bubbleBgColor = fromMe ? 'bg-blue-500' : 'bg-gray-300';
+  const textColor = fromMe ? 'text-white' : 'text-black';  
  
-  // Format the createdAt timestamp
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     let hours = date.getHours();
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
+    hours = hours ? hours : 12; 
     const formattedHours = hours.toString().padStart(2, '0');
     return `${formattedHours}:${minutes} ${ampm}`;
   };

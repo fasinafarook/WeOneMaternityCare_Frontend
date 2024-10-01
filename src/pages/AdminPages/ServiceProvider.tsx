@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getServiceProviders, blockProvider } from "../../api/adminAPI";
 import { Link, useSearchParams } from "react-router-dom";
-import { FiSearch, FiMail, FiPhone, FiCheckCircle, FiXCircle, FiEye, FiUnlock, FiLock } from "react-icons/fi";
-import { FaBars } from "react-icons/fa"; // Importing the missing FaBars icon
+import { FiSearch, FiMail, FiPhone,  FiEye, FiUnlock, FiLock } from "react-icons/fi";
 import Pagination from "../../components/common_pages/Pagination";
 import TableShimmer from "../../components/common_pages/Table";
 import toast from "react-hot-toast";
 import Footer from "../../components/common_pages/Footer";
 import AdminNavbar from "../../components/common_pages/AdminHeader";
-// import AdminSidebar from "../../components/common_pages/AdminSidebars";
-import {
-  Button,
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
-} from "@material-tailwind/react";
+import Swal from "sweetalert2"; 
 
 interface ServiceProvidersData {
   name: string;
@@ -38,25 +30,32 @@ interface ServiceProvidersData {
 const ServiceProviders: React.FC = () => {
   const [serviceProviders, setServiceProviders] = useState<ServiceProvidersData[]>([]);
   const [search, setSearch] = useState("");
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedProvider, setSelectedProvider] = useState<ServiceProvidersData | null>(null);
+  const [approvalFilter, setApprovalFilter] = useState<string>("all"); // New filter state
   const [loading, setLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [totalPages, setTotalPages] = useState(1);
   const currentPage = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "5");
-  // const [show, setShow] = useState(false);
-
-  // const handleClose = () => setShow(false);
-  // const handleShow = () => setShow(true);
 
   const handleSearch = (name: string) => {
     setSearch(name);
   };
 
-  const filteredServiceProviders = serviceProviders.filter((provider) =>
-    provider.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const handleApprovalFilterChange = (filter: string) => {
+    setApprovalFilter(filter);
+  };
+
+  const filteredServiceProviders = serviceProviders
+    .filter((provider) => provider.name.toLowerCase().includes(search.toLowerCase()))
+    .filter((provider) => {
+      if (approvalFilter === "approved") {
+        return provider.isApproved;
+      } else if (approvalFilter === "notApproved") {
+        return !provider.isApproved;
+      } else {
+        return true; // Show all if the filter is set to "all"
+      }
+    });
 
   const fetchServiceProviders = async (page: number, limit: number) => {
     setLoading(true);
@@ -79,36 +78,35 @@ const ServiceProviders: React.FC = () => {
     setSearchParams({ page: newPage.toString(), limit: limit.toString() });
   };
 
-  const handleOpenModal = (provider: ServiceProvidersData) => {
-    setSelectedProvider(provider);
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setSelectedProvider(null);
-  };
-
   const handleBlock = async (serviceProviderId: string, userBlocked: boolean) => {
-    try {
-      const response = await blockProvider(serviceProviderId);
-      if (response.success) {
-        setServiceProviders((prevProviders) =>
-          prevProviders.map((provider) =>
-            provider._id === serviceProviderId
-              ? { ...provider, isBlocked: !userBlocked }
-              : provider
-          )
-        );
-        setSelectedProvider((prevProvider) =>
-          prevProvider ? { ...prevProvider, isBlocked: !userBlocked } : null
-        );
-        setOpenModal(false);
-        toast.success(`User ${userBlocked ? "unblocked" : "blocked"} successfully.`);
+    const action = userBlocked ? "unblock" : "block";
+    
+    Swal.fire({
+      title: `Are you sure you want to ${action} this provider?`,
+      text: `This action will ${action} the provider's access.`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: `${action.charAt(0).toUpperCase() + action.slice(1)}`,
+      cancelButtonText: "Cancel",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await blockProvider(serviceProviderId);
+          if (response.success) {
+            setServiceProviders((prevProviders) =>
+              prevProviders.map((provider) =>
+                provider._id === serviceProviderId
+                  ? { ...provider, isBlocked: !userBlocked }
+                  : provider
+              )
+            );
+            toast.success(`User ${action === 'block' ? 'blocked' : 'unblocked'} successfully.`);
+          }
+        } catch (error) {
+          toast.error("An error occurred while updating user status.");
+        }
       }
-    } catch (error) {
-      toast.error("An error occurred while updating user status.");
-    }
+    });
   };
 
   return (
@@ -117,33 +115,21 @@ const ServiceProviders: React.FC = () => {
       <AdminNavbar />
 
       {/* Page Layout */}
-      <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-
-        {/* Menu Button */}
-        {/* <Button
-          variant="primary"
-          onClick={handleShow}
-          style={{
-            position: 'absolute',
-            top: '1rem',
-            left: '1rem',
-            zIndex: 1000, 
-            background:'black'// Ensures button stays on top
-          }}
-        >
-          <FaBars /> Menu
-        </Button> */}
-
-        {/* Sidebar */}
-        {/* <AdminSidebar show={show} handleClose={handleClose} /> */}
-<br />
-<br />
-        <div className="bg-gray-100 min-h-screen p-8">
+      <div
+        style={{
+          backgroundImage: "url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')",
+          backgroundSize: "cover",
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <div className="bg-gray-100 min-h-screen p-8 bg-opacity-80">
           <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">Service Providers</h1>
+            <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">Service Providers</h1>
 
             <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-              <div className="relative">
+              <div className="relative mb-4">
                 <input
                   type="text"
                   className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -153,7 +139,18 @@ const ServiceProviders: React.FC = () => {
                 />
                 <FiSearch className="absolute left-3 top-3 text-gray-400" />
               </div>
-              <br />
+
+              <div className="mt-4">
+                <select
+                  value={approvalFilter}
+                  onChange={(e) => handleApprovalFilterChange(e.target.value)}
+                  className="w-full pl-3 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="all">All</option>
+                  <option value="approved">Approved</option>
+                  <option value="notApproved">Not Approved</option>
+                </select>
+              </div>
             </div>
 
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -180,12 +177,12 @@ const ServiceProviders: React.FC = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="flex-shrink-0 h-10 w-10">
-                                                  <img
-                              className="h-10 w-10 rounded-full object-cover"
-                              src={provider.profilePicture || "https://via.placeholder.com/40"}
-                              alt={provider.name}
-                              style={{ width: "40px", height: "40px" }}
-                            />
+                              <img
+                                className="h-10 w-10 rounded-full object-cover"
+                                src={provider.profilePicture || "https://via.placeholder.com/40"}
+                                alt={provider.name}
+                                style={{ width: "40px", height: "40px" }}
+                              />
                             </div>
                             <div className="ml-4">
                               <div className="text-sm font-medium text-gray-900">{provider.name}</div>
@@ -205,52 +202,27 @@ const ServiceProviders: React.FC = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-  <span
-    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-      provider.isApproved ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-    }`}
-  >
-    {provider.isApproved ? (
-      <>
-        <FiCheckCircle className="mr-1" /> {/* Green check icon */}
-        Approved {/* Green text */}
-      </>
-    ) : (
-      <>
-        <FiXCircle className="mr-1" /> {/* Red cross icon */}
-        Not Approved {/* Red text */}
-      </>
-    )}
-  </span>
-</td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                          <Link
-                            to={`/admin/serviceProvider/${provider._id}`}
-                            className="text-indigo-600 hover:text-indigo-900"
+                          <span
+                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              provider.isApproved ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                            }`}
                           >
-                            <FiEye className="inline-block mr-1" />
-                            View
+                            {provider.isApproved ? "Approved" : "Not Approved"}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          <Link to={`/admin/serviceProvider/${provider._id}`}>
+                            <FiEye className="text-blue-600 cursor-pointer" />
                           </Link>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                          <button 
-                            className={`text-white px-4 py-2 rounded ${
-                              provider.isBlocked ? "bg-red-500 hover:bg-red-600" : "bg-blue-500 hover:bg-blue-600"
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          <button
+                            onClick={() => handleBlock(provider._id, provider.isBlocked)}
+                            className={`text-sm ${
+                              provider.isBlocked ? "text-green-600" : "text-red-600"
                             }`}
-                            onClick={() => handleOpenModal(provider)}
                           >
-                            {provider.isBlocked ? (
-                              <>
-                                <FiUnlock className="inline-block mr-1" />
-                                Unblock
-                              </>
-                            ) : (
-                              <>
-                                <FiLock className="inline-block mr-1" />
-                                Block
-                              </>
-                            )}
+                            {provider.isBlocked ? <FiUnlock /> : <FiLock />}
                           </button>
                         </td>
                       </tr>
@@ -259,44 +231,18 @@ const ServiceProviders: React.FC = () => {
                 )}
               </table>
             </div>
+
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={handlePageChange}
             />
+
           </div>
         </div>
-        <Footer />
       </div>
+      <Footer />
 
-      <Dialog
-        open={openModal}
-        onClose={handleCloseModal}
-        size="sm"
-        aria-labelledby="block-unblock-dialog"
-      >
-        <DialogHeader>Confirm Action</DialogHeader>
-        <DialogBody>
-          Are you sure you want to {selectedProvider?.isBlocked ? "unblock" : "block"} this provider?
-        </DialogBody>
-        <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={handleCloseModal}
-            className="mr-2"
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            color="blue"
-            onClick={() => handleBlock(selectedProvider!._id, selectedProvider!.isBlocked)}
-          >
-            {selectedProvider?.isBlocked ? "Unblock" : "Block"}
-          </Button>
-        </DialogFooter>
-      </Dialog>
     </>
   );
 };

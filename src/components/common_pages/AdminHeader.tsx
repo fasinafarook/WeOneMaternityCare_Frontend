@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { Navbar, Container, Image, Nav, Button, Offcanvas } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import logo from "../../../public/images/WeOne (1).png";
+import logo from "../../../public/images/logo.jpeg";
 import { logout } from "../../api/adminAPI";
 import { adminLogout } from "../../redux/slice/authSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { adminServices } from "../../Services/constants/serviceList"; // Import the admin services list
+import { adminServices } from "../../Services/constants/serviceList";
+import { FaSignOutAlt, FaCog } from "react-icons/fa"; // Import icons
 
 const AdminNavbar: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [showSidebar, setShowSidebar] = useState(false); // State for Offcanvas visibility
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const handleLogout = async () => {
     const result = await Swal.fire({
@@ -43,53 +44,63 @@ const AdminNavbar: React.FC = () => {
 
   return (
     <>
-      <Navbar expand="lg" style={{ background: "linear-gradient(to right, #574b60, #D7BCC8)", padding: "10px 0" }}>
-        <Container>
-          {/* Logo */}
-          <Navbar.Brand href="/admin/dashboard">
-            <Image
-              src={logo}
-              style={{ width: "70px", height: "70px" }} // Ensure width is auto to maintain aspect ratio
-              alt="Logo"
-            />
-          </Navbar.Brand>
-
-          {/* Toggle Button for Mobile View */}
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-
+      <Navbar expand="lg" style={{ 
+        background: "linear-gradient(to right, #2c3e50, #bdc3c7)", 
+        padding: "10px 0", 
+        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.2)" 
+      }}>
+        <Container style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           {/* Sidebar Button */}
           <Button
-            variant="secondary"
+            variant="link"
             onClick={() => setShowSidebar(true)} // Open the sidebar
-            style={{ marginLeft: 'auto', backgroundColor: "#4CAF50", color: "#fff" }}
+            style={{
+              backgroundColor: "transparent", 
+              color: "#fff", 
+              fontSize: "20px",
+              padding: "10px",
+              border: "none",
+              transition: "color 0.3s ease",
+            }}
           >
-            Services
+            <FaCog /> {/* Settings icon */}
           </Button>
+
+          {/* Logo centered */}
+          <Navbar.Brand href="/admin/dashboard" style={{ flexGrow: 1, textAlign: 'center' }}>
+            <Image
+              src={logo}
+              style={{ width: "70px", height: "70px", margin: "0 auto" }} 
+              alt="Logo"
+            />
+            <h3 style={{ color: "#fff", margin: "0" }}>Admin</h3>
+          </Navbar.Brand>
 
           {/* Logout Button */}
           <Button
             onClick={handleLogout}
             style={{
-              backgroundColor: "#dc3545",
+              backgroundColor: "#e74c3c",
               border: "none",
               color: "#fff",
-              marginLeft: "1rem",
-              padding: "10px 20px",
-              borderRadius: "5px",
+              padding: "10px 15px",
+              borderRadius: "50%",
               transition: "background-color 0.3s ease",
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
-            Logout
+            <FaSignOutAlt /> {/* Logout icon */}
           </Button>
         </Container>
       </Navbar>
 
       {/* Sidebar (Offcanvas) */}
-      <Offcanvas show={showSidebar} onHide={() => setShowSidebar(false)} placement="start"> {/* Changed placement to 'start' */}
-        <Offcanvas.Header closeButton>
+      <Offcanvas show={showSidebar} onHide={() => setShowSidebar(false)} placement="start" style={{ backgroundColor: "#34495e", color: "#fff" }}>
+        <Offcanvas.Header closeButton style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.2)" }}>
           <Offcanvas.Title>Admin Services</Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body>
+        <Offcanvas.Body style={{ padding: "0" }}>
           <Nav className="flex-column">
             {adminServices.map(({ service, path }) => (
               <Nav.Link
@@ -98,13 +109,13 @@ const AdminNavbar: React.FC = () => {
                 to={path}
                 style={({ isActive }: { isActive: boolean }) => ({
                   fontSize: "16px",
-                  padding: "10px 20px",
-                  marginRight: "10px",
-                  borderRadius: "5px",
+                  padding: "15px 20px",
+                  margin: "5px 0",
+                  borderRadius: "0",
                   textTransform: "capitalize",
-                  backgroundColor: isActive ? "#4CAF50" : "transparent",
-                  color: isActive ? "#fff" : "#000",
-                  transition: "background-color 0.3s ease",
+                  backgroundColor: isActive ? "#2980b9" : "transparent",
+                  color: isActive ? "#fff" : "#bdc3c7",
+                  transition: "background-color 0.3s ease, color 0.3s ease",
                   textDecoration: "none",
                 })}
                 onClick={() => setShowSidebar(false)} // Close sidebar on link click

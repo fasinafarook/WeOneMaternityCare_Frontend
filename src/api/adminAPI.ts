@@ -145,7 +145,7 @@ export const getBlogs = async (page: number, limit: number) => {
     return response.data;
   } catch (error) {
     console.log("Error fetching blogs:", error);
-    return { success: false, data: [], total: 0 }; // Ensure it returns a consistent structure
+    return { success: false, data: [], total: 0 }; 
   }
 };
 
@@ -156,7 +156,7 @@ export const unlistBlog = async (blogId: string) => {
     return response.data;
   } catch (error) {
     console.log("Error unlisting blog:", error);
-    throw error; // Ensure errors are thrown so they can be caught in the component
+    throw error; 
   }
 };
 

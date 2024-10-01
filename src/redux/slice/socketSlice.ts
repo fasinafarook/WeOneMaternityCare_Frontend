@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Socket } from 'socket.io-client';
 
 interface SocketState {
-  socket: any; // Use `any` type to bypass immutability constraints
+  socket: any; 
   onlineUsers: string[];
 }
 

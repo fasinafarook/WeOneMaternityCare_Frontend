@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
-// import { Container, Row, Col } from "react-bootstrap";
 import { FaUsers, FaUserTie, FaCalendarCheck } from 'react-icons/fa';
 import { Bar, Pie } from 'react-chartjs-2';
-
 import { getDashboardDetails } from '../../api/adminAPI';
 import {
   Chart as ChartJS,
@@ -40,7 +38,7 @@ interface IBooking {
 
 const aggregateChartData = (bookings: IBooking[], groupBy: 'month' | 'day') => {
   const filteredBookings = bookings.filter(
-    booking => booking.status === 'Completed' || booking.status === 'Scheduled' || booking.status === 'Cancelled'
+    (booking) => booking.status === 'Completed' || booking.status === 'Scheduled' || booking.status === 'Cancelled'
   );
 
   const data: { [key: string]: { bookings: number; revenue: number } } = {};
@@ -63,14 +61,12 @@ const aggregateChartData = (bookings: IBooking[], groupBy: 'month' | 'day') => {
     data[key].revenue += booking.price;
   });
 
-  const sortedKeys = Object.keys(data).sort((a, b) =>
-    new Date(a).getTime() - new Date(b).getTime()
-  );
+  const sortedKeys = Object.keys(data).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
 
   return {
     labels: sortedKeys,
-    bookingsData: sortedKeys.map(key => data[key].bookings),
-    revenueData: sortedKeys.map(key => data[key].revenue),
+    bookingsData: sortedKeys.map((key) => data[key].bookings),
+    revenueData: sortedKeys.map((key) => data[key].revenue),
   };
 };
 
@@ -138,47 +134,16 @@ const AdminDashboard = () => {
         datasets: [
           {
             label: 'Booking Count',
-            data: [
-              bookingsCount.completed,
-              bookingsCount.scheduled,
-              bookingsCount.cancelled,
-              bookingsCount.refunded,
-            ],
-            
-            backgroundColor: [
-              'rgba(75, 192, 192, 0.6)',
-              'rgba(255, 206, 86, 0.6)',
-              'rgba(255, 99, 132, 0.6)',
-              'rgba(153, 102, 255, 0.6)',
-            ],
-            borderColor: [
-              'rgba(75, 192, 192, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(255, 99, 132, 1)',
-              'rgba(153, 102, 255, 1)',
-            ],
+            data: [bookingsCount.completed, bookingsCount.scheduled, bookingsCount.cancelled, bookingsCount.refunded],
+            backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(255, 206, 86, 0.6)', 'rgba(255, 99, 132, 0.6)', 'rgba(153, 102, 255, 0.6)'],
+            borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)', 'rgba(255, 99, 132, 1)', 'rgba(153, 102, 255, 1)'],
             borderWidth: 1,
           },
           {
             label: 'Revenue (₹)',
-            data: [
-              revenueByStatus.completed,
-              revenueByStatus.scheduled,
-              revenueByStatus.cancelled,
-              revenueByStatus.refunded,
-            ],
-            backgroundColor: [
-              'rgba(75, 192, 192, 0.4)',
-              'rgba(255, 206, 86, 0.4)',
-              'rgba(255, 99, 132, 0.4)',
-              'rgba(153, 102, 255, 0.4)',
-            ],
-            borderColor: [
-              'rgba(75, 192, 192, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(255, 99, 132, 1)',
-              'rgba(153, 102, 255, 1)',
-            ],
+            data: [revenueByStatus.completed, revenueByStatus.scheduled, revenueByStatus.cancelled, revenueByStatus.refunded],
+            backgroundColor: ['rgba(75, 192, 192, 0.4)', 'rgba(255, 206, 86, 0.4)', 'rgba(255, 99, 132, 0.4)', 'rgba(153, 102, 255, 0.4)'],
+            borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)', 'rgba(255, 99, 132, 1)', 'rgba(153, 102, 255, 1)'],
             borderWidth: 1,
           },
         ],
@@ -213,135 +178,88 @@ const AdminDashboard = () => {
   }, [bookings, viewMode]);
 
   const toggleViewMode = () => {
-    setViewMode(prevMode => (prevMode === 'month' ? 'day' : 'month'));
+    setViewMode((prevMode) => (prevMode === 'month' ? 'day' : 'month'));
   };
 
   return (
     <>
       <AdminNavbar />
-      <div className="min-h-screen bg-gradient-to-br from-[#E7DDFF] to-[#E7DDFF] p-8">
-        <header className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-[#19328F]">Admin Dashboard</h1>
-        </header>
+      <div
+        className="min-h-screen bg-cover bg-center bg-no-repeat p-8"
+        style={{
+          backgroundImage:
+            "url('https://thumbs.dreamstime.com/b/concept-cardiology-heart-health-close-up-female-doctor-hand-holding-stethoscope-91242003.jpg')",
+          backgroundAttachment: 'fixed',
+        }}
+      >
+        <div className="bg-black bg-opacity-50 p-8 min-h-screen">
+          <header className="flex justify-between items-center mb-8">
+            <h1 className="text-4xl font-bold text-white">Admin Dashboard</h1>
+          </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <StatCard
-            icon={<FaUserTie className="text-[#2F76FF]" />}
-            title="Service Providers"
-            value={dashboardDetails.providersCount}
-          />
-          <StatCard
-            icon={<FaUsers className="text-[#2F76FF]" />}
-            title="Users"
-            value={dashboardDetails.usersCount}
-          />
-          <StatCard
-            icon={<FaCalendarCheck className="text-[#2F76FF]" />}
-            title="Total Bookings"
-            value={
-              dashboardDetails.bookingsCount.completed +
-              dashboardDetails.bookingsCount.scheduled +
-              dashboardDetails.bookingsCount.cancelled
-            }
-          />
-        </div>
-
-        {/* Bar Chart Section */}
-        <div className="w-full bg-white rounded-lg shadow-xl p-6 mb-6">
-          {chartData && <Bar options={chartOptions} data={chartData} />}
-          <button
-            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
-            onClick={toggleViewMode}
-          >
-            Toggle View Mode ({viewMode})
-          </button>
-        </div>
-
-        {/* Pie Chart Section */}
-        <div className="w-full md:w-1/3 lg:w-1/2 mx-auto  rounded-lg shadow-xl p-6">
-        {pieData && (
-            <Pie
-              data={pieData}
-           
-              options={{
-                plugins: {
-                  legend: {
-                    position: 'right',
-                  },
-                },
-              }}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <StatCard icon={<FaUserTie className="text-[#2F76FF]" />} title="Service Providers" value={dashboardDetails.providersCount} />
+            <StatCard icon={<FaUsers className="text-[#2F76FF]" />} title="Users" value={dashboardDetails.usersCount} />
+            <StatCard
+              icon={<FaCalendarCheck className="text-[#2F76FF]" />}
+              title="Total Bookings"
+              value={
+                dashboardDetails.bookingsCount.completed +
+                dashboardDetails.bookingsCount.scheduled +
+                dashboardDetails.bookingsCount.cancelled
+              }
             />
-          )}
-        </div>
-
-                {/* Main Content
-                <Container>
-          <div className="mt-5 mb-5">
-            <Row>
-              <Col md={6}>
-                <img
-                  src="https://images.pexels.com/photos/7282807/pexels-photo-7282807.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  style={{ height: "350px", width: "100%" }}
-                  className="rounded-4"
-                  alt="admindash1"
-                />
-              </Col>
-              <Col md={6} className="mt-3">
-                <img
-                  src="https://images.pexels.com/photos/7282318/pexels-photo-7282318.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  style={{ height: "350px", width: "100%" }}
-                  className="rounded-4"
-                  alt="admindash2"
-                />
-              </Col>
-            </Row>
-            <h3 className="poppins-semibold-italic mt-4">
-              Begin your child's journey with Us
-            </h3>
-            <p className="text-secondary poppins-regular">
-              We prioritize excellence in care and support, ensuring every aspect meets the highest standards.
-            </p>
-            <h2 className="text-center fw-bold mt-3">About Us</h2>
-            <hr />
-            <p className="text-center mt-3">
-              The birth of your baby is one of the most exciting events in your
-              life. From the miracle of the first heartbeat to the exhilarating
-              moment of the first breath, a new love story is beginning! Whether
-              you are expecting or have already welcomed your little one into
-              the world, Janika will walk you through this beautiful journey.
-              <br />
-              Ayurveda says, “If a pregnant woman is taken care of, as advised,
-              she will give birth to a child who does not have any diseases—a
-              healthy, physically strong, radiant and well-nourished baby.” We
-              at Janika believe every mother and baby deserves the best care
-              possible – before, during, and after a newborn enters the world.
-              We have designed services and solutions not only for the physical
-              but also the mental well-being of the mother. You will have
-              questions about how and why you should care for yourself during
-              your pregnancy; we are here to answer you.
-            </p>
           </div>
-        </Container> */}
+
+          <div className="w-full bg-white bg-opacity-90 rounded-lg shadow-xl p-6 mb-6">
+            {chartData && <Bar options={chartOptions} data={chartData} />}
+            <button
+              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
+              onClick={toggleViewMode}
+            >
+              Toggle View Mode ({viewMode})
+            </button>
+          </div>
+
+          <div className="w-full md:w-1/3 lg:w-1/2 mx-auto bg-white bg-opacity-90 rounded-lg shadow-xl p-6">
+            {pieData && (
+              <Pie
+                data={pieData}
+                options={{
+                  plugins: {
+                    tooltip: {
+                      callbacks: {
+                        label: (context) => `${context.label}: ${context.raw} ₹`,
+                      },
+                    },
+                  },
+                }}
+              />
+            )}
+          </div>
+        </div>
       </div>
       <Footer />
     </>
   );
 };
 
-export default AdminDashboard;
-
-interface StatCardProps {
+interface IStatCardProps {
   icon: React.ReactNode;
   title: string;
   value: number;
 }
 
-const StatCard = ({ icon, title, value }: StatCardProps) => (
-  <div className="bg-white rounded-lg shadow-md p-6 flex items-center justify-between">
-    <div className="text-3xl">{icon}</div>
-    <div className="ml-4">
-      <h3 className="text-lg font-medium text-gray-700">{title}</h3>
-      <p className="text-2xl font-semibold text-[#19328F]">{value}</p>
+const StatCard = ({ icon, title, value }: IStatCardProps) => {
+  return (
+    <div className="bg-white rounded-lg shadow-xl p-6 flex items-center space-x-4">
+      <div className="p-4 bg-blue-100 rounded-full">{icon}</div>
+      <div>
+        <h3 className="text-lg font-semibold">{title}</h3>
+        <p className="text-xl font-bold">{value}</p>
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
+export default AdminDashboard;

@@ -10,7 +10,7 @@ import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
 function Footer() {
   const footerStyle = {
-    background: "linear-gradient(to right, #574B60, #D7BCC8)",
+    background: "linear-gradient(to right, #2c3e50, #bdc3c7)",
     color: "white",
   };
 

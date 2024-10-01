@@ -9,6 +9,8 @@ const ComplaintsPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedComplaint, setSelectedComplaint] = useState<any | null>(null);
+  
+  // State for response management
   const [response, setResponse] = useState<string>('');
   const [responseError, setResponseError] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | 'responded' | 'unresponded'>('all');
@@ -90,170 +92,178 @@ const ComplaintsPage: React.FC = () => {
     }
   };
 
-  if (loading) return <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Loading...</div>;
-  if (error) return <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{error}</div>;
+  if (loading) return <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }}>Loading...</div>;
+  if (error) return <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }}>{error}</div>;
 
   return (
     <>
       <AdminNavbar />
-      <div style={{ minHeight: 'calc(100vh - 60px)', padding: '20px' }}>
-        <h1 style={{ textAlign: 'center' }}>Complaints</h1>
-        <div style={{ marginBottom: '20px', textAlign: 'center' }}>
-          <button
-            onClick={() => setFilter('all')}
-            style={{
-              marginRight: '10px',
-              padding: '10px 20px',
-              backgroundColor: '#4CAF50',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-              transition: 'background-color 0.3s, transform 0.3s',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#45a049')}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#4CAF50')}
-          >
-            All
-          </button>
-          <button
-            onClick={() => setFilter('responded')}
-            style={{
-              marginRight: '10px',
-              padding: '10px 20px',
-              backgroundColor: '#2196F3',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-              transition: 'background-color 0.3s, transform 0.3s',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1976D2')}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2196F3')}
-          >
-            Responded
-          </button>
-          <button
-            onClick={() => setFilter('unresponded')}
-            style={{
-              padding: '10px 20px',
-              backgroundColor: '#f44336',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-              transition: 'background-color 0.3s, transform 0.3s',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#d32f2f')}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#f44336')}
-          >
-            Unresponded
-          </button>
-        </div>
+      <div style={{
+        minHeight: 'calc(100vh - 60px)',
+        padding: '20px',
+        backgroundImage: "url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}>
+        <div style={{
+          backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black background for contrast
+          padding: '20px',
+          borderRadius: '8px',
+        }}>
+          <h1 style={{ textAlign: 'center', marginBottom: '20px', color: 'white' }}>Complaints</h1>
+          <div style={{ marginBottom: '20px', textAlign: 'center' }}>
+            <button
+              onClick={() => setFilter('all')}
+              style={{
+                marginRight: '10px',
+                padding: '10px 20px',
+                backgroundColor: '#4CAF50',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.2)',
+                transition: 'background-color 0.3s, transform 0.3s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#45a049')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#4CAF50')}
+            >
+              
+              All
+            </button>
+            <button
+              onClick={() => setFilter('responded')}
+              style={{
+                marginRight: '10px',
+                padding: '10px 20px',
+                backgroundColor: '#2196F3',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.2)',
+                transition: 'background-color 0.3s, transform 0.3s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1976D2')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2196F3')}
+            >
+              Responded
+            </button>
+            <button
+              onClick={() => setFilter('unresponded')}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: '#f44336',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.2)',
+                transition: 'background-color 0.3s, transform 0.3s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#d32f2f')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#f44336')}
+            >
+              Unresponded
+            </button>
+          </div>
 
-        {getPaginatedComplaints().length === 0 ? (
-          <div style={{ textAlign: 'center', marginTop: '20px' }}>No complaints found.</div>
-        ) : (
-          <>
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
-              <thead>
-                <tr>
-                  <th style={{ padding: '10px', border: '1px solid #ddd', backgroundColor: '#f4f4f4' }}>ID</th>
-                  <th style={{ padding: '10px', border: '1px solid #ddd', backgroundColor: '#f4f4f4' }}>Subject</th>
-                  <th style={{ padding: '10px', border: '1px solid #ddd', backgroundColor: '#f4f4f4' }}>Message</th>
-                  <th style={{ padding: '10px', border: '1px solid #ddd', backgroundColor: '#f4f4f4' }}>Resolved</th>
-                  <th style={{ padding: '10px', border: '1px solid #ddd', backgroundColor: '#f4f4f4' }}>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {getPaginatedComplaints().map((complaint) => (
-                  <tr key={complaint._id}>
-                    <td style={{ padding: '10px', border: '1px solid #ddd' }}>{complaint._id}</td>
-                    <td style={{ padding: '10px', border: '1px solid #ddd' }}>{complaint.subject}</td>
-                    <td style={{ padding: '10px', border: '1px solid #ddd' }}>{complaint.message}</td>
-                    <td style={{ padding: '10px', border: '1px solid #ddd', color: complaint.isResolved ? 'green' : 'red' }}>
-                      {complaint.isResolved ? 'Yes' : 'No'}
-                    </td>
-                    <td style={{ padding: '10px', border: '1px solid #ddd' }}>
-                      {!complaint.isResolved ? (
-                       <button
-                       style={{
-                         padding: '8px 16px',
-                         backgroundColor: '#007bff',
-                         color: 'white',
-                         border: 'none',
-                         borderRadius: '5px',
-                         cursor: 'pointer',
-                         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                         transition: 'background-color 0.3s, transform 0.2s',
-                         fontSize: '14px',
-                         fontWeight: '500',
-                         textAlign: 'center',
-                         display: 'inline-block',
-                       }}
-                       onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#0056b3')}
-                       onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#007bff')}
-                       onClick={() => handleRespondClick(complaint)}
-                     >
-                       Respond
-                     </button>
-                     
-                      ) : (
-                        <button
-                          style={{ padding: '5px 10px', cursor: 'default', color: 'green', backgroundColor: 'lightgrey', border: '1px solid #ddd' }}
-                          disabled
-                        >
-                          Resolved
-                        </button>
-                      )}
-                    </td>
+          {getPaginatedComplaints().length === 0 ? (
+            <div style={{ textAlign: 'center', marginTop: '20px', color: 'white' }}>No complaints found.</div>
+          ) : (
+            <>
+              <table style={{
+                width: '100%',
+                borderCollapse: 'collapse',
+                marginTop: '20px',
+                backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent white
+                borderRadius: '8px',
+                overflow: 'hidden'
+              }}>
+                <thead>
+                  <tr>
+                    <th style={{ padding: '10px', border: '1px solid #ddd', backgroundColor: '#f4f4f4' }}>ID</th>
+                    <th style={{ padding: '10px', border: '1px solid #ddd', backgroundColor: '#f4f4f4' }}>Subject</th>
+                    <th style={{ padding: '10px', border: '1px solid #ddd', backgroundColor: '#f4f4f4' }}>Message</th>
+                    <th style={{ padding: '10px', border: '1px solid #ddd', backgroundColor: '#f4f4f4' }}>Resolved</th>
+                    <th style={{ padding: '10px', border: '1px solid #ddd', backgroundColor: '#f4f4f4' }}>Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {getPaginatedComplaints().map((complaint) => (
+                    <tr key={complaint._id}>
+                      <td style={{ padding: '10px', border: '1px solid #ddd' }}>{complaint._id}</td>
+                      <td style={{ padding: '10px', border: '1px solid #ddd' }}>{complaint.subject}</td>
+                      <td style={{ padding: '10px', border: '1px solid #ddd' }}>{complaint.message}</td>
+                      <td
+  style={{
+    padding: '10px',
+    border: '1px solid #ddd',
+    color: complaint.isResolved ? 'green' : 'red', // Conditional color based on resolution status
+  }}
+>
+  {complaint.isResolved ? 'Yes' : 'No'}
+</td>                      <td style={{ padding: '10px', border: '1px solid #ddd' }}>
+{!complaint.isResolved ? (
+  <button
+    style={{
+      padding: '5px 10px',
+      backgroundColor: '#2196F3',
+      color: 'white',
+      border: 'none',
+      borderRadius: '5px',
+      cursor: 'pointer',
+    }}
+    onClick={() => handleRespondClick(complaint)}
+  >
+    Respond
+  </button>
+) : (
+  <span style={{ color: 'green' }}>Resolved</span> // Changed to a span with green color
+)}
 
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                style={{
-                  marginRight: '10px',
-                  padding: '10px 20px',
-                  backgroundColor: '#2196F3',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                }}
-              >
-                Previous
-              </button>
-              <span style={{ margin: '0 10px' }}>
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                style={{
-                  marginLeft: '10px',
-                  padding: '10px 20px',
-                  backgroundColor: '#2196F3',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                }}
-              >
-                Next
-              </button>
-            </div>
-          </>
-        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  style={{
+                    marginRight: '5px',
+                    padding: '10px 15px',
+                    backgroundColor: '#4CAF50',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '5px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Previous
+                </button>
+                <span style={{ alignSelf: 'center', margin: '0 10px', color: 'white' }}>{`Page ${currentPage} of ${totalPages}`}</span>
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  style={{
+                    marginLeft: '5px',
+                    padding: '10px 15px',
+                    backgroundColor: '#4CAF50',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '5px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Next
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
       <Footer />
     </>

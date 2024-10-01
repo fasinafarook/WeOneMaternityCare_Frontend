@@ -125,10 +125,20 @@ const OutsourcedBookings = () => {
 
   return (
     <>
+    
       <UserNavbar />
-      <div className="min-h-screen flex flex-col bg-[#EEF5FF] p-4 sm:p-6 md:p-12 lg:p-24">
+      <div style={{
+        backgroundImage: `url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        minHeight: "100vh",
+        padding: "20px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}>        
         <div className="max-w-7xl text-[#070913] mx-auto w-full">
-          <h1 className="text-xl font-bold mb-4">Bookings List</h1>
+          <h1 style={{ fontSize: "2rem", fontWeight: "bold", color: "#333", textAlign: "center", marginBottom: "20px" }}>Bookings List</h1>
           <div className="flex flex-col">
             <div className="overflow-x-auto">
               <div className="p-1.5 w-full inline-block align-middle">

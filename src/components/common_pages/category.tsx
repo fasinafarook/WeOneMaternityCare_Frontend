@@ -13,9 +13,9 @@ const CategoryShimmer: React.FC = () => {
           </div>
           <div className="p-4">
             <div className="flex flex-wrap gap-2 mb-4">
-              {[1, 2, 3].map((_, techIndex) => (
+              {[1, 2, 3].map((_, catIndex) => (
                 <div
-                  key={techIndex}
+                  key={catIndex}
                   className="h-4 bg-gray-300 rounded w-1/4"
                 ></div>
               ))}

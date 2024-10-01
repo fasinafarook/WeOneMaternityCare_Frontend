@@ -78,8 +78,14 @@ const Category = () => {
   return (
     <>
       <AdminNavbar />
-      <div className="min-h-screen p-8 bg-gradient-to-b from-blue-50 to-white">
-        <div className="container mx-auto">
+      <div
+        className="min-h-screen p-8 bg-cover bg-center"
+        style={{
+          backgroundImage: "url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')",
+          backgroundSize: "cover",
+        }}
+      >
+        <div className="container mx-auto bg-white bg-opacity-90 rounded-lg shadow-lg p-6">
           <div className="flex flex-col sm:flex-row justify-between items-center mb-12">
             <h1 className="text-4xl font-bold text-gray-800 mb-4 sm:mb-0 flex items-center">
               <FiPackage className="inline-block mr-2 text-blue-600" />

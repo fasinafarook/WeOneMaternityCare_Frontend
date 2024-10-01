@@ -1,290 +1,3 @@
-// import { Link } from "react-router-dom";
-// import { useForm, SubmitHandler } from "react-hook-form";
-// import { signup } from "../../api/userAPI";
-// import { useNavigate } from "react-router-dom";
-// import toast from "react-hot-toast";
-// import { useState } from "react";
-// import { FaSpinner } from "react-icons/fa";
-// import "./UserRegistration.css";
-
-// interface IFormInput {
-//   name: string;
-//   email: string;
-//   mobile: number;
-//   password: string;
-//     confirmPassword: string; // Added confirmPassword
-
-// }
-
-// const UserSignUp = () => {
-//   const navigate = useNavigate();
-//   const [loading, setLoading] = useState(false);
-
-//   const {
-//     register,
-//     formState: { errors },
-//     handleSubmit,
-//   } = useForm<IFormInput>({ mode: "onChange" });
-
-//   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-//     try {
-//       setLoading(true);
-//       const { name, email, mobile, password } = data;
-//       const response = await signup(name, email, mobile, password);
-//       if (response?.data.success) {
-//         navigate("/user/verify-otp");
-//       } else {
-//         toast.error("Email already in use. Please log in or choose another.");
-//         setLoading(false);
-//       }
-//     } catch (error) {
-//       console.log(error);
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600">
-//       <div className="flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl w-full">
-//         <div className="hidden md:block md:w-1/2 background-image"></div>
-//         <div className="w-full md:w-1/2 p-8">
-//           <div className="text-center">
-//             <h1 className="text-3xl font-bold text-gray-800">Candidate Sign Up</h1>
-//             <p className="mt-2 text-gray-600">Enter your details to create your account</p>
-//           </div>
-
-//           <form className="mt-8 space-y-4" onSubmit={handleSubmit(onSubmit)}>
-//             <div className="flex flex-col gap-3">
-//               <input
-//                 className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:border-blue-500"
-//                 type="text"
-//                 placeholder="Enter your name"
-//                 {...register("name", {
-//                   required: "Name is required",
-//                   pattern: {
-//                     value: /^(?=.*[a-zA-Z])[a-zA-Z ]{2,30}$/,
-//                     message: "Invalid Name",
-//                   },
-//                 })}
-//               />
-//               {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
-
-//               <input
-//                 className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:border-blue-500"
-//                 type="email"
-//                 placeholder="Enter your email"
-//                 {...register("email", {
-//                   required: "Email is required",
-//                   pattern: {
-//                     value: /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/,
-//                     message: "Invalid email address",
-//                   },
-//                 })}
-//               />
-//               {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-
-//               <input
-//                 className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:border-blue-500"
-//                 type="tel"
-//                 placeholder="Enter your phone"
-//                 {...register("mobile", {
-//                   required: "Mobile number is required",
-//                   pattern: {
-//                     value: /^[0]?[789]\d{9}$/,
-//                     message: "Invalid mobile number",
-//                   },
-//                 })}
-//               />
-//               {errors.mobile && <p className="text-red-500 text-sm">{errors.mobile.message}</p>}
-
-//               <input
-//                 className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:border-blue-500"
-//                 type="password"
-//                 placeholder="Password"
-//                 {...register("password", {
-//                   required: "Password is required",
-//                   pattern: {
-//                     value: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
-//                     message: "Password should be 6-16 characters long and contain at least one number and one special character",
-//                   },
-//                 })}
-//               />
-//               {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
-
-//               <button
-//                 disabled={loading}
-//                 type="submit"
-//                 className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out flex items-center justify-center"
-//               >
-//                 {loading ? <FaSpinner className="animate-spin mr-2" /> : "Sign Up"}
-//               </button>
-
-//               <p className="mt-4 text-center text-gray-600">
-//                 Already have an account?{" "}
-//                 <Link to="/candidate/login" className="text-blue-600 hover:underline">
-//                   Sign in
-//                 </Link>
-//               </p>
-//             </div>
-//           </form>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default UserSignUp;
-
-// import { Link } from "react-router-dom";
-// import { useForm, SubmitHandler } from "react-hook-form";
-// import { signup } from "../../api/userAPI";
-// import { useNavigate } from "react-router-dom";
-// import toast from "react-hot-toast";
-// import { useState } from "react";
-// import { FaSpinner } from "react-icons/fa";
-// import "./UserRegistration.css";
-
-// interface IFormInput {
-//   name: string;
-//   email: string;
-//   mobile: number;
-//   password: string;
-//   confirmPassword: string; 
-// }
-
-// const UserSignUp = () => {
-//   const navigate = useNavigate();
-//   const [loading, setLoading] = useState(false);
-
-//   const {
-//     register,
-//     formState: { errors },
-//     handleSubmit,
-//     watch,
-   
-//   } = useForm<IFormInput>({ mode: "onChange" });
-
-//   const password = watch("password"); 
-
-//   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-//     try {
-//       setLoading(true);
-//       const { name, email, mobile, password } = data;
-//       const response = await signup(name, email, mobile, password);
-//       if (response?.data.success) {
-//         navigate("/user/verify-otp");
-//       } else {
-//         toast.error("Email already in use. Please log in or choose another.");
-//         setLoading(false);
-//       }
-//     } catch (error) {
-//       console.log(error);
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600">
-//       <div className="flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl w-full">
-//         <div className="  md:w-1/2 background-image"></div>
-//         <div className="w-full md:w-1/2 p-8">
-//           <div className="text-center">
-//             <h1 className="text-3xl font-bold text-gray-800">User Sign Up</h1>
-//             <p className="mt-2 text-gray-600">Enter your details to create your account</p>
-//           </div>
-
-//           <form className="mt-8 space-y-4" onSubmit={handleSubmit(onSubmit)}>
-//             <div className="flex flex-col gap-3">
-//               <input
-//                 className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:border-blue-500"
-//                 type="text"
-//                 placeholder="Enter your name"
-//                 {...register("name", {
-//                   required: "Name is required",
-//                   pattern: {
-//                     value: /^(?=.*[a-zA-Z])[a-zA-Z ]{2,30}$/,
-//                     message: "Invalid Name",
-//                   },
-//                 })}
-//               />
-//               {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
-
-//               <input
-//                 className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:border-blue-500"
-//                 type="email"
-//                 placeholder="Enter your email"
-//                 {...register("email", {
-//                   required: "Email is required",
-//                   pattern: {
-//                     value: /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/,
-//                     message: "Invalid email address",
-//                   },
-//                 })}
-//               />
-//               {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-
-//               <input
-//                 className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:border-blue-500"
-//                 type="tel"
-//                 placeholder="Enter your phone"
-//                 {...register("mobile", {
-//                   required: "Mobile number is required",
-//                   pattern: {
-//                     value: /^[0]?[789]\d{9}$/,
-//                     message: "Invalid mobile number",
-//                   },
-//                 })}
-//               />
-//               {errors.mobile && <p className="text-red-500 text-sm">{errors.mobile.message}</p>}
-
-//               <input
-//                 className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:border-blue-500"
-//                 type="password"
-//                 placeholder="Password"
-//                 {...register("password", {
-//                   required: "Password is required",
-//                   pattern: {
-//                     value: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
-//                     message: "Password should be 6-16 characters long and contain at least one number and one special character",
-//                   },
-//                 })}
-//               />
-//               {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
-
-//               <input
-//                 className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:border-blue-500"
-//                 type="password"
-//                 placeholder="Confirm Password"
-//                 {...register("confirmPassword", {
-//                   required: "Please confirm your password",
-//                   validate: (value) => value === password || "Passwords do not match",
-//                 })}
-//               />
-//               {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
-
-//               <button
-//                 disabled={loading}
-//                 type="submit"
-//                 className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out flex items-center justify-center"
-//               >
-//                 {loading ? <FaSpinner className="animate-spin mr-2" /> : "Sign Up"}
-//               </button>
-
-//               <p className="mt-4 text-center text-gray-600">
-//                 Already have an account?{" "}
-//                 <Link to="/candidate/login" className="text-blue-600 hover:underline">
-//                   Sign in
-//                 </Link>
-//               </p>
-//             </div>
-//           </form>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default UserSignUp;
 import { Link } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { signup } from "../../api/userAPI";
@@ -292,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { FaSpinner } from "react-icons/fa";
-import "./UserRegistration.css";
 import Footer from "../../components/common_pages/Footer";
 import logo from "../../../public/images/logo.jpeg";
 
@@ -301,7 +13,7 @@ interface IFormInput {
   email: string;
   mobile: number;
   password: string;
-  confirmPassword: string; // Added confirmPassword
+  confirmPassword: string; 
 }
 
 const UserSignUp = () => {
@@ -322,132 +34,179 @@ const UserSignUp = () => {
       setLoading(true);
       const { name, email, mobile, password } = data;
       const response = await signup(name, email, mobile, password);
+  
       if (response?.data.success) {
         navigate("/user/verify-otp");
       } else {
-        toast.error("Email already in use. Please log in or choose another.");
+        toast.error(response?.data.message || "An error occurred. Please try again.");
         setLoading(false);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message);  
+      } else {
+        toast.error("Something went wrong. Please try again.");  
+      }
       setLoading(false);
     }
   };
+  
 
   return (
     <>
-     <Link to="/">
-      <img
-        src={logo}
-        alt="Logo"
-        style={{ width: '100px', height: '70px' }}
-      />
-    </Link>
-    <div className="flex h-screen w-full bg-white">
-          <img src="https://media.istockphoto.com/id/1341609914/vector/pregnant-couple-background-vector-illustration-with-a-husband-takes-care-and-hugs-his-wife.jpg?s=612x612&w=0&k=20&c=IZ7k7IktzY_x61KybAj2yBioHTLk6r86jafhB3ExN0E=" alt="Login Image" className="w-full h-full object-cover" />
+      {/* Fullscreen Wrapper */}
+      <div className="relative w-full h-screen flex items-center justify-center bg-gray-100">
+        {/* Full Background Image */}
+        <div
+          className="absolute inset-0 w-full h-full bg-cover bg-center"
+          style={{
+            backgroundImage:
+              "url('https://www.hmsmirdifhospital.ae/images/banner/500/what-is-a-gynecologist-min.jpg')",
+          }}
+        ></div>
 
-        <div className="w-full lg:w-1/2 flex items-center justify-center p-5 lg:p-10">
-          <div style={{ backgroundColor: 'rgb(173 185 198)' }} className=" rounded-lg shadow-lg border max-w-md w-full p-8">         
-          <h3 className="text-xl text-gray-600 text-center mb-6"> User Sign Up</h3>
-          <p className="mt-2 text-gray-600">Enter your details to create your account</p>
-         
-          <form className="mt-8 space-y-4" onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex flex-col gap-3">
-              <input
-                className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:border-blue-500"
-                type="text"
-                placeholder="Enter your name"
-                {...register("name", {
-                  required: "Name is required",
-                  pattern: {
-                    value: /^(?=.*[a-zA-Z])[a-zA-Z ]{2,30}$/,
-                    message: "Invalid Name",
-                  },
-                })}
-              />
-              {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+        {/* Semi-transparent overlay */}
+        <div className="absolute inset-0 bg-black opacity-50"></div>
 
-              <input
-                className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:border-blue-500"
-                type="email"
-                placeholder="Enter your email"
-                {...register("email", {
-                  required: "Email is required",
-                  pattern: {
-                    value: /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/,
-                    message: "Invalid email address",
-                  },
-                })}
-              />
-              {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+        {/* Centered Form */}
+        <div className="relative z-10 bg-white rounded-lg shadow-lg p-10 max-w-md w-full mx-4 transition-transform transform hover:scale-105 duration-300">
+          <div className="text-center mb-6">
+            <Link to="/">
+              <img src={logo} alt="Logo" className="w-20 h-auto mx-auto" />
+            </Link>
+          </div>
 
-              <input
-                className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:border-blue-500"
-                type="tel"
-                placeholder="Enter your phone"
-                {...register("mobile", {
-                  required: "Mobile number is required",
-                  pattern: {
-                    value: /^[0]?[789]\d{9}$/,
-                    message: "Invalid mobile number",
-                  },
-                })}
-              />
-              {errors.mobile && <p className="text-red-500 text-sm">{errors.mobile.message}</p>}
+          <h3 className="text-2xl font-semibold text-center text-gray-700 mb-6">
+            User Sign Up
+          </h3>
+          <p className="text-center text-gray-500 mb-6">
+            Enter your details to create your account
+          </p>
 
-              <input
-                className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:border-blue-500"
-                type="password"
-                placeholder="Password"
-                {...register("password", {
-                  required: "Password is required",
-                  pattern: {
-                    value: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
-                    message: "Password should be 6-16 characters long and contain at least one number and one special character",
-                  },
-                })}
-              />
-              {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Name Field */}
+            <input
+              className={`w-full px-4 py-2 border rounded-lg bg-gray-100 border-gray-300 focus:outline-none focus:border-blue-500 ${
+                errors.name ? "border-red-500" : ""
+              }`}
+              type="text"
+              placeholder="Enter your name"
+              {...register("name", {
+                required: "Name is required",
+                pattern: {
+                  value: /^(?=.*[a-zA-Z])[a-zA-Z ]{2,30}$/,
+                  message: "Invalid Name",
+                },
+              })}
+            />
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors.name.message}</p>
+            )}
 
-              <input
-                className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:border-blue-500"
-                type="password"
-                placeholder="Confirm Password"
-                {...register("confirmPassword", {
-                  required: "Please confirm your password",
-                  validate: (value) => value === password || "Passwords do not match",
-                })}
-              />
-              {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
+            {/* Email Field */}
+            <input
+              className={`w-full px-4 py-2 border rounded-lg bg-gray-100 border-gray-300 focus:outline-none focus:border-blue-500 ${
+                errors.email ? "border-red-500" : ""
+              }`}
+              type="email"
+              placeholder="Enter your email"
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/,
+                  message: "Invalid email address",
+                },
+              })}
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email.message}</p>
+            )}
 
-              <button
-                disabled={loading}
-                type="submit"
-                className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out flex items-center justify-center" style={{background:" rgb(27, 145, 187)"}}
-              >
-                {loading ? <FaSpinner className="animate-spin mr-2" /> : "Sign Up"}
-              </button>
+            {/* Mobile Field */}
+            <input
+              className={`w-full px-4 py-2 border rounded-lg bg-gray-100 border-gray-300 focus:outline-none focus:border-blue-500 ${
+                errors.mobile ? "border-red-500" : ""
+              }`}
+              type="tel"
+              placeholder="Enter your mobile number"
+              {...register("mobile", {
+                required: "Mobile number is required",
+                pattern: {
+                  value: /^[0]?[789]\d{9}$/,
+                  message: "Invalid mobile number",
+                },
+              })}
+            />
+            {errors.mobile && (
+              <p className="text-red-500 text-sm">{errors.mobile.message}</p>
+            )}
 
-              <p className="mt-4 text-center text-gray-600">
-                Already have an account?{" "}
-                <Link to="/user/verify-login" className="text-blue-600 hover:underline">
-                  Sign in
-                </Link>
+            {/* Password Field */}
+            <input
+              className={`w-full px-4 py-2 border rounded-lg bg-gray-100 border-gray-300 focus:outline-none focus:border-blue-500 ${
+                errors.password ? "border-red-500" : ""
+              }`}
+              type="password"
+              placeholder="Enter your password"
+              {...register("password", {
+                required: "Password is required",
+                pattern: {
+                  value: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
+                  message:
+                    "Password should be 6-16 characters long and contain at least one number and one special character",
+                },
+              })}
+            />
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password.message}</p>
+            )}
+
+            {/* Confirm Password Field */}
+            <input
+              className={`w-full px-4 py-2 border rounded-lg bg-gray-100 border-gray-300 focus:outline-none focus:border-blue-500 ${
+                errors.confirmPassword ? "border-red-500" : ""
+              }`}
+              type="password"
+              placeholder="Confirm your password"
+              {...register("confirmPassword", {
+                required: "Please confirm your password",
+                validate: (value) =>
+                  value === password || "Passwords do not match",
+              })}
+            />
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm">
+                {errors.confirmPassword.message}
               </p>
-            </div>
+            )}
+
+            {/* Submit Button */}
+            <button
+              disabled={loading}
+              type="submit"
+              className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out flex items-center justify-center"
+            >
+              {loading ? (
+                <FaSpinner className="animate-spin mr-2" />
+              ) : (
+                "Sign Up"
+              )}
+            </button>
+
+            {/* Sign In Link */}
+            <p className="mt-4 text-center text-gray-600">
+              Already have an account?{" "}
+              <Link to="/user/verify-login" className="text-blue-600 hover:underline">
+                Sign in
+              </Link>
+            </p>
           </form>
         </div>
       </div>
-      </div>
-<Footer/>
-</>
 
- 
+      <Footer />
+    </>
   );
 };
-
-
-
-
 
 export default UserSignUp;

@@ -2,7 +2,6 @@ import Api from "../Services/axios";
 
 import serviceProviderEndpoint from "../Services/endpoints/serviceProviderEndpoint";
 
-
 export const signup = async (
   name: string,
   email: string,
@@ -77,12 +76,10 @@ export const verifyLogin = async (email: string, password: string) => {
   }
 };
 
-
 interface ServiceProviderDetails {
-  // Corrected the interface name
-  name: string;
-  mobile: number;
-  email: string;
+  // name: string;
+  // mobile: number;
+  // email: string;
   service: string;
   specialization?: string;
   qualification: string;
@@ -96,13 +93,12 @@ interface ServiceProviderDetails {
 export const verifyDetails = async (
   serviceProviderDetails: ServiceProviderDetails
 ) => {
-  // Corrected the function name and interface reference
   try {
     const formData = new FormData();
 
     for (const key in serviceProviderDetails) {
-      console.log('sp',serviceProviderDetails);
-      
+      console.log("sp", serviceProviderDetails);
+
       if (serviceProviderDetails.hasOwnProperty(key)) {
         const value =
           serviceProviderDetails[key as keyof ServiceProviderDetails];
@@ -112,14 +108,9 @@ export const verifyDetails = async (
           formData.append(key, value as string);
         }
       }
-      
     }
-    console.log('for',formData);
-    
+    console.log("for", formData);
 
-    // const token = localStorage.getItem("serviceProviderToken"); // Assuming token is stored in localStorage
-    // console.log('token',token);
-    
     const response = await Api.post(
       serviceProviderEndpoint.verifyDetails,
       formData,
@@ -130,15 +121,13 @@ export const verifyDetails = async (
         },
       }
     );
-    console.log('response',response);
+    console.log("response", response);
     return response.data;
   } catch (error: any) {
     console.log("Error in verifying details: ", error);
     return error.response?.data;
   }
 };
-
-
 
 export const logout = async () => {
   const response = await Api.post(serviceProviderEndpoint.logout);
@@ -184,19 +173,20 @@ interface SlotData {
   status?: "open" | "booked";
   price: number;
   date: Date | null;
-  services: Services[]
-  
+  services: Services[];
 }
 
 export const addSlot = async (slotData: SlotData) => {
   try {
-    const response = await Api.post(serviceProviderEndpoint.addSlot, { slotData });
+    const response = await Api.post(serviceProviderEndpoint.addSlot, {
+      slotData,
+    });
     return response.data;
-  } catch (error: any) { // Cast to `any`
+  } catch (error: any) {
     if (error.response && error.response.status === 401) {
-      alert(error.response.data.message); // Display the "You are blocked!" message
+      alert(error.response.data.message);
     } else {
-      console.error('Unexpected error:', error);
+      console.error("Unexpected error:", error);
     }
   }
 };
@@ -211,8 +201,8 @@ export const getSlotsList = async (
       serviceProviderEndpoint.getSlots +
         `?searchQuery=${query}&page=${page}&limit=${limit}`
     );
-    console.log("Backend response", response); 
-    console.log("Backend responsedata", response.data);     
+    console.log("Backend response", response);
+    console.log("Backend responsedata", response.data);
     return response.data;
   } catch (error: any) {
     return error.response.data;
@@ -279,24 +269,25 @@ export const processRefund = async (bookingId: string, amount: number) => {
   }
 };
 
-
-
-
-
 export const editSlot = async (slotId: string, slotData: any) => {
   try {
-    const response = await Api.put(`/serviceProvider/edit-slot/${slotId}`, slotData);
-    console.log("Backend response", response); 
-    console.log("Backend responsedata", response.data); 
-
+    const response = await Api.put(
+      `/serviceProvider/edit-slot/${slotId}`,
+      slotData
+    );
+    console.log("Backend response", response);
+    console.log("Backend responsedata", response.data);
 
     return response.data;
-  } catch (error:any) {
-    throw new Error(error.response?.data?.message || 'Error updating slot');
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Error updating slot");
   }
 };
 
-export const updateBookingStatus = async (bookingId: string, status: string) => {
+export const updateBookingStatus = async (
+  bookingId: string,
+  status: string
+) => {
   try {
     const response = await Api.put(
       `${serviceProviderEndpoint.updateBookingStatus}/${bookingId}`,
@@ -309,63 +300,78 @@ export const updateBookingStatus = async (bookingId: string, status: string) => 
   }
 };
 
-
 export const forgorPassword = async (email: string) => {
   try {
-    const response = await Api.post(serviceProviderEndpoint.ForgotPassword, {email})
+    const response = await Api.post(serviceProviderEndpoint.ForgotPassword, {
+      email,
+    });
     localStorage.setItem("intResetPassword", response.data.data);
-    return response.data
+    return response.data;
   } catch (error: any) {
-    console.log(error)
-    return error.response.data
+    console.log(error);
+    return error.response.data;
   }
-}
-
+};
 
 export const resetPassword = async (otp: string, password: string) => {
   try {
-      const token = localStorage.getItem("intResetPassword")
-      const response = await Api.post(serviceProviderEndpoint.resetPassword, {otp, password}, {
-          headers: {
-              Authorization: `Bearer ${token}`
-          }
-      })
-      if(response.data.success){
-          localStorage.removeItem("intResetPassword")
+    const token = localStorage.getItem("intResetPassword");
+    const response = await Api.post(
+      serviceProviderEndpoint.resetPassword,
+      { otp, password },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-      return response.data
+    );
+    if (response.data.success) {
+      localStorage.removeItem("intResetPassword");
+    }
+    return response.data;
   } catch (error: any) {
-      console.log("inseide catch in api: ", error.response.data)
-      return error.response.data
+    console.log("inseide catch in api: ", error.response.data);
+    return error.response.data;
   }
-}
+};
 
-
-export const editPassword = async (currentPassword: string, newPassword: string) => {
+export const editPassword = async (
+  currentPassword: string,
+  newPassword: string
+) => {
   try {
-      const {data} = await Api.put(serviceProviderEndpoint.editPassword, {currentPassword, newPassword})
-      return data 
+    const { data } = await Api.put(serviceProviderEndpoint.editPassword, {
+      currentPassword,
+      newPassword,
+    });
+    return data;
   } catch (error: any) {
-      console.log(error)
-      return error.response.data
+    console.log(error);
+    return error.response.data;
   }
-}
+};
 
 export const editProfile = async (details: ServiceProviderDetails) => {
   try {
-    const {data} = await Api.put(serviceProviderEndpoint.editProfile, {details});
-    return data
+    const { data } = await Api.put(serviceProviderEndpoint.editProfile, {
+      details,
+    });
+    return data;
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 export const getDashboardData = async () => {
   try {
-    const response = await Api.get('/serviceProvider/dashboard'); // API route from backend
+    const response = await Api.get("/serviceProvider/dashboard");
     return response.data;
   } catch (error) {
-    console.error('Failed to fetch dashboard data:', error);
+    console.error("Failed to fetch dashboard data:", error);
     throw error;
   }
+};
+
+export const notifyLeaveAndRefund = async (bookingId: string, cancelReason: string) => {
+  return await Api.post(`/serviceProvider/notify-leave/${bookingId}`, { cancelReason });
 };

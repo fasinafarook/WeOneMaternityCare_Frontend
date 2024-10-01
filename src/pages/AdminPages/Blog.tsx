@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getBlogs, updateBlogStatus } from "../../api/adminAPI";
 import toast from "react-hot-toast";
-import { FiPlus, FiPackage, FiEye, FiEyeOff } from 'react-icons/fi';
+import { FiPlus, FiPackage, FiEye, FiEyeOff } from "react-icons/fi";
 import Pagination from "../../components/common_pages/Pagination";
 import TableShimmer from "../../components/common_pages/Table";
 import AdminNavbar from "../../components/common_pages/AdminHeader";
@@ -28,22 +28,52 @@ const ConfirmationModal: React.FC<{
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg">
-        <p className="text-lg mb-4">{message}</p>
-        <div className="flex justify-end space-x-4">
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: "#fff",
+          padding: "24px",
+          borderRadius: "12px",
+          boxShadow: "0 5px 15px rgba(0, 0, 0, 0.3)",
+        }}
+      >
+        <p style={{ fontSize: "18px", marginBottom: "16px" }}>{message}</p>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px" }}>
           <button
             onClick={() => {
               onConfirm();
               onClose();
             }}
-            className="bg-red-500 text-white py-2 px-4 rounded"
+            style={{
+              backgroundColor: "#e3342f",
+              color: "#fff",
+              padding: "10px 20px",
+              borderRadius: "8px",
+              cursor: "pointer",
+              border: "none",
+            }}
           >
             Confirm
           </button>
           <button
             onClick={onClose}
-            className="bg-gray-500 text-white py-2 px-4 rounded"
+            style={{
+              backgroundColor: "#6c757d",
+              color: "#fff",
+              padding: "10px 20px",
+              borderRadius: "8px",
+              cursor: "pointer",
+              border: "none",
+            }}
           >
             Cancel
           </button>
@@ -65,15 +95,13 @@ const BlogManagement = () => {
   const [currentStatus, setCurrentStatus] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
 
+  const limit = 6;
   const currentPage = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "5");
 
   const fetchBlogs = useCallback(async (page: number, limit: number) => {
     setLoading(true);
     try {
       const response = await getBlogs(page, limit);
-      console.log("Fetched blogs:", response);
-
       if (response.success) {
         setBlogs(response.blogs || []);
         setTotalPages(Math.ceil(response.total / limit));
@@ -94,7 +122,7 @@ const BlogManagement = () => {
   const handleToggleStatus = (blogId: string, currentStatus: boolean) => {
     setCurrentBlogId(blogId);
     setCurrentStatus(currentStatus);
-    setMessage(`Are you sure you want to ${currentStatus ? 'unlist' : 'list'} this blog?`);
+    setMessage(`Are you sure you want to ${currentStatus ? "unlist" : "list"} this blog?`);
     setIsModalOpen(true);
   };
 
@@ -108,7 +136,7 @@ const BlogManagement = () => {
               blog._id === currentBlogId ? { ...blog, isListed: !currentStatus } : blog
             )
           );
-          toast.success(`Blog has been ${currentStatus ? 'unlisted' : 'listed'}`);
+          toast.success(`Blog has been ${currentStatus ? "unlisted" : "listed"}`);
         } else {
           toast.error("Failed to update blog status");
         }
@@ -125,71 +153,161 @@ const BlogManagement = () => {
   return (
     <>
       <AdminNavbar />
-      <div className="min-h-screen p-8">
-        <div className="container mx-auto">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-12">
-            <h1 className="text-3xl font-bold mb-4 sm:mb-0 text-gray-800">
-              <FiPackage className="inline-block mr-2" />
+      <div
+        style={{
+          minHeight: "100vh",
+          padding: "40px 16px",
+          backgroundImage:
+            "url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: "rgba(255, 255, 255, 0.8)",
+            padding: "24px",
+            borderRadius: "12px",
+            width: "100%",
+            maxWidth: "1200px",
+            margin: "0 auto",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "24px",
+              flexDirection: "column",
+              textAlign: "center",
+            }}
+          >
+            <h1
+              style={{
+                fontSize: "32px",
+                fontWeight: "bold",
+                color: "#333",
+                marginBottom: "16px",
+              }}
+            >
+              <FiPackage style={{ marginRight: "8px", verticalAlign: "middle" }} />
               Blog Management
             </h1>
-            <div className="flex space-x-4">
-              <button
-                onClick={() => navigate("/admin/add-blogs")}
-                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded transition duration-300 ease-in-out flex items-center"
-              >
-                <FiPlus className="mr-2" /> Add Blog
-              </button>
-            </div>
+            <button
+              onClick={() => navigate("/admin/add-blogs")}
+              style={{
+                backgroundColor: "#1e90ff",
+                color: "#fff",
+                padding: "12px 24px",
+                borderRadius: "8px",
+                fontSize: "16px",
+                display: "flex",
+                alignItems: "center",
+                transition: "background-color 0.3s ease",
+                cursor: "pointer",
+              }}
+            >
+              <FiPlus style={{ marginRight: "8px" }} />
+              Add Blog
+            </button>
           </div>
 
           {loading ? (
-            <TableShimmer columns={5} />
+            <TableShimmer columns={6} />
           ) : (
-            <>
-              {blogs.length > 0 && (
-                <div className="mb-8">
-                  <h2 className="text-xl font-semibold mb-4 text-gray-700">
-                    Blogs
-                  </h2>
-                  <div className="space-y-4">
-                    {blogs.map((blog) => (
-                      <div key={blog._id} className="flex justify-between items-center p-4 bg-white border border-gray-300 rounded-md shadow-sm">
-                        <div className="flex items-center">
-                          <img src={blog.image} alt={blog.title} className="w-16 h-16 rounded mr-4" />
-                          <div>
-                            <h3 className="text-lg font-semibold">{blog.title}</h3>
-                            <p className="text-sm text-gray-600">{blog.date}</p>
-                            <p className="text-sm text-gray-800">{blog.content.slice(0, 100)}...</p>
-                          </div>
-                        </div>
-                        <button
-                          onClick={() => handleToggleStatus(blog._id, blog.isListed)}
-                          className={`py-2 px-4 rounded ${
-                            blog.isListed ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'
-                          } text-white transition duration-300 ease-in-out flex items-center`}
-                        >
-                          {blog.isListed ? <FiEyeOff className="mr-2" /> : <FiEye className="mr-2" />}
-                          {blog.isListed ? 'Unlist' : 'List'}
-                        </button>
+            blogs.length > 0 && (
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                  gap: "16px",
+                  marginBottom: "32px",
+                }}
+              >
+                {blogs.map((blog) => (
+                  <div
+                    key={blog._id}
+                    style={{
+                      backgroundColor: "#fff",
+                      padding: "16px",
+                      borderRadius: "12px",
+                      boxShadow: "0 5px 15px rgba(0, 0, 0, 0.1)",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                      height: "100%",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", marginBottom: "16px" }}>
+                      <img
+                        src={blog.image}
+                        alt={blog.title}
+                        style={{
+                          width: "80px",
+                          height: "80px",
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                          marginRight: "16px",
+                        }}
+                      />
+                      <div>
+                        <h3 style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "8px" }}>
+                          {blog.title}
+                        </h3>
+                        <p style={{ fontSize: "14px", color: "#666", marginBottom: "4px" }}>
+                          {blog.date}
+                        </p>
+                        <p style={{ fontSize: "14px", color: "#444" }}>
+                          {blog.content.slice(0, 100)}...
+                        </p>
                       </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </>
-          )}
+                    </div>
 
-          {/* Pagination */}
-          <Pagination 
-            currentPage={currentPage} 
-            onPageChange={handlePageChange} 
-            totalPages={totalPages} 
+                    <button
+                      onClick={() => handleToggleStatus(blog._id, blog.isListed)}
+                      style={{
+                        backgroundColor: blog.isListed ? "#e3342f" : "#38c172",
+                        color: "#fff",
+                        padding: "10px",
+                        borderRadius: "8px",
+                        fontSize: "14px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        transition: "background-color 0.3s ease",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {blog.isListed ? (
+                        <>
+                          <FiEyeOff style={{ marginRight: "8px" }} />
+                          Unlist Blog
+                        </>
+                      ) : (
+                        <>
+                          <FiEye style={{ marginRight: "8px" }} />
+                          List Blog
+                        </>
+                      )}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )
+          )}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
           />
         </div>
-        <Footer />
       </div>
 
-      {/* Confirmation Modal */}
+      <Footer />
+
       <ConfirmationModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

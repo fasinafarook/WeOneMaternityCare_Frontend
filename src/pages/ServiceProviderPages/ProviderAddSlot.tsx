@@ -39,7 +39,7 @@ const AddSlot = () => {
   const [domainsList, setDomainsList] = useState<Domain[]>([]);
   const [services, setServices] = useState<Options[]>([]);
   const serviceProviderInfo = useSelector((state: RootState) => state.auth.serviceProviderInfo);
-
+  
   const navigate = useNavigate();
 
   const { register, handleSubmit, control, setValue, formState: { errors }, trigger } = useForm<Slot>({
@@ -59,11 +59,9 @@ const AddSlot = () => {
     fetchDomainList();
 
     if (serviceProviderInfo) {
-      // Pre-fill main category and fee
       setValue("title", serviceProviderInfo.service);
       setValue("price", serviceProviderInfo.rate);
 
-      // Fetch sub-categories based on the main category
       const selectedDomain = domainsList.find(domain => domain.categoryName === serviceProviderInfo.service);
       if (selectedDomain) {
         const options: Options[] = selectedDomain.subCategories.map(item => ({ value: item, label: item }));
@@ -123,21 +121,38 @@ const AddSlot = () => {
     setValue("services", []);
     setValue("title", selectedDomain);
     await trigger("title");
-    console.log("domain full data: ", services);
   };
 
   return (
     <>
       <AppNavbar />
-      <div className="min-h-screen bg-white-100 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-2xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
-          <div className="bg-[#91939f] text-white py-6 px-8">
-            <h1 className="text-3xl font-bold">Add a Slot</h1>
+      <div style={{
+        minHeight: '100vh',
+        backgroundImage: "url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        padding: '12px 0',
+      }}>
+        <div style={{
+          maxWidth: '600px',
+          margin: 'auto',
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          borderRadius: '12px',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+          overflow: 'hidden',
+        }}>
+          <div style={{
+            backgroundColor: '#91939f',
+            color: 'white',
+            padding: '24px',
+            textAlign: 'center',
+          }}>
+            <h1 style={{ fontSize: '24px', fontWeight: 'bold' }}>Add a Slot</h1>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Select Date</label>
+          <form onSubmit={handleSubmit(onSubmit)} style={{ padding: '32px', display: 'grid', gap: '16px' }}>
+            <div style={{ gridTemplateColumns: '1fr 1fr', display: 'grid', gap: '16px' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '8px' }}>Select Date</label>
                 <Controller
                   control={control}
                   name="date"
@@ -149,46 +164,53 @@ const AddSlot = () => {
                       className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                       placeholderText="Select date"
                       minDate={new Date()}
+                      style={{ padding: '12px', borderRadius: '6px', border: '1px solid #ccc' }}
                     />
                   )}
                 />
-                {errors.date && <p className="mt-1 text-sm text-red-600">{errors.date.message}</p>}
+                {errors.date && <p style={{ marginTop: '8px', color: 'red' }}>{errors.date.message}</p>}
               </div>
 
               <div>
-                <label htmlFor="start-time" className="block text-sm font-medium text-gray-700 mb-2">Start time</label>
+                <label htmlFor="start-time" style={{ display: 'block', marginBottom: '8px' }}>Start time</label>
                 <input
                   type="time"
                   id="start-time"
                   {...register("timeFrom", { required: "Start time is required" })}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  style={{ width: '100%', padding: '12px', borderRadius: '6px', border: '1px solid #ccc' }}
                 />
-                {errors.timeFrom && <p className="mt-1 text-sm text-red-600">{errors.timeFrom.message}</p>}
+                {errors.timeFrom && <p style={{ marginTop: '8px', color: 'red' }}>{errors.timeFrom.message}</p>}
               </div>
 
               <div>
-                <label htmlFor="end-time" className="block text-sm font-medium text-gray-700 mb-2">End time</label>
+                <label htmlFor="end-time" style={{ display: 'block', marginBottom: '8px' }}>End time</label>
                 <input
                   type="time"
                   id="end-time"
                   {...register("timeTo", { required: "End time is required" })}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  style={{ width: '100%', padding: '12px', borderRadius: '6px', border: '1px solid #ccc' }}
                 />
-                {errors.timeTo && <p className="mt-1 text-sm text-red-600">{errors.timeTo.message}</p>}
+                {errors.timeTo && <p style={{ marginTop: '8px', color: 'red' }}>{errors.timeTo.message}</p>}
               </div>
 
-              <div className="col-span-2">
-                <label htmlFor="domain" className="block text-sm font-medium text-gray-700 mb-2">Main Category</label>
+              <div>
+                <label htmlFor="domain" style={{ display: 'block', marginBottom: '8px' }}>Main Category</label>
                 <input
                   type="text"
                   value={serviceProviderInfo?.service || ""}
                   disabled
-                  className="w-full p-3 border border-gray-300 rounded-md bg-gray-100"
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    borderRadius: '6px',
+                    border: '1px solid #ccc',
+                    backgroundColor: '#f7f7f7',
+                  }}
                 />
               </div>
 
-              <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Sub-Services</label>
+              <div>
+                <label style={{ display: 'block', marginBottom: '8px' }}>Sub-Services</label>
                 {services && (
                   <Controller
                     name="services"
@@ -204,37 +226,48 @@ const AddSlot = () => {
                     )}
                   />
                 )}
-                {errors.services && <p className="mt-1 text-sm text-red-600">{errors.services.message}</p>}
+                {errors.services && <p style={{ marginTop: '8px', color: 'red' }}>{errors.services.message}</p>}
               </div>
 
-              <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+              <div>
+                <label style={{ display: 'block', marginBottom: '8px' }}>Description</label>
                 <textarea
                   {...register("description", { required: "Description is required" })}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 resize-none h-24"
+                  style={{ width: '100%', padding: '12px', borderRadius: '6px', border: '1px solid #ccc', resize: 'none', height: '100px' }}
                 />
-                {errors.description && <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>}
+                {errors.description && <p style={{ marginTop: '8px', color: 'red' }}>{errors.description.message}</p>}
               </div>
 
-              <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Fee</label>
+              <div>
+                <label htmlFor="price" style={{ display: 'block', marginBottom: '8px' }}>Price</label>
                 <input
                   type="number"
-                  value={serviceProviderInfo?.rate || ""}
-                  disabled
-                  className="w-full p-3 border border-gray-300 rounded-md bg-gray-100"
+                  id="price"
+                  {...register("price", { required: "Price is required", min: { value: 0, message: "Price must be positive" } })}
+                  style={{ width: '100%', padding: '12px', borderRadius: '6px', border: '1px solid #ccc' }}
                 />
+                {errors.price && <p style={{ marginTop: '8px', color: 'red' }}>{errors.price.message}</p>}
               </div>
             </div>
 
-            <div className="flex justify-end mt-8">
-              <button
-                type="submit"
-                className="px-6 py-3 bg-[#19328F] text-white font-medium rounded-md hover:bg-[#142057] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
-              >
-                Book Slot
-              </button>
-            </div>
+            <button
+              type="submit"
+              style={{
+                backgroundColor: '#4caf50',
+                color: 'white',
+                padding: '12px 20px',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '16px',
+                marginTop: '16px',
+                transition: 'background-color 0.3s ease',
+              }}
+              onMouseOver={e => e.currentTarget.style.backgroundColor = '#45a049'}
+              onMouseOut={e => e.currentTarget.style.backgroundColor = '#4caf50'}
+            >
+              Add Slot
+            </button>
           </form>
         </div>
       </div>

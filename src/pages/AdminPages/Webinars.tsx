@@ -95,50 +95,123 @@ const Webinars: React.FC = () => {
   return (
     <>
       <AdminNavbar />
-      <div className="min-h-screen p-8">
-        <div className="container mx-auto">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-12">
-            <h1 className="text-3xl font-bold mb-4 sm:mb-0 text-gray-800">
-              <FiPackage className="inline-block mr-2" />
+      <div
+        style={{
+          minHeight: '100vh',
+          backgroundImage: `url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          padding: '8px',
+          color: 'white',
+        }}
+      >
+        <div
+          style={{
+backgroundColor: "rgba(255, 255, 255, 0.8)",
+            padding: '30px',
+            borderRadius: '10px',
+            maxWidth: '1200px',
+            margin: '0 auto',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '20px',
+              textAlign: 'center',
+            }}
+          >
+             <h1
+              style={{
+                fontSize: "32px",
+                fontWeight: "bold",
+                color: "#333",
+                marginBottom: "16px",
+              }}
+            >
+              <FiPackage style={{ marginRight: "8px", verticalAlign: "middle" }} />
               Webinar Management
             </h1>
-            <div className="flex space-x-4">
-              <button
-                onClick={() => navigate('/admin/add-webinars')}
-                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded transition duration-300 ease-in-out flex items-center"
-              >
-                <FiPlus className="mr-2" /> Add Webinar
-              </button>
-            </div>
+            <button
+              onClick={() => navigate('/admin/add-webinars')}
+              style={{
+                backgroundColor: '#1D4ED8',
+                color: '#fff',
+                padding: '10px 20px',
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                cursor: 'pointer',
+                fontSize: '18px',
+                transition: 'background-color 0.3s ease',
+              }}
+            >
+              <FiPlus style={{ marginRight: '10px' }} />
+              Add Webinar
+            </button>
           </div>
 
           {loading ? (
             <WebinarShimmer />
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: '20px',
+              }}
+            >
               {webinars.map((webinar) => (
                 <div
                   key={webinar.webinarId}
-                  className="bg-white rounded-lg overflow-hidden border border-gray-800 transition duration-300 ease-in-out hover:shadow-lg"
+                  style={{
+                    backgroundColor: '#fff',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                    transition: 'transform 0.3s ease',
+                  }}
+                  onMouseOver={(e) =>
+                    ((e.currentTarget.style.transform = 'scale(1.03)'), (e.currentTarget.style.transition = 'transform 0.3s ease'))
+                  }
+                  onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1)')}
                 >
-                  <div className="p-4 border-b border-gray-700">
-                    <h5 className="text-xl font-semibold text-gray-800 truncate">{webinar.title}</h5>
+                  <div
+                    style={{
+                      padding: '20px',
+                      borderBottom: '1px solid #ddd',
+                      textAlign: 'center',
+                    }}
+                  >
+                    <h5 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333' }}>{webinar.title}</h5>
                   </div>
-                  <div className="p-4">
+                  <div style={{ padding: '20px', textAlign: 'center' }}>
                     <video
                       src={webinar.videoUrl}
                       controls
-                      width="300"
-                      poster={webinar.thumbnail} // Use the thumbnail as the poster image
-                      className="rounded-lg shadow-lg"
+                      width="100%"
+                      poster={webinar.thumbnail}
+                      style={{ borderRadius: '8px', boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)' }}
                     />
-                    <p>{new Date(webinar.createdAt).toLocaleDateString()}</p>
-                    <p className="text-xl font-semibold text-gray-800 truncate">{webinar.quotes}</p>
+                    <p style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
+                      {new Date(webinar.createdAt).toLocaleDateString()}
+                    </p>
+                    <p style={{ fontSize: '16px', fontWeight: '600', color: '#333' }}>{webinar.quotes}</p>
                     <button
                       onClick={() => handleToggleListing(webinar.webinarId, webinar.isListed)}
-                      className={`mt-4 py-2 px-4 rounded ${
-                        webinar.isListed ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'
-                      } text-white transition duration-300 ease-in-out`}
+                      style={{
+                        marginTop: '10px',
+                        padding: '10px 20px',
+                        borderRadius: '8px',
+                        backgroundColor: webinar.isListed ? '#DC2626' : '#059669',
+                        color: '#fff',
+                        cursor: 'pointer',
+                        fontSize: '16px',
+                        transition: 'background-color 0.3s ease',
+                      }}
                     >
                       {webinar.isListed ? 'Unlist Webinar' : 'List Webinar'}
                     </button>

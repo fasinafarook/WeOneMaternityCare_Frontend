@@ -1,5 +1,3 @@
-
-
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { verifyLogin } from "../../api/userAPI";
@@ -29,18 +27,17 @@ const UserLogin = () => {
     const response = await verifyLogin(email, password);
 
     if (response?.data.success) {
-      const userInfo = response.data.data; // Assuming this is where your user info is returned
+      const userInfo = response.data.data;
       dispatch(setUserCredentials(userInfo));
       navigate("/user/home");
     } else {
-      toast.error(response?.data.message , {
-        style: {  
+      toast.error(response?.data.message, {
+        style: {
           border: "1px solid #dc3545",
           padding: "16px",
-          color: "#721c24",  // Text color
-          backgroundColor: "#f8d7da",  // Background color
-          fontSize: "14px",  // Ensure text size is readable
-          
+          color: "#721c24",
+          backgroundColor: "#f8d7da",
+          fontSize: "14px",
         },
         iconTheme: {
           primary: "#dc3545",
@@ -52,77 +49,111 @@ const UserLogin = () => {
 
   return (
     <>
-      <div className="flex h-screen w-full bg-white">
-      <Link to="/">
-      <img
-        src={logo}
-        alt="Logo"
-        style={{ width: '100px', height: '70px' }}
-      />
-    </Link>
-    <img src="https://media.istockphoto.com/id/1341609914/vector/pregnant-couple-background-vector-illustration-with-a-husband-takes-care-and-hugs-his-wife.jpg?s=612x612&w=0&k=20&c=IZ7k7IktzY_x61KybAj2yBioHTLk6r86jafhB3ExN0E=" alt="Login Image" className="  " style={{height:'80%', width:'50%'}}  />
-      
-        <div className="w-full lg:w-1/2 flex items-center justify-center p-5 lg:p-10">
-          <div style={{ backgroundColor: 'rgb(173 185 198)' }} className=" rounded-lg shadow-lg border max-w-md w-full p-8">
-            <p className="text-xl text-gray-600 text-center mb-6">Login as User</p>
-            
+      <div className="relative flex items-center justify-center w-full h-screen bg-cover bg-center" 
+        style={{ 
+          backgroundImage: `url('https://www.hmsmirdifhospital.ae/images/banner/500/what-is-a-gynecologist-min.jpg')`,
+        }}
+      >
+        {/* Dark Overlay */}
+        {/* <div className="absolute inset-0 bg-black opacity-60"></div> */}
 
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
-                <input
-                  className="text-gray-700 border border-gray-300 rounded py-2 px-4 block w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  type="email"
-                  {...register("email", { required: true })}
-                />
-                {errors.email && (
-                  <p className="text-red-500 text-sm mt-1">Email is required</p>
-                )}
-              </div>
-              <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
-                <input
-                  className="text-gray-700 border border-gray-300 rounded py-2 px-4 block w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  type="password"
-                  {...register("password", { required: true })}
-                />
-                {errors.password && (
-                  <p className="text-red-500 text-sm mt-1">Password is required</p>
-                )}
+        {/* Form Container */}
+        <div className="relative z-10 bg-white shadow-lg rounded-lg p-8 max-w-md w-full mx-4 transition-transform transform hover:scale-105 duration-300">
+          {/* Logo */}
+          <div className="text-center mb-6">
+            <Link to="/">
+              <img
+                src={logo}
+                alt="Logo"
+                className="w-24 h-auto mx-auto"
+              />
+            </Link>
+          </div>
+
+          {/* Login Form */}
+          <p className="text-2xl font-bold text-center text-gray-800 mb-6">
+            Login as User
+          </p>
+
+          <form onSubmit={handleSubmit(onSubmit)}>
+            {/* Email Field */}
+            <div className="mb-6">
+              <label className="block text-gray-700 text-sm font-medium mb-2">
+                Email Address
+              </label>
+              <input
+                className={`text-gray-700 border ${
+                  errors.email ? "border-red-500" : "border-gray-300"
+                } rounded-lg py-3 px-4 block w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
+                type="email"
+                {...register("email", { required: "Email is required" })}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
+
+            {/* Password Field */}
+            <div className="mb-6">
+              <label className="block text-gray-700 text-sm font-medium mb-2">
+                Password
+              </label>
+              <input
+                className={`text-gray-700 border ${
+                  errors.password ? "border-red-500" : "border-gray-300"
+                } rounded-lg py-3 px-4 block w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
+                type="password"
+                {...register("password", { required: "Password is required" })}
+              />
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.password.message}
+                </p>
+              )}
+
+              {/* Links */}
+              <div className="flex justify-between text-sm mt-2">
                 <Link
                   to="/serviceProvider/verify-login"
-                  className="text-xs text-gray-500 hover:text-gray-900 text-end block mt-2"
+                  className="text-gray-500 hover:text-blue-500 transition-colors"
                 >
                   Login as Service Provider
                 </Link>
-
                 <Link
                   to="/user/forgot-password"
-                  className="text-xs text-gray-500 hover:text-gray-900 text-end w-full mt-2"
+                  className="text-gray-500 hover:text-blue-500 transition-colors"
                 >
                   Forgot Password?
                 </Link>
               </div>
+            </div>
 
-              <div className="mb-6"  style={{background:" rgb(27 145 187)"}}>
-                <button className="bg-[#142057] text-Dark font-bold py-2 px-4 w-full rounded hover:bg-[#19328F]"  style={{background:" rgb(27, 145, 187)"}}>
-                  Login
-                </button>
-              </div>
-              
-              <div className="text-center">
-                <Link
-                  to="/user/client-register"
-                  className="text-xs text-gray-500 capitalize"
-                >
-                  Don&apos;t have an account yet? <span className="text-blue-700">Sign Up</span>
-                </Link>
-              </div>
-            </form>
-          </div>
+            {/* Submit Button */}
+            <div className="mb-6">
+              <button
+                className="bg-blue-600 text-white font-bold py-3 px-4 w-full rounded-lg hover:bg-blue-700 transition-transform transform hover:scale-105 duration-200"
+              >
+                Login
+              </button>
+            </div>
+
+            {/* Sign Up */}
+            <div className="text-center">
+              <Link
+                to="/user/client-register"
+                className="text-sm text-gray-500 hover:text-blue-600 transition-colors"
+              >
+                Don&apos;t have an account yet?{" "}
+                <span className="text-blue-600 hover:underline">Sign Up</span>
+              </Link>
+            </div>
+          </form>
         </div>
       </div>
-      <Footer/>
+
+      <Footer />
     </>
   );
 };

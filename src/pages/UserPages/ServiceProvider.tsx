@@ -1,317 +1,5 @@
-// import React, { useEffect, useState } from 'react';
-// import { fetchApprovedAndUnblockedProviders } from '../../api/userAPI';
-// import { ServiceProvider } from '../../types/SeviceProviders';
-// import { useNavigate } from 'react-router-dom';
-// import UserSidebar from "../../components/common_pages/UserSidebar";
-// import Footer from '../../components/common_pages/Footer';
-// import { Button } from 'react-bootstrap';
-// import UserNavbar from '../../components/common_pages/UserHeader';
-// import { FaBars } from 'react-icons/fa';
-
-// const ApprovedProviders: React.FC = () => {
-//     const [show, setShow] = useState(false);
-//     const [providers, setProviders] = useState<ServiceProvider[]>([]);
-//     const [loading, setLoading] = useState<boolean>(true);
-//     const [error, setError] = useState<string | null>(null);
-//     const [searchTerm, setSearchTerm] = useState<string>('');
-//     const [filteredProviders, setFilteredProviders] = useState<ServiceProvider[]>([]);
-//     const handleClose = () => setShow(false);
-//     const handleShow = () => setShow(true);
-//     const navigate = useNavigate();
-
-//     useEffect(() => {
-//         const loadProviders = async () => {
-//             try {
-//                 const data = await fetchApprovedAndUnblockedProviders();
-//                 setProviders(data);
-//                 setFilteredProviders(data);
-//             } catch (err) {
-//                 setError('Failed to fetch providers');
-//             } finally {
-//                 setLoading(false);
-//             }
-//         };
-
-//         loadProviders();
-//     }, []);
-
-//     useEffect(() => {
-//         const filterProviders = () => {
-//             const lowercasedSearchTerm = searchTerm.toLowerCase();
-//             const filtered = providers.filter(provider =>
-//                 provider.name.toLowerCase().includes(lowercasedSearchTerm) ||
-//                 provider.service.toLowerCase().includes(lowercasedSearchTerm) ||
-//                 provider.location.toLowerCase().includes(lowercasedSearchTerm)
-//             );
-//             setFilteredProviders(filtered);
-//         };
-
-//         filterProviders();
-//     }, [searchTerm, providers]);
-
-//     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-//         setSearchTerm(event.target.value);
-//     };
-
-//     const handleViewDetails = (providerId: string) => {
-//         navigate(`/user/serviceProviderDetails/${providerId}`); // Adjust the route to your details page
-//     };
-
-//     if (loading) return <div>Loading...</div>;
-//     if (error) return <div>{error}</div>;
-
-//     return (
-//         <>
-//         <UserNavbar/>
-//         <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-
-//         <Button 
-//           variant="primary" 
-//           onClick={handleShow} 
-//           style={{ 
-//             position: 'absolute', 
-//             top: '1rem', 
-//             left: '1rem', 
-//             zIndex: 1000 
-//           }}
-//         >
-//           <FaBars /> Menu
-//         </Button>
-//         <UserSidebar show={show} handleClose={handleClose} />
-//         <br />
-//         <div style={{ flex: 1, padding: '2rem' }}>
-
-//         <div className="providers-list" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-            
-//             <h1 style={{ marginBottom: '2rem' }}> Service Providers</h1>
-            
-//             <div className="search-bar mb-4" style={{ width: '80%', maxWidth: '600px', marginBottom: '2rem' }}>
-//                 <input
-//                     type="text"
-//                     placeholder="Search by name, service, or location"
-//                     value={searchTerm}
-//                     onChange={handleSearchChange}
-//                     className="w-full p-2 border border-gray-300 rounded"
-//                     style={{ width: '100%', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
-//                 />
-//             </div>
-            
-//             <div style={{ width: '100%', overflowX: 'auto' }}>
-//                 <table className="min-w-full divide-y divide-gray-200" style={{ width: '80%', maxWidth: '1000px', margin: '0 auto' }}>
-//                     <thead className="bg-gray-50">
-//                         <tr>
-//                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Profile Picture</th>
-//                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-//                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
-//                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Specialization</th>
-//                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-//                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-//                         </tr>
-//                     </thead>
-//                     <tbody className="bg-white divide-y divide-gray-200">
-//                         {filteredProviders.length > 0 ? (
-//                             filteredProviders.map((provider) => (
-//                                 <tr key={provider._id}>
-//                                     <td className="px-6 py-4 whitespace-nowrap">
-//                                         <img src={provider.profilePicture || "https://via.placeholder.com/40"} alt={provider.name} className="h-12 w-12 rounded-full" />
-//                                     </td>
-//                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{provider.name}</td>
-//                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{provider.service}</td>
-//                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{provider.specialization}</td>
-//                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{provider.location}</td>
-//                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-//                                         <button
-//                                             onClick={() => handleViewDetails(provider._id)}
-//                                             className="text-indigo-600 hover:text-indigo-900"
-//                                         >
-//                                             View Details
-//                                         </button>
-//                                     </td>
-//                                 </tr>
-//                             ))
-//                         ) : (
-//                             <tr>
-//                                 <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500">No providers found</td>
-//                             </tr>
-//                         )}
-//                     </tbody>
-//                 </table>
-//             </div>
-//         </div>
-//         </div>
-//         </div>
-//         <Footer/>
-//         </>
-//     );
-// };
-
-// export default ApprovedProviders;
-
-
-// import React, { useEffect, useState } from 'react';
-// import { fetchApprovedAndUnblockedProviders } from '../../api/userAPI';
-// import { ServiceProvider } from '../../types/SeviceProviders';
-// import { useNavigate } from 'react-router-dom';
-// // import UserSidebar from "../../components/common_pages/UserSidebar";
-// import Footer from '../../components/common_pages/Footer';
-// // import { Button } from 'react-bootstrap';
-// import UserNavbar from '../../components/common_pages/UserHeader';
-// // import { FaBars } from 'react-icons/fa';
-
-// const ApprovedProviders: React.FC = () => {
-//     // const [show, setShow] = useState(false);
-//     const [providers, setProviders] = useState<ServiceProvider[]>([]);
-//     const [loading, setLoading] = useState<boolean>(true);
-//     const [error, setError] = useState<string | null>(null);
-//     const [searchTerm, setSearchTerm] = useState<string>('');
-//     const [filteredProviders, setFilteredProviders] = useState<ServiceProvider[]>([]);
-//     // const handleClose = () => setShow(false);
-//     // const handleShow = () => setShow(true);
-//     const navigate = useNavigate();
-
-//     useEffect(() => {
-//         const loadProviders = async () => {
-//             try {
-//                 const data = await fetchApprovedAndUnblockedProviders();
-//                 setProviders(data);
-//                 setFilteredProviders(data);
-//             } catch (err) {
-//                 setError('Failed to fetch providers');
-//             } finally {
-//                 setLoading(false);
-//             }
-//         };
-
-//         loadProviders();
-//     }, []);
-
-//     useEffect(() => {
-//         const filterProviders = () => {
-//             const lowercasedSearchTerm = searchTerm.toLowerCase();
-//             const filtered = providers.filter(provider =>
-//                 provider.name.toLowerCase().includes(lowercasedSearchTerm) ||
-//                 provider.service.toLowerCase().includes(lowercasedSearchTerm) ||
-//                 provider.location.toLowerCase().includes(lowercasedSearchTerm)
-//             );
-//             setFilteredProviders(filtered);
-//         };
-
-//         filterProviders();
-//     }, [searchTerm, providers]);
-
-//     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-//         setSearchTerm(event.target.value);
-//     };
-
-//     const handleViewDetails = (providerId: string) => {
-//         navigate(`/user/serviceProviderDetails/${providerId}`); // Adjust the route to your details page
-//     };
-
-//     const handleViewSlots = (providerId: string) => {
-//         navigate(`/user/get-service-providers-slots-details/${providerId}`); // Navigate to the slots page
-//     };
-
-//     if (loading) return <div>Loading...</div>;
-//     if (error) return <div>{error}</div>;
-
-//     return (
-//         <>
-//         <UserNavbar/>
-//         <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-
-//         {/* <Button 
-//           variant="primary" 
-//           onClick={handleShow} 
-//           style={{ 
-//             position: 'absolute', 
-//             top: '1rem', 
-//             left: '1rem', 
-//             zIndex: 1000 
-//           }}
-//         >
-//           <FaBars /> Menu
-//         </Button> */}
-//         {/* <UserSidebar show={show} handleClose={handleClose} /> */}
-//         <br />
-//         <div style={{ flex: 1, padding: '2rem' }}>
-
-//         <div className="providers-list" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-            
-//             <h1 style={{ marginBottom: '2rem' }}> Service Providers</h1>
-            
-//             <div className="search-bar mb-4" style={{ width: '80%', maxWidth: '600px', marginBottom: '2rem' }}>
-//                 <input
-//                     type="text"
-//                     placeholder="Search by name, service, or location"
-//                     value={searchTerm}
-//                     onChange={handleSearchChange}
-//                     className="w-full p-2 border border-gray-300 rounded"
-//                     style={{ width: '100%', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
-//                 />
-//             </div>
-            
-//             <div style={{ width: '100%', overflowX: 'auto' }}>
-//                 <table className="min-w-full divide-y divide-gray-200" style={{ width: '80%', maxWidth: '1000px', margin: '0 auto' }}>
-//                     <thead className="bg-gray-50">
-//                         <tr>
-//                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Profile Picture</th>
-//                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-//                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
-//                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Specialization</th>
-//                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-//                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-//                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Available Slots</th>
-//                         </tr>
-//                     </thead>
-//                     <tbody className="bg-white divide-y divide-gray-200">
-//                         {filteredProviders.length > 0 ? (
-//                             filteredProviders.map((provider) => (
-//                                 <tr key={provider._id}>
-//                                     <td className="px-6 py-4 whitespace-nowrap">
-//                                         <img src={provider.profilePicture || "https://via.placeholder.com/40"} alt={provider.name} className="h-12 w-12 rounded-full" />
-//                                     </td>
-//                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{provider.name}</td>
-//                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{provider.service}</td>
-//                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{provider.specialization}</td>
-//                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{provider.location}</td>
-//                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-//                                         <button
-//                                             onClick={() => handleViewDetails(provider._id)}
-//                                             className="text-indigo-600 hover:text-indigo-900"
-//                                         >
-//                                             View Details
-//                                         </button>
-//                                     </td>
-//                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-//                                         <button
-//                                             onClick={() => handleViewSlots(provider._id)}
-//                                             className="text-blue-600 hover:text-blue-900"
-//                                         >
-//                                             View Slots
-//                                         </button>
-//                                     </td>
-//                                 </tr>
-//                             ))
-//                         ) : (
-//                             <tr>
-//                                 <td colSpan={7} className="px-6 py-4 text-center text-sm text-gray-500">No providers found</td>
-//                             </tr>
-//                         )}
-//                     </tbody>
-//                 </table>
-//             </div>
-//         </div>
-//         </div>
-//         </div>
-//         <Footer/>
-//         </>
-//     );
-// };
-
-// export default ApprovedProviders;
-
 import React, { useEffect, useState } from 'react';
-import { fetchApprovedAndUnblockedProviders, fetchCategories } from '../../api/userAPI'; // Assume fetchCategories is a new API function
+import { fetchApprovedAndUnblockedProviders, fetchCategories } from '../../api/userAPI';
 import { ServiceProvider } from '../../types/SeviceProviders';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../../components/common_pages/Footer';
@@ -323,8 +11,10 @@ const ApprovedProviders: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [filteredProviders, setFilteredProviders] = useState<ServiceProvider[]>([]);
-    const [categories, setCategories] = useState<string[]>([]); // New state for categories
-    const [selectedCategory, setSelectedCategory] = useState<string>(''); // New state for selected category
+    const [categories, setCategories] = useState<string[]>([]); 
+    const [selectedCategory, setSelectedCategory] = useState<string>(''); 
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [providersPerPage] = useState<number>(8); 
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -377,90 +67,191 @@ const ApprovedProviders: React.FC = () => {
         navigate(`/user/get-service-providers-slots-details/${providerId}`);
     };
 
+    // Pagination logic
+    const indexOfLastProvider = currentPage * providersPerPage;
+    const indexOfFirstProvider = indexOfLastProvider - providersPerPage;
+    const currentProviders = filteredProviders.slice(indexOfFirstProvider, indexOfLastProvider);
+
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
 
     return (
         <>
         <UserNavbar />
-        <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <br />
-        <div style={{ flex: 1, padding: '2rem' }}>
+        <div style={{
+            backgroundImage: `url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')`,
+            backgroundSize: 'cover',
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between'
+        }}>
+        <div style={{ padding: '2rem' }}>
+            <div className="providers-list" style={{
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                flexDirection: 'column', 
+                backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+                padding: '2rem',
+                borderRadius: '12px',
+                boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)'
+            }}>
+                <h1 style={{ marginBottom: '2rem', color: '#2b6777', fontSize: '32px', fontWeight: 'bold' }}>Service Providers</h1>
+                
+                <div className="filters" style={{
+                    display: 'flex', 
+                    flexDirection: 'column',
+                    width: '100%', 
+                    maxWidth: '600px', 
+                    marginBottom: '2rem', 
+                    gap: '1rem'
+                }}>
+                    <input
+                        type="text"
+                        placeholder="Search by name, service, or location"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        style={{
+                            padding: '0.8rem',
+                            borderRadius: '5px',
+                            border: '1px solid #ccc',
+                            width: '100%'
+                        }}
+                    />
+                    <select
+                        value={selectedCategory}
+                        onChange={handleCategoryChange}
+                        style={{
+                            padding: '0.8rem',
+                            borderRadius: '5px',
+                            border: '1px solid #ccc',
+                            width: '100%'
+                        }}
+                    >
+                        <option value="">All Categories</option>
+                        {categories.map(category => (
+                            <option key={category} value={category}>
+                                {category}
+                            </option>
+                        ))}
+                    </select>
+                </div>
 
-        <div className="providers-list" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-            
-            <h1 style={{ marginBottom: '2rem' }}> Service Providers</h1>
-            
-            <div className="filters" style={{ display: 'flex', width: '80%', maxWidth: '600px', marginBottom: '2rem', gap: '1rem' }}>
-                <input
-                    type="text"
-                    placeholder="Search by name, service, or location"
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                    style={{ flex: 1, padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
-                />
-                <select
-                    value={selectedCategory}
-                    onChange={handleCategoryChange}
-                    className="p-2 border border-gray-300 rounded"
-                    style={{ flex: 1, padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
-                >
-                    <option value="">All Categories</option>
-                    {categories.map(category => (
-                        <option key={category} value={category}>
-                            {category}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            <div className="overflow-x-auto">
-                <table className="min-w-full bg-white">
-                    <thead>
-                        <tr>
-                        <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600">Profile</th>
-
-                            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600">Name</th>
-                            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600">Service</th>
-                            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600">Specialization</th>
-                            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600">Location</th>
-                            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600">Details</th>
-                            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600">Slots</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredProviders.length > 0 ? (
-                            filteredProviders.map((provider) => (
-                                <tr key={provider._id}>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <img src={provider.profilePicture || "https://via.placeholder.com/40"} alt={provider.name} className="h-12 w-12 rounded-full" />
-                                  </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{provider.name}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{provider.service}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{provider.specialization}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{provider.location}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        <button onClick={() => handleViewDetails(provider._id)} className="text-indigo-600 hover:text-indigo-900">View Details</button>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        <button onClick={() => handleViewSlots(provider._id)} className="text-indigo-600 hover:text-indigo-900">View Slots</button>
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
+                <div className="overflow-x-auto" style={{ width: '100%', maxWidth: '1000px' }}>
+                    <table style={{
+                        width: '100%',
+                        borderCollapse: 'collapse',
+                        backgroundColor: '#fff',
+                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
+                    }}>
+                        <thead>
                             <tr>
-                                <td colSpan={7} className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">No providers found</td>
+                                <th style={tableHeaderStyle}>Profile</th>
+                                <th style={tableHeaderStyle}>Name</th>
+                                <th style={tableHeaderStyle}>Service</th>
+                                <th style={tableHeaderStyle}>Specialization</th>
+                                <th style={tableHeaderStyle}>Location</th>
+                                <th style={tableHeaderStyle}>Details</th>
+                                <th style={tableHeaderStyle}>Slots</th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {currentProviders.length > 0 ? (
+                                currentProviders.map((provider) => (
+                                    <tr key={provider._id}>
+                                        <td style={tableCellStyle}>
+                                            <img src={provider.profilePicture || "https://via.placeholder.com/40"} alt={provider.name} style={{ height: '40px', width: '40px', borderRadius: '50%' }} />
+                                        </td>
+                                        <td style={tableCellStyle}>{provider.name}</td>
+                                        <td style={tableCellStyle}>{provider.service}</td>
+                                        <td style={tableCellStyle}>{provider.specialization}</td>
+                                        <td style={tableCellStyle}>{provider.location}</td>
+                                        <td style={tableCellStyle}>
+                                            <button onClick={() => handleViewDetails(provider._id)} style={buttonStyle}>View Details</button>
+                                        </td>
+                                        <td style={tableCellStyle}>
+                                            <button onClick={() => handleViewSlots(provider._id)} style={buttonStyle}>View Slots</button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={7} style={{ textAlign: 'center', padding: '1rem', fontWeight: 'bold' }}>No providers found</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+
+                {/* Pagination */}
+                <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center' }}>
+                    <Pagination
+                        providersPerPage={providersPerPage}
+                        totalProviders={filteredProviders.length}
+                        paginate={paginate}
+                        currentPage={currentPage}
+                    />
+                </div>
             </div>
-        </div>
         </div>
         <Footer />
     </div>
     </>
+    );
+};
+
+// Styles
+const tableHeaderStyle = {
+    padding: '10px',
+    backgroundColor: '#f2f2f2',
+    textAlign: 'left',
+    fontWeight: 'bold',
+    borderBottom: '1px solid #ddd'
+};
+
+const tableCellStyle = {
+    padding: '10px',
+    borderBottom: '1px solid #ddd'
+};
+
+const buttonStyle = {
+    padding: '6px 12px',
+    backgroundColor: '#2b6777',
+    color: '#fff',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    border: 'none',
+    textDecoration: 'none'
+};
+
+// Pagination component
+const Pagination: React.FC<{
+    providersPerPage: number;
+    totalProviders: number;
+    paginate: (pageNumber: number) => void;
+    currentPage: number;
+}> = ({ providersPerPage, totalProviders, paginate, currentPage }) => {
+    const pageNumbers = [];
+
+    for (let i = 1; i <= Math.ceil(totalProviders / providersPerPage); i++) {
+        pageNumbers.push(i);
+    }
+
+    return (
+        <nav>
+            <ul style={{ display: 'flex', listStyle: 'none', padding: '0', gap: '10px' }}>
+                {pageNumbers.map(number => (
+                    <li key={number} style={{ cursor: 'pointer', fontWeight: currentPage === number ? 'bold' : 'normal' }}>
+                        <a onClick={() => paginate(number)} style={{ textDecoration: 'none', color: '#2b6777' }}>
+                            {number}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </nav>
     );
 };
 

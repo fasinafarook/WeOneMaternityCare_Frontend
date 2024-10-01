@@ -22,6 +22,9 @@ export const signup = async (
     return response;
   } catch (error) {
     console.log(error);
+    throw error;
+
+
   }
 };
 
@@ -105,10 +108,9 @@ interface userDetails {
   email?: string;
 }
 export const editProfile = async (details: userDetails) => {
-
   try {
-    const {data} = await Api.put(userEndpoint.editProfile, details);
-     console.log('ed',data);
+    const { data } = await Api.put(userEndpoint.editProfile, details);
+    console.log("ed", data);
 
     return data;
   } catch (error) {
@@ -137,7 +139,7 @@ export const fetchApprovedAndUnblockedProviders = async (): Promise<
 > => {
   try {
     const response = await Api.get(userEndpoint.serviceProviders);
-    return response.data; 
+    return response.data;
   } catch (error) {
     console.error("Failed to fetch providers:", error);
     throw new Error("Failed to fetch providers");
@@ -145,15 +147,15 @@ export const fetchApprovedAndUnblockedProviders = async (): Promise<
 };
 
 export const fetchCategories = async () => {
-    try {
-      const response = await Api.get(userEndpoint.serviceCategorys);
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching categories", error);
-      return [];
-    }
-  };
-  
+  try {
+    const response = await Api.get(userEndpoint.serviceCategorys);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching categories", error);
+    return [];
+  }
+};
+
 export const getServiceProviderDetails = async (id: string) => {
   try {
     const response = await Api.get(
@@ -187,6 +189,8 @@ export const makePayment = async (data: any, previousUrl: string) => {
       data,
       previousUrl,
     });
+    console.log('data',response.data);
+    
     return response.data;
   } catch (error) {
     console.log(error);
@@ -217,7 +221,7 @@ interface IWebinar {
 export const fetchListedWebinars = async (): Promise<IWebinar[]> => {
   try {
     const response = await Api.get(userEndpoint.getListedWebinars);
-    return response.data; // Assumes the API response has data in the body
+    return response.data;
   } catch (error) {
     console.error("Failed to fetch webinars:", error);
     throw new Error("Failed to fetch webinars");
@@ -229,7 +233,7 @@ export const fetchBlogs = async (page: number, limit: number) => {
     const response = await Api.get(
       `${userEndpoint.getBlogs}?page=${page}&limit=${limit}`
     );
-    return response.data; // Assumes the API response has data in the body
+    return response.data;
   } catch (error) {
     console.error("Failed to fetch blogs:", error);
     throw new Error("Failed to fetch blogs");
@@ -262,46 +266,46 @@ export const getPaymentDashboardDetails = async () => {
   }
 };
 
-
-
 export const getUserComplaints = async (userId: string) => {
   try {
     const { data } = await Api.get(`${userEndpoint.getComplaints}/${userId}`);
     return data;
   } catch (error) {
-    console.error('Error fetching user complaints:', error);
+    console.error("Error fetching user complaints:", error);
     throw error;
   }
 };
 
-export const fileComplaint = async (userId: string, subject: string, description: string) => {
+export const fileComplaint = async (
+  userId: string,
+  subject: string,
+  description: string
+) => {
   try {
     const response = await Api.post(userEndpoint.submitComplaint, {
       userId,
       subject,
-      message: description, // Ensure the backend uses `message` instead of `description` based on your schema
+      message: description,
     });
-    console.log('Complaint filed successfully:', response.data);
-    return response.data; // Assumes the API response has data in the body
+    console.log("Complaint filed successfully:", response.data);
+    return response.data;
   } catch (error) {
-    console.error('Failed to file complaint:', error);
-    throw new Error('Failed to file complaint');
+    console.error("Failed to file complaint:", error);
+    throw new Error("Failed to file complaint");
   }
 };
-
 
 export const getUserchatt = async () => {
   try {
     const { data } = await Api.get(`${userEndpoint.getUserchatt}`);
-    console.log('uj',data);
-    
+    console.log("uj", data);
+
     return data;
   } catch (error) {
-    console.error('Error fetching user complaints:', error);
+    console.error("Error fetching user complaints:", error);
     throw error;
   }
 };
-
 
 export const getUserCompletedBookings = async (userId: string) => {
   try {
@@ -313,33 +317,36 @@ export const getUserCompletedBookings = async (userId: string) => {
   }
 };
 
-
-export const forgorPassword = async(email: string) => {
+export const forgorPassword = async (email: string) => {
   try {
-      const response = await Api.post(userEndpoint.forgorPassword, {email})
-      console.log(response.data)
-      localStorage.setItem("resetPassword", response.data.data)
-      return response.data
+    const response = await Api.post(userEndpoint.forgorPassword, { email });
+    console.log(response.data);
+    localStorage.setItem("resetPassword", response.data.data);
+    return response.data;
   } catch (error: any) {
-      console.log(error)
-      return error.response.data
+    console.log(error);
+    return error.response.data;
   }
-}
+};
 
 export const resetPassword = async (otp: string, password: string) => {
   try {
-      const token = localStorage.getItem("resetPassword")
-      const response = await Api.post(userEndpoint.resetPassword, {otp, password}, {
-          headers: {
-              Authorization: `Bearer ${token}`
-          }
-      })
-      if(response.data.success){
-          localStorage.removeItem("resetPassword")
+    const token = localStorage.getItem("resetPassword");
+    const response = await Api.post(
+      userEndpoint.resetPassword,
+      { otp, password },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-      return response.data
+    );
+    if (response.data.success) {
+      localStorage.removeItem("resetPassword");
+    }
+    return response.data;
   } catch (error: any) {
-      console.log("inseide catch in api: ", error.response.data)
-      return error.response.data
+    console.log("inseide catch in api: ", error.response.data);
+    return error.response.data;
   }
-}
+};

@@ -10,7 +10,7 @@ const MessageInput: React.FC = () => {
         e.preventDefault();
         if (!message) return;
         await sendMessage(message);
-        setMessage(''); // Clear the input field after sending the message
+        setMessage(''); 
     };
 
     return (

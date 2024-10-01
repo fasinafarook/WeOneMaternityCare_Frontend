@@ -13,7 +13,7 @@ export interface ServiceProvider {
     location: string;
     isApproved: boolean;
     isBlocked: boolean;
-    createdAt: string; // ISO 8601 date string
+    createdAt: string; 
     hasCompletedDetails: boolean;
   }
   

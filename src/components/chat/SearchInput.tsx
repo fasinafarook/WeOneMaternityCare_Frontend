@@ -5,7 +5,7 @@ import useGetConversation from '../../hooks/useGetConversation';
 import { toast } from 'react-toastify';
 
 const SearchInput: React.FC = () => {
-  const [search, setSearch] = useState("");  // Correct useState usage
+  const [search, setSearch] = useState("");  
   const { setSelectedConversation } = useConversation();
   const { conversations } = useGetConversation();
   
