@@ -1,10 +1,12 @@
-
-import React, { useRef, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useRef, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 
 const ProviderVideoCall: React.FC = () => {
-  const { roomId, serviceProviderId } = useParams<{ roomId: string; serviceProviderId: string }>();
+  const { roomId, serviceProviderId } = useParams<{
+    roomId: string;
+    serviceProviderId: string;
+  }>();
 
   const meetingContainerRef = useRef<HTMLDivElement | null>(null);
 

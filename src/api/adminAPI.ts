@@ -145,7 +145,7 @@ export const getBlogs = async (page: number, limit: number) => {
     return response.data;
   } catch (error) {
     console.log("Error fetching blogs:", error);
-    return { success: false, data: [], total: 0 }; 
+    return { success: false, data: [], total: 0 };
   }
 };
 
@@ -156,16 +156,9 @@ export const unlistBlog = async (blogId: string) => {
     return response.data;
   } catch (error) {
     console.log("Error unlisting blog:", error);
-    throw error; 
+    throw error;
   }
 };
-
-// interface BlogData {
-//     title: string;
-//     image: File | null;
-//     content: string;
-//     date?: Date;
-// }
 
 export const addBlog = async (formData: FormData) => {
   try {
@@ -262,56 +255,57 @@ export const unlistWebinar = async (webinarId: string) => {
   }
 };
 
-
-
-
 export const fetchComplaints = async () => {
   try {
-    const response = await Api.get(
-      `${adminEndpoint.getAllComplaints}`
-    );    return response.data;
+    const response = await Api.get(`${adminEndpoint.getAllComplaints}`);
+    return response.data;
   } catch (error) {
-    console.error('Error fetching complaints:', error);
+    console.error("Error fetching complaints:", error);
     throw error;
   }
 };
-
 
 interface RespondToComplaintParams {
   complaintId: string;
   response: string;
 }
 
-export const respondToComplaint = async ({ complaintId, response }: RespondToComplaintParams) => {
+export const respondToComplaint = async ({
+  complaintId,
+  response,
+}: RespondToComplaintParams) => {
   try {
-    const res = await Api.put(`${adminEndpoint.respondToComplaint}/${complaintId}`, { responseMessage: response });
-    console.log('res',res);
-    
+    const res = await Api.put(
+      `${adminEndpoint.respondToComplaint}/${complaintId}`,
+      { responseMessage: response }
+    );
+    console.log("res", res);
+
     return res.data;
   } catch (error) {
-    console.error('Error responding to complaint:', error);
-    throw new Error('Failed to respond to complaint');
+    console.error("Error responding to complaint:", error);
+    throw new Error("Failed to respond to complaint");
   }
 };
 
-
 export const getBookings = async (page: number, limit: number) => {
   try {
-    const response = await Api.get(`${adminEndpoint.getBookings}?page=${page}&limit=${limit}`);
+    const response = await Api.get(
+      `${adminEndpoint.getBookings}?page=${page}&limit=${limit}`
+    );
     return response.data;
   } catch (error) {
     throw new Error("Failed to fetch bookings");
   }
 };
 
-
 export const getDashboardDetails = async () => {
   try {
-      const {data} = await Api.get(adminEndpoint.getDashboardDetails)
-      console.log('dfgg',data);
-      
-      return data
+    const { data } = await Api.get(adminEndpoint.getDashboardDetails);
+    console.log("dfgg", data);
+
+    return data;
   } catch (error) {
-      console.log(error)
+    console.log(error);
   }
-}
+};

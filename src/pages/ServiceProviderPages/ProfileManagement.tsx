@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 // import { MdArrowBack } from "react-icons/md";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { editPassword, editProfile, fetchCategories, getProfileDetails } from "../../api/serviceProviderAPI";
+import {
+  editPassword,
+  editProfile,
+  fetchCategories,
+  getProfileDetails,
+} from "../../api/serviceProviderAPI";
 import toast from "react-hot-toast";
 import Footer from "../../components/common_pages/Footer";
 import AppNavbar from "../../components/common_pages/ProviderHeader";
@@ -29,8 +34,10 @@ interface EditSpProps {
   onProfileEdit: (updatedData: serviceProvider) => void;
 }
 
-
-const ProfileManagement: React.FC<EditSpProps> = ({ serviceProviderDetails = {}, onProfileEdit = () => {} }) => {
+const ProfileManagement: React.FC<EditSpProps> = ({
+  serviceProviderDetails = {},
+  onProfileEdit = () => {},
+}) => {
   const [categories, setCategories] = useState<string[]>([]);
 
   const {
@@ -42,8 +49,13 @@ const ProfileManagement: React.FC<EditSpProps> = ({ serviceProviderDetails = {},
     defaultValues: serviceProviderDetails, // Pre-fill fields with current profile details
   });
 
-  const {register: registerPassword, handleSubmit: handleSubmitPassword, reset: resetPassword, formState: {errors:errorsPassword}, watch} = useForm<IPassword>()
-
+  const {
+    register: registerPassword,
+    handleSubmit: handleSubmitPassword,
+    reset: resetPassword,
+    formState: { errors: errorsPassword },
+    watch,
+  } = useForm<IPassword>();
 
   // Fetch user profile details and prefill the form
   useEffect(() => {
@@ -92,7 +104,6 @@ const ProfileManagement: React.FC<EditSpProps> = ({ serviceProviderDetails = {},
     }
   };
 
-
   // Fetch categories for services dropdown
   useEffect(() => {
     const loadCategories = async () => {
@@ -129,37 +140,48 @@ const ProfileManagement: React.FC<EditSpProps> = ({ serviceProviderDetails = {},
   return (
     <>
       <AppNavbar />
-      <div style={{
-        minHeight: '100vh',
-        background: 'url(https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-        padding: '8px 28px',
-      }}>
-        <div style={{
-          maxWidth: '900px',
-          margin: 'auto',
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          borderRadius: '15px',
-          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
-          overflow: 'hidden',
-        }}>
-          <div style={{
-            background: 'linear-gradient(to right, #0f0f0f, #8c8d93)',
-            padding: '30px',
-            color: 'white',
-            textAlign: 'center'
-          }}>
-            <h1 style={{ fontSize: '32px', fontWeight: 'bold' }}>Profile Settings</h1>
+      <div
+        style={{
+          minHeight: "100vh",
+          background:
+            "url(https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+          padding: "8px 28px",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "900px",
+            margin: "auto",
+            backgroundColor: "rgba(255, 255, 255, 0.9)",
+            borderRadius: "15px",
+            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            style={{
+              background: "linear-gradient(to right, #0f0f0f, #8c8d93)",
+              padding: "30px",
+              color: "white",
+              textAlign: "center",
+            }}
+          >
+            <h1 style={{ fontSize: "32px", fontWeight: "bold" }}>
+              Profile Settings
+            </h1>
           </div>
-
 
           <form onSubmit={handleSubmit(handleEdit)} className="p-6 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Name Field */}
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Name
                 </label>
                 <input
@@ -168,29 +190,44 @@ const ProfileManagement: React.FC<EditSpProps> = ({ serviceProviderDetails = {},
                   {...register("name", { required: "Name is required" })}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300"
                 />
-                {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
+                {errors.name && (
+                  <p className="text-sm text-red-600">{errors.name.message}</p>
+                )}
               </div>
 
               {/* Mobile Field */}
               <div>
-                <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="mobile"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Mobile
                 </label>
                 <input
                   type="tel"
                   id="mobile"
-                  {...register("mobile", { required: "Mobile number is required" , pattern: {
-                    value: /^[0]?[789]\d{9}$/,
-                    message: "Enter a valid number",
-                  }, })}
+                  {...register("mobile", {
+                    required: "Mobile number is required",
+                    pattern: {
+                      value: /^[0]?[789]\d{9}$/,
+                      message: "Enter a valid number",
+                    },
+                  })}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300"
                 />
-                {errors.mobile && <p className="text-sm text-red-600">{errors.mobile.message}</p>}
+                {errors.mobile && (
+                  <p className="text-sm text-red-600">
+                    {errors.mobile.message}
+                  </p>
+                )}
               </div>
 
               {/* Email Field */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Email
                 </label>
                 <input
@@ -200,26 +237,40 @@ const ProfileManagement: React.FC<EditSpProps> = ({ serviceProviderDetails = {},
                   {...register("email", { required: "Email is required" })}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300"
                 />
-                {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
+                {errors.email && (
+                  <p className="text-sm text-red-600">{errors.email.message}</p>
+                )}
               </div>
 
               {/* Location Field */}
               <div>
-                <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="location"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Location
                 </label>
                 <input
                   type="text"
                   id="location"
-                  {...register("location", { required: "Location is required" })}
+                  {...register("location", {
+                    required: "Location is required",
+                  })}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300"
                 />
-                {errors.location && <p className="text-sm text-red-600">{errors.location.message}</p>}
+                {errors.location && (
+                  <p className="text-sm text-red-600">
+                    {errors.location.message}
+                  </p>
+                )}
               </div>
 
               {/* Service Dropdown */}
               <div>
-                <label htmlFor="service" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="service"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Service
                 </label>
                 <select
@@ -234,40 +285,65 @@ const ProfileManagement: React.FC<EditSpProps> = ({ serviceProviderDetails = {},
                     </option>
                   ))}
                 </select>
-                {errors.service && <p className="text-sm text-red-600">{errors.service.message}</p>}
+                {errors.service && (
+                  <p className="text-sm text-red-600">
+                    {errors.service.message}
+                  </p>
+                )}
               </div>
 
               {/* Qualification Field */}
               <div>
-                <label htmlFor="qualification" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="qualification"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Qualification
                 </label>
                 <input
                   type="text"
                   id="qualification"
-                  {...register("qualification", { required: "Qualification is required" })}
+                  {...register("qualification", {
+                    required: "Qualification is required",
+                  })}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300"
                 />
-                {errors.qualification && <p className="text-sm text-red-600">{errors.qualification.message}</p>}
+                {errors.qualification && (
+                  <p className="text-sm text-red-600">
+                    {errors.qualification.message}
+                  </p>
+                )}
               </div>
 
               {/* Experience Field */}
               <div>
-                <label htmlFor="expYear" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="expYear"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Years of Experience
                 </label>
                 <input
                   type="number"
                   id="expYear"
-                  {...register("expYear", { required: "Experience is required" })}
+                  {...register("expYear", {
+                    required: "Experience is required",
+                  })}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300"
                 />
-                {errors.expYear && <p className="text-sm text-red-600">{errors.expYear.message}</p>}
+                {errors.expYear && (
+                  <p className="text-sm text-red-600">
+                    {errors.expYear.message}
+                  </p>
+                )}
               </div>
 
               {/* Rate Field */}
               <div>
-                <label htmlFor="rate" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="rate"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Rate per session
                 </label>
                 <input
@@ -276,13 +352,19 @@ const ProfileManagement: React.FC<EditSpProps> = ({ serviceProviderDetails = {},
                   {...register("rate", { required: "Rate is required" })}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300"
                 />
-                {errors.rate && <p className="text-sm text-red-600">{errors.rate.message}</p>}
+                {errors.rate && (
+                  <p className="text-sm text-red-600">{errors.rate.message}</p>
+                )}
               </div>
             </div>
 
             {/* Submit Button */}
             <div className="flex justify-end">
-              <button type="submit" className="px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-500" style={{background:" rgb(27, 145, 187)"}}>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-500"
+                style={{ background: " rgb(27, 145, 187)" }}
+              >
                 Save Changes
               </button>
             </div>
@@ -290,75 +372,101 @@ const ProfileManagement: React.FC<EditSpProps> = ({ serviceProviderDetails = {},
 
           {/* Password Change Form */}
           <div className="max-w-4xl mx-auto mt-8 bg-white rounded-xl shadow-lg overflow-hidden">
-          <div className="bg-gradient-to-r from-[#0f0f0f] to-[#8c8d93] p-6 text-white">
-            <h1 className="text-3xl font-bold">Password Settings</h1>
+            <div className="bg-gradient-to-r from-[#0f0f0f] to-[#8c8d93] p-6 text-white">
+              <h1 className="text-3xl font-bold">Password Settings</h1>
+            </div>
+            <form
+              onSubmit={handleSubmitPassword(handlePassword)}
+              className="p-6 space-y-4"
+            >
+              <div>
+                <label
+                  htmlFor="oldPassword"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Old Password
+                </label>
+                <input
+                  type="password"
+                  id="oldPassword"
+                  {...registerPassword("oldPassword", {
+                    required: "Password is required",
+                  })}
+                  placeholder="Enter old password"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                />
+                {errorsPassword.oldPassword && (
+                  <p className="text-sm text-red-600 pt-1">
+                    {errorsPassword.oldPassword.message}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="newPassword"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  id="newPassword"
+                  {...registerPassword("newPassword", {
+                    required: "Password is required",
+                    pattern: {
+                      value:
+                        /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
+                      message:
+                        "Password should be 6-16 characters long and contain at least one number and one special character",
+                    },
+                  })}
+                  placeholder="Enter new password"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                />
+                {errorsPassword.newPassword && (
+                  <p className="text-sm text-red-600 pt-1">
+                    {errorsPassword.newPassword.message}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  {...registerPassword("confirmPassword", {
+                    required: "Password is required",
+                    validate: (val: string) => {
+                      if (watch("newPassword") != val) {
+                        return "Your passwords do not match";
+                      }
+                    },
+                  })}
+                  placeholder="Confirm password"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                />
+                {errorsPassword.confirmPassword && (
+                  <p className="text-sm text-red-600 pt-1">
+                    {errorsPassword.confirmPassword.message}
+                  </p>
+                )}
+              </div>
+              <div className="pt-4">
+                <button
+                  className="w-full px-4 py-2 bg-[#142057] text-white rounded-md hover:bg-[#19328F] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  style={{ background: " rgb(27, 145, 187)" }}
+                >
+                  Change Password
+                </button>
+              </div>
+            </form>
           </div>
-        <form onSubmit={handleSubmitPassword(handlePassword)} className="p-6 space-y-4">
-          <div>
-            <label htmlFor="oldPassword" className="block text-sm font-medium text-gray-700 mb-1">
-              Old Password
-            </label>
-            <input
-              type="password"
-              id="oldPassword"
-              {...registerPassword("oldPassword", {required:  "Password is required"})}
-              placeholder="Enter old password"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            />
-            {
-                errorsPassword .oldPassword && <p className="text-sm text-red-600 pt-1">{errorsPassword .oldPassword.message}</p>
-            }
-          </div>
-          <div>
-            <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-1">
-              New Password
-            </label>
-            <input
-              type="password"
-              id="newPassword"
-              {...registerPassword("newPassword", {required:  "Password is required",
-                pattern:{
-                    value:  /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
-                    message: "Password should be 6-16 characters long and contain at least one number and one special character"
-                }
-                         
-              })}
-              placeholder="Enter new password"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            />
-            {
-                errorsPassword .newPassword && <p className="text-sm text-red-600 pt-1">{errorsPassword .newPassword.message}</p>
-            }
-          </div>
-          <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              {...registerPassword("confirmPassword", {required:  "Password is required",
-                validate: (val: string) => {
-                    if(watch('newPassword') != val){
-                        return "Your passwords do not match"
-                    }
-                }
-              })}
-              placeholder="Confirm password"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            />
-            {
-                errorsPassword .confirmPassword && <p className="text-sm text-red-600 pt-1">{errorsPassword .confirmPassword.message}</p>
-            }
-          </div>
-          <div className="pt-4">
-            <button className="w-full px-4 py-2 bg-[#142057] text-white rounded-md hover:bg-[#19328F] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" style={{background:" rgb(27, 145, 187)"}}>
-              Change Password
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        </div>
       </div>
 
       <Footer />

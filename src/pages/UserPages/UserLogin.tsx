@@ -49,8 +49,9 @@ const UserLogin = () => {
 
   return (
     <>
-      <div className="relative flex items-center justify-center w-full h-screen bg-cover bg-center" 
-        style={{ 
+      <div
+        className="relative flex items-center justify-center w-full h-screen bg-cover bg-center"
+        style={{
           backgroundImage: `url('https://www.hmsmirdifhospital.ae/images/banner/500/what-is-a-gynecologist-min.jpg')`,
         }}
       >
@@ -62,11 +63,7 @@ const UserLogin = () => {
           {/* Logo */}
           <div className="text-center mb-6">
             <Link to="/">
-              <img
-                src={logo}
-                alt="Logo"
-                className="w-24 h-auto mx-auto"
-              />
+              <img src={logo} alt="Logo" className="w-24 h-auto mx-auto" />
             </Link>
           </div>
 
@@ -132,9 +129,7 @@ const UserLogin = () => {
 
             {/* Submit Button */}
             <div className="mb-6">
-              <button
-                className="bg-blue-600 text-white font-bold py-3 px-4 w-full rounded-lg hover:bg-blue-700 transition-transform transform hover:scale-105 duration-200"
-              >
+              <button className="bg-blue-600 text-white font-bold py-3 px-4 w-full rounded-lg hover:bg-blue-700 transition-transform transform hover:scale-105 duration-200">
                 Login
               </button>
             </div>

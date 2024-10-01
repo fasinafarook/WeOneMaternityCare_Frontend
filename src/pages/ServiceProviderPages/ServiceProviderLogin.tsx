@@ -30,12 +30,13 @@ const SericeProviderLogin = () => {
       toast.error(response.message);
     }
 
-    const { hasCompletedDetails } = response.data;
+    // const { hasCompletedDetails } = response.data;
 
-    if (!hasCompletedDetails) {
-      dispatch(setServiceProviderCredentials(response.data.token));
-      navigate("/serviceProvider/verify-details");
-    } else if (response.success) {
+    // if (!hasCompletedDetails) {
+    //   dispatch(setServiceProviderCredentials(response.data.token));
+    //   navigate("/serviceProvider/verify-details");
+    // } else
+    if (response.success) {
       const { token, isApproved } = response.data;
       const sericeProviderInfo = {
         token,
@@ -49,21 +50,25 @@ const SericeProviderLogin = () => {
   return (
     <>
       {/* Main container with full-screen background image */}
-      <div className="relative flex items-center justify-center h-screen bg-cover bg-center" style={{ backgroundImage: 'url("https://www.hmsmirdifhospital.ae/images/banner/500/what-is-a-gynecologist-min.jpg")' }}>
-        
+      <div
+        className="relative flex items-center justify-center h-screen bg-cover bg-center"
+        style={{
+          backgroundImage:
+            'url("https://www.hmsmirdifhospital.ae/images/banner/500/what-is-a-gynecologist-min.jpg")',
+        }}
+      >
         {/* Overlay for dimming the background */}
         {/* <div className="absolute inset-0 bg-black opacity-50"></div> */}
 
         {/* Centered content */}
         <div className="relative z-10 w-full max-w-md p-8 bg-white/90 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300">
-          
           {/* Logo at the top */}
           <Link to="/">
             <img
               src={logo}
               alt="Logo"
               className="block mx-auto mb-6"
-              style={{ width: '100px', height: '70px' }}
+              style={{ width: "100px", height: "70px" }}
             />
           </Link>
 
@@ -100,7 +105,9 @@ const SericeProviderLogin = () => {
                 {...register("password", { required: true })}
               />
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">Password is required</p>
+                <p className="text-red-500 text-sm mt-1">
+                  Password is required
+                </p>
               )}
               <div className="flex justify-between mt-2 text-sm">
                 <Link
@@ -135,7 +142,8 @@ const SericeProviderLogin = () => {
               to="/serviceProvider/serviceProvider-register"
               className="text-sm text-gray-500 hover:text-blue-700"
             >
-              Don&apos;t have an account yet? <span className="text-blue-600">Sign Up</span>
+              Don&apos;t have an account yet?{" "}
+              <span className="text-blue-600">Sign Up</span>
             </Link>
           </div>
         </div>

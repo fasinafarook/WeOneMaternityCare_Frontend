@@ -6,7 +6,7 @@ import { logout } from "../../api/adminAPI";
 import logo from "../../../public/images/logo.jpeg";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
-import { serviceProviderLogout } from "../../redux/slice/authSlice";
+import { serviceProviderLogout,updateServiceProviderInfo } from "../../redux/slice/authSlice";
 import { getProfileDetails } from "../../api/serviceProviderAPI";
 import Swal from "sweetalert2";
 
@@ -59,6 +59,25 @@ const AppNavbar: React.FC = () => {
     };
     fetchUserData();
   }, []);
+  const fetchProviderInfo = async () => {
+    const response = await getProfileDetails();
+    if (response.success) {
+        dispatch(updateServiceProviderInfo(response.data));
+        return response.data;
+    }
+    return null;
+};
+  const handleScheduleSlot = async() => {
+    const providerInfo = await fetchProviderInfo();
+    console.log('userinfo',providerInfo);
+    
+    if(providerInfo.hasCompletedDetails !== true){
+      navigate(`/serviceProvider/verify-details`);
+    }else{
+      navigate('/serviceProvider/get-slots');
+    }
+    
+  };
 
   const navLinkStyle = (path: string): React.CSSProperties => ({
     color: path === window.location.pathname ? "#c97d60" : "white",
@@ -115,13 +134,9 @@ const AppNavbar: React.FC = () => {
             >
               Bookings
             </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/serviceProvider/get-slots"
-              style={navLinkStyle("/serviceProvider/get-slots")}
-            >
-              Slots
-            </Nav.Link>
+            <Nav.Link onClick={handleScheduleSlot} style={navLinkStyle("/serviceProvider/get-slots")}>
+      Slots
+    </Nav.Link>
             <Nav.Link
               as={Link}
               to="/serviceProvider/about"

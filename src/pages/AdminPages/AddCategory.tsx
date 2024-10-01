@@ -3,7 +3,7 @@ import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { addCategory } from "../../api/adminAPI";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { FiPackage, FiPlus, FiChevronLeft } from 'react-icons/fi';
+import { FiPackage, FiPlus, FiChevronLeft } from "react-icons/fi";
 import AdminNavbar from "../../components/common_pages/AdminHeader";
 import Footer from "../../components/common_pages/Footer";
 
@@ -47,16 +47,19 @@ const AddCategory = () => {
   return (
     <>
       <AdminNavbar />
-      <div style={{
-        backgroundImage: "url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '20px',
-      }}>
+      <div
+        style={{
+          backgroundImage:
+            "url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "20px",
+        }}
+      >
         <div className="max-w-2xl w-full p-6 bg-white rounded-lg shadow-md opacity-90">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-2xl font-bold text-gray-800 flex items-center">
@@ -66,7 +69,7 @@ const AddCategory = () => {
             <button
               onClick={() => navigate("/admin/categorys-list")}
               className="text-gray-600 hover:text-gray-800 transition duration-300 ease-in-out flex items-center"
-              style={{ background: 'skyblue' }}
+              style={{ background: "skyblue" }}
             >
               <FiChevronLeft className="mr-1" /> Back to Category
             </button>
@@ -74,7 +77,10 @@ const AddCategory = () => {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
-              <label htmlFor="categoryName" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="categoryName"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Name of Category
               </label>
               <input
@@ -82,15 +88,22 @@ const AddCategory = () => {
                 type="text"
                 placeholder="Enter category name"
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 ease-in-out"
-                {...register("categoryName", { required: "Category name is required" })}
+                {...register("categoryName", {
+                  required: "Category name is required",
+                })}
               />
               {errors.categoryName && (
-                <p className="text-red-500 text-sm mt-1">{errors.categoryName.message}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.categoryName.message}
+                </p>
               )}
             </div>
 
             <div>
-              <label htmlFor="subCategories" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="subCategories"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Sub Categories
               </label>
               <TagsInput
@@ -99,7 +112,8 @@ const AddCategory = () => {
                 name="subCategories"
                 placeHolder="Enter sub-categories and press enter"
                 classNames={{
-                  input: "w-full p-2 border border-gray-300 rounded-md transition duration-300 ease-in-out",
+                  input:
+                    "w-full p-2 border border-gray-300 rounded-md transition duration-300 ease-in-out",
                   tag: "bg-blue-100 text-blue-800 rounded-full px-2 py-1 m-1 text-sm",
                 }}
               />
@@ -113,7 +127,7 @@ const AddCategory = () => {
                   ? "bg-blue-600 hover:bg-blue-700 text-white"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               } font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out`}
-              style={{ background: 'green' }}
+              style={{ background: "green" }}
             >
               <FiPlus className="mr-2" /> Add Category
             </button>

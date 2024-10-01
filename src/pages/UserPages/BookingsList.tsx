@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import UserNavbar from "../../components/common_pages/UserHeader";
 import { getScheduledIbookings, cancelBooking } from "../../api/userAPI";
 import { MdOutlineCurrencyRupee } from "react-icons/md";
-import { Button, Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react";
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Pagination from "../../components/common_pages/Pagination";
 import TableShimmer from "../../components/common_pages/Table";
@@ -23,13 +29,16 @@ export interface IScheduledBooking {
 }
 
 const OutsourcedBookings = () => {
-  const [scheduledBookings, setScheduledBookings] = useState<IScheduledBooking[]>([]);
+  const [scheduledBookings, setScheduledBookings] = useState<
+    IScheduledBooking[]
+  >([]);
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [totalPages, setTotalPages] = useState(1);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [selectedBooking, setSelectedBooking] = useState<IScheduledBooking | null>(null);
+  const [selectedBooking, setSelectedBooking] =
+    useState<IScheduledBooking | null>(null);
   const [cancellationReason, setCancellationReason] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const currentPage = parseInt(searchParams.get("page") || "1");
@@ -99,7 +108,9 @@ const OutsourcedBookings = () => {
 
   const handleJoinCall = () => {
     if (selectedBooking) {
-      navigate(`/user/video-call/${selectedBooking.roomId}/${selectedBooking.userId}`);
+      navigate(
+        `/user/video-call/${selectedBooking.roomId}/${selectedBooking.userId}`
+      );
     }
   };
 
@@ -115,7 +126,7 @@ const OutsourcedBookings = () => {
     const currentTime = new Date();
     const startTime = new Date(fromTime);
     const endTime = new Date(toTime);
-  
+
     return currentTime >= startTime && currentTime <= endTime;
   };
 
@@ -125,20 +136,31 @@ const OutsourcedBookings = () => {
 
   return (
     <>
-    
       <UserNavbar />
-      <div style={{
-        backgroundImage: `url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        minHeight: "100vh",
-        padding: "20px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-      }}>        
+      <div
+        style={{
+          backgroundImage: `url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          minHeight: "100vh",
+          padding: "20px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
         <div className="max-w-7xl text-[#070913] mx-auto w-full">
-          <h1 style={{ fontSize: "2rem", fontWeight: "bold", color: "#333", textAlign: "center", marginBottom: "20px" }}>Bookings List</h1>
+          <h1
+            style={{
+              fontSize: "2rem",
+              fontWeight: "bold",
+              color: "#333",
+              textAlign: "center",
+              marginBottom: "20px",
+            }}
+          >
+            Bookings List
+          </h1>
           <div className="flex flex-col">
             <div className="overflow-x-auto">
               <div className="p-1.5 w-full inline-block align-middle">
@@ -146,17 +168,21 @@ const OutsourcedBookings = () => {
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gradient-to-r from-[#595b60] to-[#0d80f3]">
                       <tr>
-                        {["ROLL NAME", "SCHEDULED ON", "PRICE", "STATUS", "ACTION"].map(
-                          (header) => (
-                            <th
-                              key={header}
-                              scope="col"
-                              className="px-2 py-3 text-xs md:text-sm font-bold text-left text-white uppercase tracking-wider"
-                            >
-                              {header}
-                            </th>
-                          )
-                        )}
+                        {[
+                          "ROLL NAME",
+                          "SCHEDULED ON",
+                          "PRICE",
+                          "STATUS",
+                          "ACTION",
+                        ].map((header) => (
+                          <th
+                            key={header}
+                            scope="col"
+                            className="px-2 py-3 text-xs md:text-sm font-bold text-left text-white uppercase tracking-wider"
+                          >
+                            {header}
+                          </th>
+                        ))}
                       </tr>
                     </thead>
                     {loading ? (
@@ -207,22 +233,21 @@ const OutsourcedBookings = () => {
                                 {booking.status}
                               </span>
                               <td>
-                              <button
-            onClick={() => handleOpenModal(booking)}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition duration-150 ease-in-out"
-          >
-            Booking Details
-          </button>
-
+                                <button
+                                  onClick={() => handleOpenModal(booking)}
+                                  className="px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition duration-150 ease-in-out"
+                                >
+                                  Booking Details
+                                </button>
                               </td>
-                              
-          
                             </td>
                             <td className="px-2 py-3 whitespace-nowrap">
                               {booking.status === "Refunded" ? (
                                 <span className="text-red-600">Refunded</span>
                               ) : booking.status === "Cancelled" ? (
-                                <span className="text-red-600">You are eligible for a refund</span>
+                                <span className="text-red-600">
+                                  You are eligible for a refund
+                                </span>
                               ) : booking.status === "Expired" ? (
                                 <button
                                   disabled
@@ -234,7 +259,7 @@ const OutsourcedBookings = () => {
                                 isCancellationAllowed(booking.fromTime) && (
                                   <button
                                     onClick={(e) => {
-                                      e.stopPropagation(); 
+                                      e.stopPropagation();
                                       setSelectedBooking(booking);
                                       setShowConfirmationModal(true);
                                     }}
@@ -272,11 +297,35 @@ const OutsourcedBookings = () => {
         <DialogBody divider>
           <div>
             <p className="font-bold">Category: {selectedBooking?.title}</p>
-            <p className="font-bold">Scheduled On: {new Date(selectedBooking?.date).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}</p>
-            <p className="font-bold">From: {new Date(selectedBooking?.fromTime).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</p>
-            <p className="font-bold">To: {new Date(selectedBooking?.toTime).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</p>
-            <p className="font-bold">Description: {selectedBooking?.description}</p>
-            <p className="font-bold">Price: <MdOutlineCurrencyRupee className="inline" /> {selectedBooking?.price}</p>
+            <p className="font-bold">
+              Scheduled On:{" "}
+              {new Date(selectedBooking?.date).toLocaleDateString("en-US", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </p>
+            <p className="font-bold">
+              From:{" "}
+              {new Date(selectedBooking?.fromTime).toLocaleTimeString("en-US", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </p>
+            <p className="font-bold">
+              To:{" "}
+              {new Date(selectedBooking?.toTime).toLocaleTimeString("en-US", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </p>
+            <p className="font-bold">
+              Description: {selectedBooking?.description}
+            </p>
+            <p className="font-bold">
+              Price: <MdOutlineCurrencyRupee className="inline" />{" "}
+              {selectedBooking?.price}
+            </p>
           </div>
         </DialogBody>
         <DialogFooter>
@@ -288,31 +337,43 @@ const OutsourcedBookings = () => {
             Close
           </Button>
           {selectedBooking?.status === "Scheduled" && (
-  <Button
-    color="green"
-    onClick={handleJoinCall}
-    disabled={!isTimeWithinSlot(selectedBooking.fromTime, selectedBooking.toTime)} // Disable button outside the slot time
-  >
-    Join Call
-  </Button>
-)}
-
+            <Button
+              color="green"
+              onClick={handleJoinCall}
+              disabled={
+                !isTimeWithinSlot(
+                  selectedBooking.fromTime,
+                  selectedBooking.toTime
+                )
+              } // Disable button outside the slot time
+            >
+              Join Call
+            </Button>
+          )}
         </DialogFooter>
       </Dialog>
 
       {/* Confirmation Modal */}
-      <Dialog open={showConfirmationModal} size="sm" handler={() => setShowConfirmationModal(false)}>
+      <Dialog
+        open={showConfirmationModal}
+        size="sm"
+        handler={() => setShowConfirmationModal(false)}
+      >
         <DialogHeader>Cancel Booking</DialogHeader>
         <DialogBody divider>
           <div>
-            <p className="font-bold">Are you sure you want to cancel this booking?</p>
+            <p className="font-bold">
+              Are you sure you want to cancel this booking?
+            </p>
             <textarea
               value={cancellationReason}
               onChange={(e) => setCancellationReason(e.target.value)}
               placeholder="Enter cancellation reason"
               className="mt-2 w-full h-20 p-2 border rounded-lg"
             />
-            {errorMessage && <p className="text-red-500 text-sm mt-2">{errorMessage}</p>}
+            {errorMessage && (
+              <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
+            )}
           </div>
         </DialogBody>
         <DialogFooter>
@@ -323,10 +384,7 @@ const OutsourcedBookings = () => {
           >
             Cancel
           </Button>
-          <Button
-            color="green"
-            onClick={handleCancelBooking}
-          >
+          <Button color="green" onClick={handleCancelBooking}>
             Confirm
           </Button>
         </DialogFooter>

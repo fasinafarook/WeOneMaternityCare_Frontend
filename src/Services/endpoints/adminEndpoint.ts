@@ -12,14 +12,14 @@ const adminEndpoint = {
     addCategory: '/admin/add-category',
     getCategorys: '/admin/categorys-list',
     unlistCategory: '/admin/unlist-category',
-    getBlogs: '/admin/blogs', // Endpoint for fetching blogs
+    getBlogs: '/admin/blogs',
     unlistBlog: '/admin/unlist-blog', 
-    addBlog: '/admin/add-blogs', // Add this line
-    addWebinar: '/admin/add-webinars', // POST request to add a webinar
-    getWebinars: '/admin/webinars', // GET request to list webinars
-    unlistWebinar: '/admin/webinars/unlist', // PUT request to unlist a 
+    addBlog: '/admin/add-blogs', 
+    addWebinar: '/admin/add-webinars', 
+    getWebinars: '/admin/webinars',
+    unlistWebinar: '/admin/webinars/unlist', 
     toggleWebinarListing:"/admin/webinars/toggle-listing",
-    updateBlogStatus: '/admin/blog', // or whatever your endpoint is
+    updateBlogStatus: '/admin/blog',
     getAllComplaints:'/admin/complaints',
     respondToComplaint:'/admin/respond-to-complaint',
     getBookings:"/admin/bookings"

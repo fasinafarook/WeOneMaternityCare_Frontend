@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import UserNavbar from "../../components/common_pages/UserHeader";
 import { getServiceProviderSlotDetails, makePayment } from "../../api/userAPI";
@@ -19,10 +18,11 @@ const ProviderAndSlotDetails = () => {
   const { serviceProviderId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-//   const [searchParams] = useSearchParams();
-//   const selectedService = searchParams.get("selectedService") as string;
+  //   const [searchParams] = useSearchParams();
+  //   const selectedService = searchParams.get("selectedService") as string;
 
-  const [serviceProvider, setServiceProvider] = useState<IServiceProvider | null>(null);
+  const [serviceProvider, setServiceProvider] =
+    useState<IServiceProvider | null>(null);
   const [slots, setSlots] = useState<any[]>([]);
 
   const fetchProviderSlotDetails = async (serviceProviderId: string) => {
@@ -49,17 +49,16 @@ const ProviderAndSlotDetails = () => {
       fetchProviderSlotDetails(serviceProviderId);
     }
   }, [serviceProviderId]);
-  
 
   const handleCheckout = async (slot: any) => {
-    console.log('hi');
-    
+    console.log("hi");
+
     const previousUrl = `${location.pathname}${location.search}`;
-    console.log('slot',slot);
+    console.log("slot", slot);
 
     try {
-      console.log('slot',slot);
-      
+      console.log("slot", slot);
+
       const response = await makePayment(slot, previousUrl);
       if (response.success) {
         window.location.href = response.data;
@@ -72,17 +71,19 @@ const ProviderAndSlotDetails = () => {
   return (
     <>
       <UserNavbar />
-      <div style={{
-        backgroundImage: `url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        minHeight: "100vh",
-        padding: "20px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-      }}>               
-       <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
+      <div
+        style={{
+          backgroundImage: `url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          minHeight: "100vh",
+          padding: "20px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
+        <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
           <div className="flex flex-col lg:flex-row">
             <div className="lg:w-2/3 p-6 lg:p-10">
               <div className="flex items-center mb-8">
@@ -92,31 +93,60 @@ const ProviderAndSlotDetails = () => {
                 >
                   <FaArrowLeft className="text-xl" />
                 </button>
-                <h1 className="text-3xl lg:text-4xl font-bold text-black">Book your slots</h1>
+                <h1 className="text-3xl lg:text-4xl font-bold text-black">
+                  Book your slots
+                </h1>
               </div>
 
               <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left text-gray-500">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
-                      <th scope="col" className="px-6 py-3">Date</th>
-                      <th scope="col" className="px-6 py-3">Time (from & to)</th>
-                      <th scope="col" className="px-6 py-3">Service</th>
-                      <th scope="col" className="px-6 py-3">Price</th>
-                      <th scope="col" className="px-6 py-3">Status</th>
+                      <th scope="col" className="px-6 py-3">
+                        Date
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Time (from & to)
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Service
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Price
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Status
+                      </th>
                       <th scope="col" className="px-6 py-3"></th>
                     </tr>
                   </thead>
                   <tbody>
                     {slots.length > 0 ? (
                       slots.map((slot: any, index: number) => (
-                        <tr key={slot._id + index} className="bg-white border-b hover:bg-gray-50">
+                        <tr
+                          key={slot._id + index}
+                          className="bg-white border-b hover:bg-gray-50"
+                        >
                           <td className="px-6 py-4 font-medium text-gray-900">
-                            {new Date(slot.slots.date).toLocaleDateString("en-US", { day: "numeric", month: "short" })}
+                            {new Date(slot.slots.date).toLocaleDateString(
+                              "en-US",
+                              { day: "numeric", month: "short" }
+                            )}
                           </td>
                           <td className="px-6 py-4">
-                            {new Date(slot.slots.schedule.from).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })} - {" "}
-                            {new Date(slot.slots.schedule.to).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
+                            {new Date(
+                              slot.slots.schedule.from
+                            ).toLocaleTimeString("en-US", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}{" "}
+                            -{" "}
+                            {new Date(
+                              slot.slots.schedule.to
+                            ).toLocaleTimeString("en-US", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
                           </td>
                           <td className="px-6 py-4 font-medium text-indigo-600 hover:text-indigo-900">
                             {slot.slots.schedule.title}
@@ -128,7 +158,9 @@ const ProviderAndSlotDetails = () => {
                           <td className="px-6 py-4">
                             <span
                               className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                                slot.slots.schedule.status === "open" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                                slot.slots.schedule.status === "open"
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-red-100 text-red-800"
                               }`}
                             >
                               {slot.slots.schedule.status}
@@ -176,21 +208,34 @@ const ProviderAndSlotDetails = () => {
                     alt="provider"
                     className="h-48 w-48 rounded-full mx-auto mb-6 border-4 border-indigo-200 shadow-lg"
                   />
-                  <h2 className="text-3xl font-bold mb-4 text-black">{serviceProvider.name}</h2>
+                  <h2 className="text-3xl font-bold mb-4 text-black">
+                    {serviceProvider.name}
+                  </h2>
                   <div className="space-y-3 text-left">
                     <p className="text-gray-700">
-                      <span className="font-semibold text-indigo-600">Location:</span> {serviceProvider.location}
+                      <span className="font-semibold text-indigo-600">
+                        Location:
+                      </span>{" "}
+                      {serviceProvider.location}
                     </p>
                     <p className="text-gray-700">
-                      <span className="font-semibold text-indigo-600">Service:</span> {serviceProvider.service}
+                      <span className="font-semibold text-indigo-600">
+                        Service:
+                      </span>{" "}
+                      {serviceProvider.service}
                     </p>
                     <p className="text-gray-700">
-                      <span className="font-semibold text-indigo-600">Experience:</span> {serviceProvider.expYear} years
+                      <span className="font-semibold text-indigo-600">
+                        Experience:
+                      </span>{" "}
+                      {serviceProvider.expYear} years
                     </p>
                   </div>
                   <div className="mt-6 p-4 bg-indigo-100 rounded-lg">
                     <FaInfoCircle className="inline mr-2 text-indigo-600" />
-                    <span className="text-sm text-indigo-800">Expert in {serviceProvider.service}</span>
+                    <span className="text-sm text-indigo-800">
+                      Expert in {serviceProvider.service}
+                    </span>
                   </div>
                 </div>
               )}
@@ -198,7 +243,7 @@ const ProviderAndSlotDetails = () => {
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };
