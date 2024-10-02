@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { FaUsers, FaUserTie, FaCalendarCheck } from 'react-icons/fa';
-import { Bar, Pie } from 'react-chartjs-2';
-import { getDashboardDetails } from '../../api/adminAPI';
+import { useEffect, useState } from "react";
+import { FaUsers, FaUserTie, FaCalendarCheck } from "react-icons/fa";
+import { Bar, Pie } from "react-chartjs-2";
+import { getDashboardDetails } from "../../api/adminAPI";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,11 +12,19 @@ import {
   Legend,
   ArcElement,
   ChartOptions,
-} from 'chart.js';
-import Footer from '../../components/common_pages/Footer';
-import AdminNavbar from '../../components/common_pages/AdminHeader';
+} from "chart.js";
+import Footer from "../../components/common_pages/Footer";
+import AdminNavbar from "../../components/common_pages/AdminHeader";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 interface IDashboardDetails {
   usersCount: number;
@@ -36,9 +44,12 @@ interface IBooking {
   price: number;
 }
 
-const aggregateChartData = (bookings: IBooking[], groupBy: 'month' | 'day') => {
+const aggregateChartData = (bookings: IBooking[], groupBy: "month" | "day") => {
   const filteredBookings = bookings.filter(
-    (booking) => booking.status === 'Completed' || booking.status === 'Scheduled' || booking.status === 'Cancelled'
+    (booking) =>
+      booking.status === "Completed" ||
+      booking.status === "Scheduled" ||
+      booking.status === "Cancelled"
   );
 
   const data: { [key: string]: { bookings: number; revenue: number } } = {};
@@ -47,10 +58,10 @@ const aggregateChartData = (bookings: IBooking[], groupBy: 'month' | 'day') => {
     const date = new Date(booking.date);
     let key: string;
 
-    if (groupBy === 'month') {
-      key = date.toLocaleString('default', { month: 'short', year: 'numeric' });
+    if (groupBy === "month") {
+      key = date.toLocaleString("default", { month: "short", year: "numeric" });
     } else {
-      key = date.toLocaleDateString('en-IN', { day: '2-digit', month: 'long' });
+      key = date.toLocaleDateString("en-IN", { day: "2-digit", month: "long" });
     }
 
     if (!data[key]) {
@@ -61,7 +72,9 @@ const aggregateChartData = (bookings: IBooking[], groupBy: 'month' | 'day') => {
     data[key].revenue += booking.price;
   });
 
-  const sortedKeys = Object.keys(data).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+  const sortedKeys = Object.keys(data).sort(
+    (a, b) => new Date(a).getTime() - new Date(b).getTime()
+  );
 
   return {
     labels: sortedKeys,
@@ -79,37 +92,37 @@ const AdminDashboard = () => {
 
   const [bookings, setBookings] = useState<IBooking[]>([]);
   const [chartData, setChartData] = useState<any>(null);
-  const [viewMode, setViewMode] = useState<'month' | 'day'>('month');
+  const [viewMode, setViewMode] = useState<"month" | "day">("month");
   const [pieData, setPieData] = useState<any>(null);
 
-  const chartOptions: ChartOptions<'bar'> = {
+  const chartOptions: ChartOptions<"bar"> = {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: "top" as const,
       },
       title: {
         display: true,
-        text: 'Performance Chart',
+        text: "Performance Chart",
       },
       tooltip: {
-        mode: 'index',
+        mode: "index",
         intersect: false,
       },
     },
     scales: {
       x: {
-        type: 'category',
+        type: "category",
         title: {
           display: true,
-          text: viewMode === 'month' ? 'Month' : 'Date',
+          text: viewMode === "month" ? "Month" : "Date",
         },
       },
       y: {
         beginAtZero: true,
         title: {
           display: true,
-          text: 'Count / Revenue (₹)',
+          text: "Count / Revenue (₹)",
         },
       },
     },
@@ -130,20 +143,50 @@ const AdminDashboard = () => {
       };
 
       setPieData({
-        labels: ['Completed', 'Scheduled', 'Cancelled', 'Refunded'],
+        labels: ["Completed", "Scheduled", "Cancelled", "Refunded"],
         datasets: [
           {
-            label: 'Booking Count',
-            data: [bookingsCount.completed, bookingsCount.scheduled, bookingsCount.cancelled, bookingsCount.refunded],
-            backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(255, 206, 86, 0.6)', 'rgba(255, 99, 132, 0.6)', 'rgba(153, 102, 255, 0.6)'],
-            borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)', 'rgba(255, 99, 132, 1)', 'rgba(153, 102, 255, 1)'],
+            label: "Booking Count",
+            data: [
+              bookingsCount.completed,
+              bookingsCount.scheduled,
+              bookingsCount.cancelled,
+              bookingsCount.refunded,
+            ],
+            backgroundColor: [
+              "rgba(75, 192, 192, 0.6)",
+              "rgba(255, 206, 86, 0.6)",
+              "rgba(255, 99, 132, 0.6)",
+              "rgba(153, 102, 255, 0.6)",
+            ],
+            borderColor: [
+              "rgba(75, 192, 192, 1)",
+              "rgba(255, 206, 86, 1)",
+              "rgba(255, 99, 132, 1)",
+              "rgba(153, 102, 255, 1)",
+            ],
             borderWidth: 1,
           },
           {
-            label: 'Revenue (₹)',
-            data: [revenueByStatus.completed, revenueByStatus.scheduled, revenueByStatus.cancelled, revenueByStatus.refunded],
-            backgroundColor: ['rgba(75, 192, 192, 0.4)', 'rgba(255, 206, 86, 0.4)', 'rgba(255, 99, 132, 0.4)', 'rgba(153, 102, 255, 0.4)'],
-            borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)', 'rgba(255, 99, 132, 1)', 'rgba(153, 102, 255, 1)'],
+            label: "Revenue (₹)",
+            data: [
+              revenueByStatus.completed,
+              revenueByStatus.scheduled,
+              revenueByStatus.cancelled,
+              revenueByStatus.refunded,
+            ],
+            backgroundColor: [
+              "rgba(75, 192, 192, 0.4)",
+              "rgba(255, 206, 86, 0.4)",
+              "rgba(255, 99, 132, 0.4)",
+              "rgba(153, 102, 255, 0.4)",
+            ],
+            borderColor: [
+              "rgba(75, 192, 192, 1)",
+              "rgba(255, 206, 86, 1)",
+              "rgba(255, 99, 132, 1)",
+              "rgba(153, 102, 255, 1)",
+            ],
             borderWidth: 1,
           },
         ],
@@ -154,22 +197,25 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     if (bookings && bookings.length > 0) {
-      const { labels, bookingsData, revenueData } = aggregateChartData(bookings, viewMode);
+      const { labels, bookingsData, revenueData } = aggregateChartData(
+        bookings,
+        viewMode
+      );
       setChartData({
         labels,
         datasets: [
           {
-            label: 'Bookings',
+            label: "Bookings",
             data: bookingsData,
-            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: "rgba(75, 192, 192, 0.6)",
+            borderColor: "rgba(75, 192, 192, 1)",
             borderWidth: 1,
           },
           {
-            label: 'Revenue (₹)',
+            label: "Revenue (₹)",
             data: revenueData,
-            backgroundColor: 'rgba(53, 162, 235, 0.6)',
-            borderColor: 'rgba(53, 162, 235, 1)',
+            backgroundColor: "rgba(53, 162, 235, 0.6)",
+            borderColor: "rgba(53, 162, 235, 1)",
             borderWidth: 1,
           },
         ],
@@ -178,7 +224,7 @@ const AdminDashboard = () => {
   }, [bookings, viewMode]);
 
   const toggleViewMode = () => {
-    setViewMode((prevMode) => (prevMode === 'month' ? 'day' : 'month'));
+    setViewMode((prevMode) => (prevMode === "month" ? "day" : "month"));
   };
 
   return (
@@ -189,7 +235,7 @@ const AdminDashboard = () => {
         style={{
           backgroundImage:
             "url('https://thumbs.dreamstime.com/b/concept-cardiology-heart-health-close-up-female-doctor-hand-holding-stethoscope-91242003.jpg')",
-          backgroundAttachment: 'fixed',
+          backgroundAttachment: "fixed",
         }}
       >
         <div className="bg-black bg-opacity-50 p-8 min-h-screen">
@@ -198,8 +244,16 @@ const AdminDashboard = () => {
           </header>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <StatCard icon={<FaUserTie className="text-[#2F76FF]" />} title="Service Providers" value={dashboardDetails.providersCount} />
-            <StatCard icon={<FaUsers className="text-[#2F76FF]" />} title="Users" value={dashboardDetails.usersCount} />
+            <StatCard
+              icon={<FaUserTie className="text-[#2F76FF]" />}
+              title="Service Providers"
+              value={dashboardDetails.providersCount}
+            />
+            <StatCard
+              icon={<FaUsers className="text-[#2F76FF]" />}
+              title="Users"
+              value={dashboardDetails.usersCount}
+            />
             <StatCard
               icon={<FaCalendarCheck className="text-[#2F76FF]" />}
               title="Total Bookings"
@@ -229,7 +283,8 @@ const AdminDashboard = () => {
                   plugins: {
                     tooltip: {
                       callbacks: {
-                        label: (context) => `${context.label}: ${context.raw} ₹`,
+                        label: (context) =>
+                          `${context.label}: ${context.raw} ₹`,
                       },
                     },
                   },

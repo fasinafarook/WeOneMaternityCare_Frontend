@@ -23,8 +23,6 @@ export const signup = async (
   } catch (error) {
     console.log(error);
     throw error;
-
-
   }
 };
 
@@ -189,8 +187,8 @@ export const makePayment = async (data: any, previousUrl: string) => {
       data,
       previousUrl,
     });
-    console.log('data',response.data);
-    
+    console.log("data", response.data);
+
     return response.data;
   } catch (error) {
     console.log(error);

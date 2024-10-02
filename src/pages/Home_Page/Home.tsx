@@ -8,7 +8,6 @@ import img1 from "../../../public/images/img1.jpeg";
 import img2 from "../../../public/images/img2.jpeg";
 import img7 from "../../../public/images/img3.jpeg";
 import img5 from "../../../public/images/img4.jpeg";
-import Carousel from "react-bootstrap/Carousel";
 import Footer from "../../components/common_pages/Footer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
@@ -215,7 +214,7 @@ const Home: React.FC<HomeProps> = () => {
         </Row>
       </Container>
 
-      <div className="review_container">
+      {/* <div className="review_container">
         <Container className="mt-5 pt-5 ">
           <Row>
             <h2 className="text-center mb-5">Reviews</h2>
@@ -291,7 +290,7 @@ const Home: React.FC<HomeProps> = () => {
             </Carousel>
           </Row>
         </Container>
-        </div>
+        </div> */}
       <Footer />
 
     </>

@@ -1,10 +1,9 @@
-
-import React, { useRef, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useRef, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 
 const UserVideoCall: React.FC = () => {
-  const { roomId,userId } = useParams<{ roomId: string , userId:string}>();
+  const { roomId, userId } = useParams<{ roomId: string; userId: string }>();
 
   const meetingContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -39,10 +38,9 @@ const UserVideoCall: React.FC = () => {
     if (meetingContainerRef.current) {
       myMeeting(meetingContainerRef.current);
     }
-  }, [roomId,userId]);
+  }, [roomId, userId]);
 
   return <div ref={meetingContainerRef} />;
 };
 
 export default UserVideoCall;
-

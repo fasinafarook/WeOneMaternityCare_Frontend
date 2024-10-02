@@ -13,7 +13,7 @@ interface IFormInput {
   email: string;
   mobile: number;
   password: string;
-  confirmPassword: string; 
+  confirmPassword: string;
 }
 
 const UserSignUp = () => {
@@ -34,23 +34,28 @@ const UserSignUp = () => {
       setLoading(true);
       const { name, email, mobile, password } = data;
       const response = await signup(name, email, mobile, password);
-  
+
       if (response?.data.success) {
         navigate("/user/verify-otp");
       } else {
-        toast.error(response?.data.message || "An error occurred. Please try again.");
+        toast.error(
+          response?.data.message || "An error occurred. Please try again."
+        );
         setLoading(false);
       }
     } catch (error: any) {
-      if (error.response && error.response.data && error.response.data.message) {
-        toast.error(error.response.data.message);  
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        toast.error(error.response.data.message);
       } else {
-        toast.error("Something went wrong. Please try again.");  
+        toast.error("Something went wrong. Please try again.");
       }
       setLoading(false);
     }
   };
-  
 
   return (
     <>
@@ -151,7 +156,8 @@ const UserSignUp = () => {
               {...register("password", {
                 required: "Password is required",
                 pattern: {
-                  value: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
+                  value:
+                    /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
                   message:
                     "Password should be 6-16 characters long and contain at least one number and one special character",
                 },
@@ -196,7 +202,10 @@ const UserSignUp = () => {
             {/* Sign In Link */}
             <p className="mt-4 text-center text-gray-600">
               Already have an account?{" "}
-              <Link to="/user/verify-login" className="text-blue-600 hover:underline">
+              <Link
+                to="/user/verify-login"
+                className="text-blue-600 hover:underline"
+              >
                 Sign in
               </Link>
             </p>

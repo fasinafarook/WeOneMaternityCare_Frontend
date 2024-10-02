@@ -47,7 +47,9 @@ const ConfirmationModal: React.FC<{
         }}
       >
         <p style={{ fontSize: "18px", marginBottom: "16px" }}>{message}</p>
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px" }}>
+        <div
+          style={{ display: "flex", justifyContent: "flex-end", gap: "12px" }}
+        >
           <button
             onClick={() => {
               onConfirm();
@@ -122,7 +124,9 @@ const BlogManagement = () => {
   const handleToggleStatus = (blogId: string, currentStatus: boolean) => {
     setCurrentBlogId(blogId);
     setCurrentStatus(currentStatus);
-    setMessage(`Are you sure you want to ${currentStatus ? "unlist" : "list"} this blog?`);
+    setMessage(
+      `Are you sure you want to ${currentStatus ? "unlist" : "list"} this blog?`
+    );
     setIsModalOpen(true);
   };
 
@@ -133,10 +137,14 @@ const BlogManagement = () => {
         if (response.success) {
           setBlogs((prevBlogs) =>
             prevBlogs.map((blog) =>
-              blog._id === currentBlogId ? { ...blog, isListed: !currentStatus } : blog
+              blog._id === currentBlogId
+                ? { ...blog, isListed: !currentStatus }
+                : blog
             )
           );
-          toast.success(`Blog has been ${currentStatus ? "unlisted" : "listed"}`);
+          toast.success(
+            `Blog has been ${currentStatus ? "unlisted" : "listed"}`
+          );
         } else {
           toast.error("Failed to update blog status");
         }
@@ -193,7 +201,9 @@ const BlogManagement = () => {
                 marginBottom: "16px",
               }}
             >
-              <FiPackage style={{ marginRight: "8px", verticalAlign: "middle" }} />
+              <FiPackage
+                style={{ marginRight: "8px", verticalAlign: "middle" }}
+              />
               Blog Management
             </h1>
             <button
@@ -241,7 +251,13 @@ const BlogManagement = () => {
                       height: "100%",
                     }}
                   >
-                    <div style={{ display: "flex", alignItems: "center", marginBottom: "16px" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "16px",
+                      }}
+                    >
                       <img
                         src={blog.image}
                         alt={blog.title}
@@ -254,10 +270,22 @@ const BlogManagement = () => {
                         }}
                       />
                       <div>
-                        <h3 style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "8px" }}>
+                        <h3
+                          style={{
+                            fontSize: "20px",
+                            fontWeight: "bold",
+                            marginBottom: "8px",
+                          }}
+                        >
                           {blog.title}
                         </h3>
-                        <p style={{ fontSize: "14px", color: "#666", marginBottom: "4px" }}>
+                        <p
+                          style={{
+                            fontSize: "14px",
+                            color: "#666",
+                            marginBottom: "4px",
+                          }}
+                        >
                           {blog.date}
                         </p>
                         <p style={{ fontSize: "14px", color: "#444" }}>
@@ -267,7 +295,9 @@ const BlogManagement = () => {
                     </div>
 
                     <button
-                      onClick={() => handleToggleStatus(blog._id, blog.isListed)}
+                      onClick={() =>
+                        handleToggleStatus(blog._id, blog.isListed)
+                      }
                       style={{
                         backgroundColor: blog.isListed ? "#e3342f" : "#38c172",
                         color: "#fff",

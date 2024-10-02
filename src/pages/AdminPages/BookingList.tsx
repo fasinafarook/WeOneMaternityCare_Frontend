@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { getBookings } from "../../api/adminAPI";
-import { Container, Table, Spinner, Alert, Form, Row, Col, Button } from "react-bootstrap";
+import {
+  Container,
+  Table,
+  Spinner,
+  Alert,
+  Form,
+  Row,
+  Col,
+  Button,
+} from "react-bootstrap";
 import AdminNavbar from "../../components/common_pages/AdminHeader";
 import Footer from "../../components/common_pages/Footer";
 
@@ -82,10 +91,14 @@ const AdminBookingList: React.FC = () => {
   // Filter bookings based on search query, date range, and status
   const filteredBookings = bookings
     .filter((booking) =>
-      booking.serviceProviderId?.name.toLowerCase().includes(searchQuery.toLowerCase())
+      booking.serviceProviderId?.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
     )
     .filter((booking) => isWithinDateRange(booking.date))
-    .filter((booking) => statusFilter === "All" || booking.status === statusFilter); // Filter by status
+    .filter(
+      (booking) => statusFilter === "All" || booking.status === statusFilter
+    ); // Filter by status
 
   if (loading)
     return (
@@ -123,7 +136,9 @@ const AdminBookingList: React.FC = () => {
             maxWidth: "90%",
           }}
         >
-          <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">Booking Lists</h1>
+          <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+            Booking Lists
+          </h1>
 
           {/* Search input for filtering by service provider */}
           <Form.Group controlId="searchServiceProvider" className="mb-3">
@@ -146,7 +161,11 @@ const AdminBookingList: React.FC = () => {
                   type="date"
                   value={startDate}
                   onChange={handleStartDateChange}
-                  style={{ borderRadius: "5px", padding: "10px", fontSize: "16px" }}
+                  style={{
+                    borderRadius: "5px",
+                    padding: "10px",
+                    fontSize: "16px",
+                  }}
                 />
               </Form.Group>
             </Col>
@@ -157,7 +176,11 @@ const AdminBookingList: React.FC = () => {
                   type="date"
                   value={endDate}
                   onChange={handleEndDateChange}
-                  style={{ borderRadius: "5px", padding: "10px", fontSize: "16px" }}
+                  style={{
+                    borderRadius: "5px",
+                    padding: "10px",
+                    fontSize: "16px",
+                  }}
                 />
               </Form.Group>
             </Col>
@@ -212,7 +235,11 @@ const AdminBookingList: React.FC = () => {
                     <td>{new Date(booking.fromTime).toLocaleTimeString()}</td>
                     <td>{new Date(booking.toTime).toLocaleTimeString()}</td>
                     <td>{booking.title}</td>
-                    <td>{booking.serviceProviderId ? booking.serviceProviderId.name : "Unknown"}</td>
+                    <td>
+                      {booking.serviceProviderId
+                        ? booking.serviceProviderId.name
+                        : "Unknown"}
+                    </td>
                     <td>{booking.userId ? booking.userId.name : "Unknown"}</td>
                     <td>
                       <span

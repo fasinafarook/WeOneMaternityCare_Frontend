@@ -54,8 +54,13 @@ const ServiceProviderDetails = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-cover bg-center bg-no-repeat flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8"
-           style={{ backgroundImage: "url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')" }}>
+      <div
+        className="min-h-screen bg-cover bg-center bg-no-repeat flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8"
+        style={{
+          backgroundImage:
+            "url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')",
+        }}
+      >
         <Link to="/" className="mb-8">
           <img src={logo} alt="Logo" className="mx-auto h-20 w-auto" />
         </Link>
@@ -65,7 +70,8 @@ const ServiceProviderDetails = () => {
               Set Your Profile
             </h2>
             <p className="mt-1 text-center text-sm text-gray-200">
-              Please fill out the information below for profile verification
+              Please complete the information below for profile verification
+              before you begin the service{" "}
             </p>
           </div>
           <form
@@ -108,7 +114,12 @@ const ServiceProviderDetails = () => {
               </div> */}
 
               <div>
-                <label htmlFor="service" className="block text-sm font-medium text-gray-700">Service</label>
+                <label
+                  htmlFor="service"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Service
+                </label>
                 <select
                   id="service"
                   {...register("service", { required: true })}
@@ -125,11 +136,20 @@ const ServiceProviderDetails = () => {
                     <option value="">No services available</option>
                   )}
                 </select>
-                {errors.service && <p className="mt-2 text-sm text-red-600">This field is required</p>}
+                {errors.service && (
+                  <p className="mt-2 text-sm text-red-600">
+                    This field is required
+                  </p>
+                )}
               </div>
 
               <div>
-                <label htmlFor="specialization" className="block text-sm font-medium text-gray-700">Specialization</label>
+                <label
+                  htmlFor="specialization"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Specialization
+                </label>
                 <input
                   id="specialization"
                   type="text"
@@ -137,10 +157,19 @@ const ServiceProviderDetails = () => {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="Specialization"
                 />
-                {errors.specialization && <p className="mt-2 text-sm text-red-600">This field is required</p>}
+                {errors.specialization && (
+                  <p className="mt-2 text-sm text-red-600">
+                    This field is required
+                  </p>
+                )}
               </div>
               <div>
-                <label htmlFor="qualification" className="block text-sm font-medium text-gray-700">Qualification</label>
+                <label
+                  htmlFor="qualification"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Qualification
+                </label>
                 <input
                   id="qualification"
                   type="text"
@@ -148,10 +177,19 @@ const ServiceProviderDetails = () => {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="Qualification"
                 />
-                {errors.qualification && <p className="mt-2 text-sm text-red-600">This field is required</p>}
+                {errors.qualification && (
+                  <p className="mt-2 text-sm text-red-600">
+                    This field is required
+                  </p>
+                )}
               </div>
               <div>
-                <label htmlFor="expYear" className="block text-sm font-medium text-gray-700">Years of Experience</label>
+                <label
+                  htmlFor="expYear"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Years of Experience
+                </label>
                 <input
                   id="expYear"
                   type="number"
@@ -159,10 +197,19 @@ const ServiceProviderDetails = () => {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="Years of Experience"
                 />
-                {errors.expYear && <p className="mt-2 text-sm text-red-600">This field is required and must be a non-negative number</p>}
+                {errors.expYear && (
+                  <p className="mt-2 text-sm text-red-600">
+                    This field is required and must be a non-negative number
+                  </p>
+                )}
               </div>
               <div>
-                <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location</label>
+                <label
+                  htmlFor="location"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Location
+                </label>
                 <input
                   id="location"
                   type="text"
@@ -170,32 +217,59 @@ const ServiceProviderDetails = () => {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="Location"
                 />
-                {errors.location && <p className="mt-2 text-sm text-red-600">This field is required</p>}
+                {errors.location && (
+                  <p className="mt-2 text-sm text-red-600">
+                    This field is required
+                  </p>
+                )}
               </div>
             </div>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div>
-                <label htmlFor="profilePicture" className="block text-sm font-medium text-gray-700">Profile Picture</label>
+                <label
+                  htmlFor="profilePicture"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Profile Picture
+                </label>
                 <input
                   id="profilePicture"
                   type="file"
                   {...register("profilePicture", { required: true })}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
-                {errors.profilePicture && <p className="mt-2 text-sm text-red-600">This field is required</p>}
+                {errors.profilePicture && (
+                  <p className="mt-2 text-sm text-red-600">
+                    This field is required
+                  </p>
+                )}
               </div>
               <div>
-                <label htmlFor="experienceCrt" className="block text-sm font-medium text-gray-700">Experience Certificate</label>
+                <label
+                  htmlFor="experienceCrt"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Experience Certificate
+                </label>
                 <input
                   id="experienceCrt"
                   type="file"
                   {...register("experienceCrt", { required: true })}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
-                {errors.experienceCrt && <p className="mt-2 text-sm text-red-600">This field is required</p>}
+                {errors.experienceCrt && (
+                  <p className="mt-2 text-sm text-red-600">
+                    This field is required
+                  </p>
+                )}
               </div>
               <div>
-                <label htmlFor="rate" className="block text-sm font-medium text-gray-700">Rate (₹ per hour)</label>
+                <label
+                  htmlFor="rate"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Rate (₹ per hour)
+                </label>
                 <input
                   id="rate"
                   type="number"
@@ -203,7 +277,11 @@ const ServiceProviderDetails = () => {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="Rate"
                 />
-                {errors.rate && <p className="mt-2 text-sm text-red-600">This field is required and must be a non-negative number</p>}
+                {errors.rate && (
+                  <p className="mt-2 text-sm text-red-600">
+                    This field is required and must be a non-negative number
+                  </p>
+                )}
               </div>
             </div>
             <div className="mt-8">

@@ -44,20 +44,26 @@ const ServiceProviderSignUp = () => {
 
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat" 
-           style={{ backgroundImage: "url('https://www.hmsmirdifhospital.ae/images/banner/500/what-is-a-gynecologist-min.jpg')" }}>
+      <div
+        className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage:
+            "url('https://www.hmsmirdifhospital.ae/images/banner/500/what-is-a-gynecologist-min.jpg')",
+        }}
+      >
         {/* Form Container */}
         <div className="relative z-10 bg-white bg-opacity-90 backdrop-blur-sm p-6 rounded-lg shadow-lg w-full sm:max-w-md md:max-w-lg lg:w-1/2 transition-transform transform hover:scale-105 duration-300">
-          
           <Link to="/">
             <img
               src={logo}
               alt="Logo"
               className="block mx-auto mb-4"
-              style={{ width: '80px', height: '60px' }}
+              style={{ width: "80px", height: "60px" }}
             />
           </Link>
-          <h3 className="text-xl md:text-2xl font-semibold text-center text-gray-700 mb-4">Service Provider Sign Up</h3>
+          <h3 className="text-xl md:text-2xl font-semibold text-center text-gray-700 mb-4">
+            Service Provider Sign Up
+          </h3>
           <p className="text-sm text-gray-500 text-center mb-4">
             Hey, enter your details to create your account.
           </p>
@@ -75,7 +81,9 @@ const ServiceProviderSignUp = () => {
                 })}
               />
               {errors.name && (
-                <p className="text-red-500 text-xs">Name is required and should be valid</p>
+                <p className="text-red-500 text-xs">
+                  Name is required and should be valid
+                </p>
               )}
 
               {/* Email Input */}
@@ -119,7 +127,8 @@ const ServiceProviderSignUp = () => {
               />
               {errors.password && (
                 <p className="text-red-500 text-xs">
-                  Password must be 6-16 characters long and contain at least one number and one special character
+                  Password must be 6-16 characters long and contain at least one
+                  number and one special character
                 </p>
               )}
 

@@ -1,113 +1,163 @@
-import React from 'react';
-import Footer from './Footer';
-import { useLocation } from 'react-router-dom';
-import AppNavbar from './ProviderHeader';
-import UserNavbar from './UserHeader';
+import React from "react";
+import Footer from "./Footer";
+import { useLocation } from "react-router-dom";
+import AppNavbar from "./ProviderHeader";
+import UserNavbar from "./UserHeader";
 
 const About: React.FC = () => {
   const location = useLocation();
 
   // Background Image Style
-  const pageStyle: React.CSSProperties  = {
-    backgroundImage: "url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')",
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: '20px',
-    color: '#fff',
+  const pageStyle: React.CSSProperties = {
+    backgroundImage:
+      "url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    minHeight: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "20px",
+    color: "#fff",
   };
 
-  const containerStyle: React.CSSProperties  = {
-    maxWidth: '800px',
-    margin: '20px auto',
-    padding: '20px',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)', // Semi-transparent white for contrast
-    borderRadius: '8px',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
-    lineHeight: '1.6',
-    color: '#333',
+  const containerStyle: React.CSSProperties = {
+    maxWidth: "800px",
+    margin: "20px auto",
+    padding: "20px",
+    backgroundColor: "rgba(255, 255, 255, 0.9)", // Semi-transparent white for contrast
+    borderRadius: "8px",
+    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
+    lineHeight: "1.6",
+    color: "#333",
     fontFamily: '"Helvetica Neue", Arial, sans-serif',
   };
 
-  const headingStyle : React.CSSProperties = {
-    color: '#2b6777',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: '20px',
-    fontSize: '28px',
+  const headingStyle: React.CSSProperties = {
+    color: "#2b6777",
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: "20px",
+    fontSize: "28px",
   };
 
   const strongStyle = {
-    color: '#2b6777',
-    fontWeight: 'bold',
+    color: "#2b6777",
+    fontWeight: "bold",
   };
 
   const sectionStyle = {
-    marginBottom: '30px',
-    backgroundColor: '#fff',
-    padding: '20px',
-    borderRadius: '8px',
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+    marginBottom: "30px",
+    backgroundColor: "#fff",
+    padding: "20px",
+    borderRadius: "8px",
+    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
   };
 
   const listStyle = {
-    paddingLeft: '20px',
-    marginTop: '10px',
-    listStyleType: 'disc',
-    color: '#495057',
+    paddingLeft: "20px",
+    marginTop: "10px",
+    listStyleType: "disc",
+    color: "#495057",
   };
 
-  const isServiceProvider = location.pathname.startsWith('/serviceProvider');
+  const isServiceProvider = location.pathname.startsWith("/serviceProvider");
 
   return (
     <>
-    <div style={pageStyle}>
-      {isServiceProvider ? <AppNavbar /> : <UserNavbar />}
-      <div style={containerStyle}>
-        <h1 style={headingStyle}>About Maternal Care Hub</h1>
-        <p>
-          Welcome to <strong style={strongStyle}>Maternal Care Hub</strong>, a dedicated platform designed to support and enhance maternal health during and after pregnancy. We understand that expecting and new mothers face numerous challenges, from accessing quality care to managing stress and anxiety. Our mission is to bridge these gaps and provide comprehensive, personalized care through a user-friendly and centralized platform.
-        </p>
-        <div style={sectionStyle}>
-          <h2 style={headingStyle}>Our Mission</h2>
-          <p>
-            Maternal health encompasses the physical, mental, emotional, and social well-being of mothers and their babies. We are committed to ensuring that every mother experiences positive health outcomes and receives the best possible care throughout her maternity journey.
-          </p>
+      <div>
+        {isServiceProvider ? <AppNavbar /> : <UserNavbar />}
+        <div style={pageStyle}>
+          <div style={containerStyle}>
+            <h1 style={headingStyle}>About Maternal Care Hub</h1>
+            <p>
+              Welcome to <strong style={strongStyle}>Maternal Care Hub</strong>,
+              a dedicated platform designed to support and enhance maternal
+              health during and after pregnancy. We understand that expecting
+              and new mothers face numerous challenges, from accessing quality
+              care to managing stress and anxiety. Our mission is to bridge
+              these gaps and provide comprehensive, personalized care through a
+              user-friendly and centralized platform.
+            </p>
+            <div style={sectionStyle}>
+              <h2 style={headingStyle}>Our Mission</h2>
+              <p>
+                Maternal health encompasses the physical, mental, emotional, and
+                social well-being of mothers and their babies. We are committed
+                to ensuring that every mother experiences positive health
+                outcomes and receives the best possible care throughout her
+                maternity journey.
+              </p>
+            </div>
+            <div style={sectionStyle}>
+              <h2 style={headingStyle}>Our Vision</h2>
+              <p>
+                <strong style={strongStyle}>Maternal Care Hub</strong> aims to:
+                <ul style={listStyle}>
+                  <li>
+                    <strong>Centralize Maternal Care:</strong> Provide a single
+                    platform where mothers can access a wide range of services,
+                    from doctor consultations and emergency care to nursing and
+                    yoga.
+                  </li>
+                  <li>
+                    <strong>Offer Personalized Support:</strong> Tailor care
+                    recommendations and services to individual needs, ensuring
+                    each mother receives the support that's right for her.
+                  </li>
+                  <li>
+                    <strong>Improve Access and Communication:</strong> Simplify
+                    the process of booking appointments and communicating with
+                    service providers to reduce stress and improve overall
+                    experiences.
+                  </li>
+                  <li>
+                    <strong>Enhance Information Access:</strong> Provide
+                    comprehensive and easily accessible information about
+                    maternal health, helping mothers make informed decisions.
+                  </li>
+                </ul>
+              </p>
+            </div>
+            <div style={sectionStyle}>
+              <h2 style={headingStyle}>Why Maternal Care Hub?</h2>
+              <p>
+                Many mothers face difficulties accessing cohesive care due to
+                fragmented platforms, limited information, and poor
+                communication with service providers.{" "}
+                <strong style={strongStyle}>Maternal Care Hub</strong> addresses
+                these issues by offering:
+                <ul style={listStyle}>
+                  <li>
+                    <strong>Seamless Booking:</strong> An easy-to-use system for
+                    scheduling consultations, emergency care, and other
+                    services.
+                  </li>
+                  <li>
+                    <strong>Comprehensive Information:</strong> Access to
+                    valuable resources and information tailored to maternal
+                    health.
+                  </li>
+                  <li>
+                    <strong>Better Communication:</strong> Improved channels for
+                    interacting with service providers, reducing
+                    misunderstandings and enhancing support.
+                  </li>
+                </ul>
+              </p>
+            </div>
+            <p>
+              At <strong style={strongStyle}>Maternal Care Hub</strong>, our
+              goal is to make maternal care more accessible, integrated, and
+              supportive, helping mothers navigate their journey with confidence
+              and ease.
+            </p>
+          </div>
         </div>
-        <div style={sectionStyle}>
-          <h2 style={headingStyle}>Our Vision</h2>
-          <p>
-            <strong style={strongStyle}>Maternal Care Hub</strong> aims to:
-            <ul style={listStyle}>
-              <li><strong>Centralize Maternal Care:</strong> Provide a single platform where mothers can access a wide range of services, from doctor consultations and emergency care to nursing and yoga.</li>
-              <li><strong>Offer Personalized Support:</strong> Tailor care recommendations and services to individual needs, ensuring each mother receives the support that's right for her.</li>
-              <li><strong>Improve Access and Communication:</strong> Simplify the process of booking appointments and communicating with service providers to reduce stress and improve overall experiences.</li>
-              <li><strong>Enhance Information Access:</strong> Provide comprehensive and easily accessible information about maternal health, helping mothers make informed decisions.</li>
-            </ul>
-          </p>
-        </div>
-        <div style={sectionStyle}>
-          <h2 style={headingStyle}>Why Maternal Care Hub?</h2>
-          <p>
-            Many mothers face difficulties accessing cohesive care due to fragmented platforms, limited information, and poor communication with service providers. <strong style={strongStyle}>Maternal Care Hub</strong> addresses these issues by offering:
-            <ul style={listStyle}>
-              <li><strong>Seamless Booking:</strong> An easy-to-use system for scheduling consultations, emergency care, and other services.</li>
-              <li><strong>Comprehensive Information:</strong> Access to valuable resources and information tailored to maternal health.</li>
-              <li><strong>Better Communication:</strong> Improved channels for interacting with service providers, reducing misunderstandings and enhancing support.</li>
-            </ul>
-          </p>
-        </div>
-        <p>
-          At <strong style={strongStyle}>Maternal Care Hub</strong>, our goal is to make maternal care more accessible, integrated, and supportive, helping mothers navigate their journey with confidence and ease.
-        </p>
       </div>
-    </div>
-          <Footer />
-          </>
+      <Footer />
+    </>
   );
 };
 

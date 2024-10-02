@@ -13,7 +13,11 @@ interface IFormInput {
 }
 
 const AdminLogin = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInput>();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -23,7 +27,7 @@ const AdminLogin = () => {
     if (response?.data.success) {
       console.log(response.data);
       dispatch(setAdminCredentials(response.data.token));
-      navigate('/admin/dashboard');
+      navigate("/admin/dashboard");
     } else {
       toast.error("Invalid credentials");
     }
@@ -31,12 +35,16 @@ const AdminLogin = () => {
 
   return (
     <>
-      <div className="relative min-h-screen flex flex-col items-center justify-center bg-cover bg-center" 
-        style={{ backgroundImage: "url('https://image.freepik.com/free-photo/pregnant-woman-hospital_293060-116.jpg')" }}>
-        
+      <div
+        className="relative min-h-screen flex flex-col items-center justify-center bg-cover bg-center"
+        style={{
+          backgroundImage:
+            "url('https://image.freepik.com/free-photo/pregnant-woman-hospital_293060-116.jpg')",
+        }}
+      >
         {/* Overlay for dark effect */}
         {/* <div className="absolute inset-0 bg-black opacity-50"></div> */}
-        
+
         {/* Form container */}
         <div className="relative z-10 max-w-md w-full p-8 bg-white bg-opacity-20 backdrop-blur-md rounded-lg shadow-lg border border-white">
           {/* Logo */}
@@ -44,13 +52,15 @@ const AdminLogin = () => {
             <img
               src={logo}
               alt="Logo"
-              style={{ width: '100px', height: '70px' }}
+              style={{ width: "100px", height: "70px" }}
               className="rounded-lg shadow-md"
             />
           </Link>
 
           {/* Form heading */}
-          <p className="text-2xl text-black font-semibold text-center mb-8">Admin Login</p>
+          <p className="text-2xl text-black font-semibold text-center mb-8">
+            Admin Login
+          </p>
 
           {/* Form */}
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
@@ -64,7 +74,9 @@ const AdminLogin = () => {
                 placeholder="Email address"
               />
               {errors.email && (
-                <p className="absolute text-red-500 text-xs mt-1">Email is required</p>
+                <p className="absolute text-red-500 text-xs mt-1">
+                  Email is required
+                </p>
               )}
             </div>
 
@@ -78,7 +90,9 @@ const AdminLogin = () => {
                 placeholder="Password"
               />
               {errors.password && (
-                <p className="absolute text-red-500 text-xs mt-1">Password is required</p>
+                <p className="absolute text-red-500 text-xs mt-1">
+                  Password is required
+                </p>
               )}
             </div>
 

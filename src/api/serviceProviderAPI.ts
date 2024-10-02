@@ -372,6 +372,11 @@ export const getDashboardData = async () => {
   }
 };
 
-export const notifyLeaveAndRefund = async (bookingId: string, cancelReason: string) => {
-  return await Api.post(`/serviceProvider/notify-leave/${bookingId}`, { cancelReason });
+export const notifyLeaveAndRefund = async (
+  bookingId: string,
+  cancelReason: string
+) => {
+  return await Api.post(`/serviceProvider/notify-leave/${bookingId}`, {
+    cancelReason,
+  });
 };
