@@ -4,7 +4,7 @@ import { verifyDetails, fetchCategories } from "../../api/serviceProviderAPI";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../../components/common_pages/Footer";
-import logo from "../../../public/images/logo.jpeg";
+import logo from "../../../src/public/images/logo.jpeg";
 
 interface IFormInput {
   // name: string;

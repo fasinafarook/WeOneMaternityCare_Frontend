@@ -3,7 +3,7 @@ import { resendOtp, verifyOtp } from "../../api/userAPI";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import Footer from "../../components/common_pages/Footer";
-import logo from "../../../public/images/logo.jpeg";
+import logo from "../../../src/public/images/logo.jpeg";
 
 const OtpVerification = () => {
   const navigate = useNavigate();

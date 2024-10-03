@@ -1,13 +1,13 @@
 import React from "react";
 import "./Home.css";
-import logo from "../../../public/images/logo.jpeg";
+import logo from "../../../src/public/images/logo.jpeg";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Link } from "react-router-dom";
 import { Col, Container, Row } from "react-bootstrap";
-import img1 from "../../../public/images/img1.jpeg";
-import img2 from "../../../public/images/img2.jpeg";
-import img7 from "../../../public/images/img3.jpeg";
-import img5 from "../../../public/images/img4.jpeg";
+import img1 from "../../../src/public/images/img1.jpeg";
+import img2 from "../../../src/public/images/img2.jpeg";
+import img7 from "../../../src/public/images/img3.jpeg";
+import img5 from "../../../src/public/images/img4.jpeg";
 import Footer from "../../components/common_pages/Footer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser, faRightToBracket } from '@fortawesome/free-solid-svg-icons';

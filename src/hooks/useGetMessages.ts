@@ -12,7 +12,7 @@ const useGetMessages = () => {
         setLoading(true);
         try {
           console.log(`Fetching messages for conversation ID: ${selectedConversation?._id}`);
-          const res = await Api.get(`/message/${selectedConversation?._id}`);
+          const res = await Api.get(`/api/message/${selectedConversation?._id}`);
           console.log('Response:', res.data);
           const data = res.data;
           if (data.error) throw new Error(data.error);

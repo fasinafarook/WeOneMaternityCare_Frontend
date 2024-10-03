@@ -8,7 +8,7 @@ import {
   Offcanvas,
 } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import logo from "../../../public/images/logo.jpeg";
+import logo from "../../../src/public/images/logo.jpeg";
 import { logout } from "../../api/adminAPI";
 import { adminLogout } from "../../redux/slice/authSlice";
 import { useDispatch } from "react-redux";

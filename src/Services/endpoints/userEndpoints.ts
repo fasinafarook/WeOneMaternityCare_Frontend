@@ -1,38 +1,38 @@
 
 const userEndpoint = {
-    candidateSignUp: "/user/client-register",
-    verifyOtp: "/user/verify-otp",
-    resendOtp: "/user/resend-otp",
-    verifyLogin:"/user/verify-login",
-    logout: "/user/logout",
-    home: "/user/home",
-    getProfileDetails: "/user/get-profile",
-    editProfile: "/user/edit-profile",
-    editPassword: "/user/edit-password",
-    serviceProviders:"/user/service-providers",
-    serviceCategorys:"user/categories",
-    getServiceProviderDetails: '/user/serviceProviderDetails',
+    candidateSignUp: "/api/user/client-register",
+    verifyOtp: "/api/user/verify-otp",
+    resendOtp: "/api/user/resend-otp",
+    verifyLogin:"/api/user/verify-login",
+    logout: "/api/user/logout",
+    home: "/api/user/home",
+    getProfileDetails: "/api/user/get-profile",
+    editProfile: "/api//user/edit-profile",
+    editPassword: "/api/user/edit-password",
+    serviceProviders:"/api/user/service-providers",
+    serviceCategorys:"/api/user/categories",
+    getServiceProviderDetails: '/api/user/serviceProviderDetails',
 
-    getInterviewerSlotDetails: "/user/get-service-providers-slots-details",
+    getInterviewerSlotDetails: "/api/user/get-service-providers-slots-details",
   
-    makePayment: "/payment/create-payment",
-    bookSlot: "/user/book-slot",
-    getScheduledBookings: "/user/get-scheduled-Bookings",
+    makePayment: "/api/payment/create-payment",
+    bookSlot: "/api/user/book-slot",
+    getScheduledBookings: "/api/user/get-scheduled-Bookings",
 
-    getListedWebinars:"/user/webinars",
-    getBlogs:"/user/blogs",
-    cancelBooking:"/payment/cancelBooking",
+    getListedWebinars:"/api/user/webinars",
+    getBlogs:"/api/user/blogs",
+    cancelBooking:"/api/payment/cancelBooking",
 
-    getPaymentDashboardDetails:"/user/wallet",
+    getPaymentDashboardDetails:"/api/user/wallet",
 
-    getUserchatt:"/user/message",
-    sendMessage: '/message/send',
+    getUserchatt:"/api/user/message",
+    sendMessage: '/api/message/send',
 
-    forgorPassword: "/user/forgot-password",
-    resetPassword: "/user/reset-password",
+    forgorPassword: "/api/user/forgot-password",
+    resetPassword: "/api/user/reset-password",
 
-    submitComplaint: '/user/complaints',
-    getComplaints: '/user/complaints', // As
+    submitComplaint: '/api/user/complaints',
+    getComplaints: '/api/user/complaints', 
 
     
 };

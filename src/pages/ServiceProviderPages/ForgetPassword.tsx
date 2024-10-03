@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../../../public/images/logo.jpeg";
+import logo from "../../../src/public/images/logo.jpeg";
 import { forgorPassword, resetPassword } from "../../api/serviceProviderAPI";
 import toast from "react-hot-toast";
 

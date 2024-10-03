@@ -272,7 +272,7 @@ export const processRefund = async (bookingId: string, amount: number) => {
 export const editSlot = async (slotId: string, slotData: any) => {
   try {
     const response = await Api.put(
-      `/serviceProvider/edit-slot/${slotId}`,
+      `/api/serviceProvider/edit-slot/${slotId}`,
       slotData
     );
     console.log("Backend response", response);
@@ -364,7 +364,7 @@ export const editProfile = async (details: ServiceProviderDetails) => {
 
 export const getDashboardData = async () => {
   try {
-    const response = await Api.get("/serviceProvider/dashboard");
+    const response = await Api.get("/api/serviceProvider/dashboard");
     return response.data;
   } catch (error) {
     console.error("Failed to fetch dashboard data:", error);
@@ -376,7 +376,7 @@ export const notifyLeaveAndRefund = async (
   bookingId: string,
   cancelReason: string
 ) => {
-  return await Api.post(`/serviceProvider/notify-leave/${bookingId}`, {
+  return await Api.post(`/api/serviceProvider/notify-leave/${bookingId}`, {
     cancelReason,
   });
 };

@@ -27,7 +27,7 @@ const useSocket = () => {
 
   useEffect(() => {
     if (userId) {
-      const socket = io('http://localhost:5000', {
+      const socket = io('https://weone-maternitycare.online/ws/', {
         query: { userId },
       });
 

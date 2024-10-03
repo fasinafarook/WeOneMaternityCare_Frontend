@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { resendOtp, verifyOtp } from "../../api/serviceProviderAPI";
 import Footer from "../../components/common_pages/Footer";
-import logo from "../../../public/images/logo.jpeg";
+import logo from "../../../src/public/images/logo.jpeg";
 
 const ServiceProviderOtp = () => {
   const [counter, setCounter] = useState(30);

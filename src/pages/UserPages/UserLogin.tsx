@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { setUserCredentials } from "../../redux/slice/authSlice";
 import Footer from "../../components/common_pages/Footer";
-import logo from "../../../public/images/logo.jpeg";
+import logo from "../../../src/public/images/logo.jpeg";
 
 interface IFormInput {
   email: string;

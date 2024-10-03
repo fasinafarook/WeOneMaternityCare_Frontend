@@ -3,7 +3,7 @@ import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { logout } from "../../api/adminAPI";
-import logo from "../../../public/images/logo.jpeg";
+import logo from "../../../src/public/images/logo.jpeg";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { userLogout } from "../../redux/slice/authSlice";

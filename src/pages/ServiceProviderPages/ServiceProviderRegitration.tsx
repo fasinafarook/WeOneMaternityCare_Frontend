@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import { FaSpinner } from "react-icons/fa";
 import Footer from "../../components/common_pages/Footer";
-import logo from "../../../public/images/logo.jpeg";
+import logo from "../../../src/public/images/logo.jpeg";
 
 interface IFormInput {
   name: string;

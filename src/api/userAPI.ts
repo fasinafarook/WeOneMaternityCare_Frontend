@@ -307,7 +307,7 @@ export const getUserchatt = async () => {
 
 export const getUserCompletedBookings = async (userId: string) => {
   try {
-    const response = await Api.get(`/user/completed/${userId}`);
+    const response = await Api.get(`/api/user/completed/${userId}`);
     return response.data;
   } catch (error) {
     console.error("Failed to fetch completed bookings:", error);
