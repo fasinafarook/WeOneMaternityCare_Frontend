@@ -19,11 +19,8 @@ import { SpProtectedRoute,PublicSpProtectedRoute } from "../components/PrivetPro
 const ServiceProviderRoutes: React.FC = () => {
   return (
     <Routes>
-                <Route element={<PublicSpProtectedRoute />}>
-        <Route
-          path="/serviceProvider/verify-details"
-          element={<ServiceProviderDetails />}
-        />
+         <Route element={<PublicSpProtectedRoute />}>
+        
         <Route
           path="/serviceProvider/serviceProvider-register"
           element={<ServiceProviderSignUp />}
@@ -47,6 +44,10 @@ const ServiceProviderRoutes: React.FC = () => {
 
       <Route element={<SpProtectedRoute />}>
         <Route path="/serviceProvider/home" element={<ProviderDashboard />} />
+        <Route
+          path="/serviceProvider/verify-details"
+          element={<ServiceProviderDetails />}
+        />
         <Route path="/serviceProvider/about" element={<About />} />
         <Route path="/serviceProvider/get-slots" element={<SlotsList />} />
         <Route path="/serviceProvider/add-slot" element={<AddSlot />} />
