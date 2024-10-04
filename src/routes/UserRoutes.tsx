@@ -19,6 +19,7 @@ import ForgotPassword from "../pages/UserPages/ForgetPassword";
 import ClientDashboard from "../pages/UserPages/UserDashboard";
 import BlogList from "../pages/UserPages/Blogs";
 import WebinarsList from "../pages/UserPages/Webinars";
+import UserVideoCall from "../pages/UserPages/videoCall";
 import { UserProtectedRoute, PublicUserProtectedRoute } from "../components/PrivetProtected";
 
 const UserRoutes: React.FC = () => {
@@ -49,6 +50,10 @@ const UserRoutes: React.FC = () => {
         <Route path="/user/messages" element={<Chat />} />
         <Route path="/user/new-complaint" element={<FileComplaint />} />
         <Route path="/user/complaints" element={<ComplaintsList />} />
+        <Route
+            path="/user/video-call/:roomId/:userId"
+            element={<UserVideoCall></UserVideoCall>}
+          />
       </Route>
     </Routes>
   );
