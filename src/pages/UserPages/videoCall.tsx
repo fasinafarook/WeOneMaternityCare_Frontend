@@ -4,6 +4,8 @@ import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 
 const UserVideoCall: React.FC = () => {
   const { roomId, userId } = useParams<{ roomId: string; userId: string }>();
+  console.log("Room ID:", roomId, "User ID:", userId);
+
 
   const meetingContainerRef = useRef<HTMLDivElement | null>(null);
 
