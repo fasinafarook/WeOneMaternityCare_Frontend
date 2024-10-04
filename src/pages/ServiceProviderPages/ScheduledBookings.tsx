@@ -341,7 +341,7 @@ const ScheduledBookings = () => {
                               >
                                 Emergency
                               </Button>
-                              <Button
+                              {/* <Button
                                 onClick={() =>
                                   handleStartCall(
                                     booking.roomId,
@@ -358,7 +358,18 @@ const ScheduledBookings = () => {
                               >
                                 <MdVideoCameraBack className="h-5 w-5 mr-2" />
                                 Start Call
-                              </Button>
+                              </Button> */}
+
+<Button
+  onClick={() =>
+    handleStartCall(booking.roomId, booking.serviceProviderId)
+  }
+  color="green"
+  className="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-green-600 hover:bg-green-700"
+>
+  <MdVideoCameraBack className="h-5 w-5 mr-2" />
+  Start Call
+</Button>
 
                               <Button
                                 onClick={() => {

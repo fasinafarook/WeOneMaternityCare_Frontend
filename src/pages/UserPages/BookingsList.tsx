@@ -337,18 +337,25 @@ const OutsourcedBookings = () => {
             Close
           </Button>
           {selectedBooking?.status === "Scheduled" && (
+            // <Button
+            //   color="green"
+            //   onClick={handleJoinCall}
+            //   disabled={
+            //     !isTimeWithinSlot(
+            //       selectedBooking.fromTime,
+            //       selectedBooking.toTime
+            //     )
+            //   } // Disable button outside the slot time
+            // >
+            //   Join Call
+            // </Button>
             <Button
-              color="green"
-              onClick={handleJoinCall}
-              disabled={
-                !isTimeWithinSlot(
-                  selectedBooking.fromTime,
-                  selectedBooking.toTime
-                )
-              } // Disable button outside the slot time
-            >
-              Join Call
-            </Button>
+  color="green"
+  onClick={handleJoinCall}
+>
+  Join Call
+</Button>
+
           )}
         </DialogFooter>
       </Dialog>
