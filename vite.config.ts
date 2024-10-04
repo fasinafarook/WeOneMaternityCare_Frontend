@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+console.log('okk');
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
@@ -8,6 +10,7 @@ export default defineConfig({
   server: {
     host: true, // Allows access from any IP address
   },
+  
 })
 
 // import { defineConfig } from 'vite';
