@@ -105,9 +105,12 @@ const OutsourcedBookings = () => {
     setSelectedBooking(booking);
     setOpenModal(true);
   };
+console.log('j');
 
   const handleJoinCall = () => {
     if (selectedBooking) {
+      console.log("Room IDs:", selectedBooking.roomId, "User IDs:", selectedBooking.userId);
+
       navigate(
         `/user/video-call/${selectedBooking.roomId}/${selectedBooking.userId}`
       );
