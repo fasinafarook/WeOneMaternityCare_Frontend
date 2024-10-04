@@ -324,7 +324,7 @@ const ScheduledBookings = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-right">
                           {booking.status === "Scheduled" && !isExpired ? (
                             <>
-                              <button
+                              <Button
                                 onClick={() => {
                                   setSelectedBooking(booking);
                                   handleCancelBooking();
@@ -339,9 +339,9 @@ const ScheduledBookings = () => {
                                   marginLeft: "8px", // Equivalent to className "ml-2"
                                 }}
                               >
-                                Cancel
-                              </button>
-                              <button
+                                Emergency
+                              </Button>
+                              <Button
                                 onClick={() =>
                                   handleStartCall(
                                     booking.roomId,
@@ -358,9 +358,9 @@ const ScheduledBookings = () => {
                               >
                                 <MdVideoCameraBack className="h-5 w-5 mr-2" />
                                 Start Call
-                              </button>
+                              </Button>
 
-                              <button
+                              <Button
                                 onClick={() => {
                                   setSelectedBooking(booking);
                                   setShowCompletedModal(true);
@@ -374,7 +374,7 @@ const ScheduledBookings = () => {
                                 }`}
                               >
                                 Mark as Completed
-                              </button>
+                              </Button>
                             </>
                           ) : null}
                         </td>
