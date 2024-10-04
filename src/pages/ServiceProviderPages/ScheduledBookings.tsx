@@ -439,6 +439,8 @@ const ScheduledBookings = () => {
             </DialogFooter>
           </Dialog>
 
+
+
           {/* Completed Modal */}
           <Dialog
             open={showCompletedModal}
