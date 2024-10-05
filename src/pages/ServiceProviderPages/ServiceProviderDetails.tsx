@@ -5,6 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../../components/common_pages/Footer";
 import logo from "../../../src/public/images/logo.jpeg";
+import AppNavbar from "../../components/common_pages/ProviderHeader";
 
 interface IFormInput {
   // name: string;
@@ -54,6 +55,7 @@ const ServiceProviderDetails = () => {
 
   return (
     <>
+    <AppNavbar/>
       <div
         className="min-h-screen bg-cover bg-center bg-no-repeat flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8"
         style={{

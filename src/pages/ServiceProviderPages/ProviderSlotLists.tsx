@@ -56,6 +56,8 @@ const SlotsList = () => {
   };
 
   const handleEditSlot = (slotId: string) => {
+    console.log('slotId',slotId);
+    
     navigate(`/serviceProvider/edit-slot/${slotId}`);
   };
 
