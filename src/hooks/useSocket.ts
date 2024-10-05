@@ -18,7 +18,13 @@ const useSocket = () => {
     const fetchProfile = async () => {
       try {
         const profileData = await getProfileDetails();
+        console.log('sckt prog',profileData);
+        console.log('sckt progID',profileData?.data._id);
+
+        
         setUserId(profileData?.data._id); 
+        console.log('sckt progsetUserId',setUserId);
+
       } catch (error) {
         console.error('Error fetching profile:', error);
       }
@@ -28,8 +34,11 @@ const useSocket = () => {
   }, []);
 
   useEffect(() => {
+    console.log('User ID in socket effect:', userId);  // Check if userId is valid before initializing socket
+
+
     if (userId) {
-      console.log('hii sck',userId);
+      console.log('Initializing socket with userId:', userId);  // Confirm that this runs when userId is set
       
       const socket = io('https://weone-maternitycare.online', {
         query: { userId },
