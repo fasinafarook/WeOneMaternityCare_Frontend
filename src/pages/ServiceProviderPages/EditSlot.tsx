@@ -5,6 +5,7 @@ import AppNavbar from "../../components/common_pages/ProviderHeader";
 import Footer from "../../components/common_pages/Footer";
 import toast from "react-hot-toast";
 
+
 const EditSlot: React.FC = () => {
   const [slotData, setSlotData] = useState({
     title: "",

@@ -34,11 +34,11 @@ const useSocket = () => {
   }, []);
 
   useEffect(() => {
-    console.log('User ID in socket effect:', userId);  // Check if userId is valid before initializing socket
+    console.log('User ID in socket effect:', userId);  
 
 
     if (userId) {
-      console.log('Initializing socket with userId:', userId);  // Confirm that this runs when userId is set
+      console.log('Initializing socket with userId:', userId);  
       
       const socket = io('https://weone-maternitycare.online', {
         query: { userId },
