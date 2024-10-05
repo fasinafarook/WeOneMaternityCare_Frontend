@@ -12,7 +12,7 @@ export default defineConfig({
   },
   
 })
-console.log('okkn');
+console.log('done');
 
 
 // import { defineConfig } from 'vite';
