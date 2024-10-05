@@ -7,6 +7,8 @@ import { AppDispatch } from '../redux/store';
 import { getProfileDetails } from '../api/userAPI'; 
 
 const useSocket = () => {
+  console.log('eh');
+  
   const dispatch: AppDispatch = useDispatch();
   const [socket, setSocketState] = useState<Socket | null>(null); 
   const [userId, setUserId] = useState<string | null>(null);
@@ -27,7 +29,7 @@ const useSocket = () => {
 
   useEffect(() => {
     if (userId) {
-      console.log('hii sck');
+      console.log('hii sck',userId);
       
       const socket = io('https://weone-maternitycare.online', {
         query: { userId },
