@@ -42,6 +42,7 @@ const useSocket = () => {
       
       const socket = io('https://weone-maternitycare.online', {
         query: { userId },
+        transports: ['websocket'],
       });
 
       setSocketState(socket); 
