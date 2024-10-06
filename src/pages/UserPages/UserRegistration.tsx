@@ -60,40 +60,37 @@ const UserSignUp = () => {
   return (
     <>
       {/* Fullscreen Wrapper */}
-      <div className="relative w-full h-screen flex items-center justify-center bg-gray-100">
-        {/* Full Background Image */}
-        <div
-          className="absolute inset-0 w-full h-full bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "url('https://www.hmsmirdifhospital.ae/images/banner/500/what-is-a-gynecologist-min.jpg')",
-          }}
-        ></div>
+      <div
+        className="relative flex items-center justify-center w-full h-screen bg-cover bg-center"
+        style={{
+          backgroundImage: `url('https://static.independent.co.uk/2023/07/12/11/12103020-d9e4b2e1-ff2f-478f-8bda-783b950117b3.jpg?quality=75&width=1200&auto=webp')`,
+        }}
+      >
 
         {/* Semi-transparent overlay */}
         <div className="absolute inset-0 bg-black opacity-50"></div>
 
         {/* Centered Form */}
-        <div className="relative z-10 bg-white rounded-lg shadow-lg p-10 max-w-md w-full mx-4 transition-transform transform hover:scale-105 duration-300">
-          <div className="text-center mb-6">
+        <div className="relative z-10 bg-grey bg-opacity-30 backdrop-blur-md border border-gray-900 shadow-lg rounded-lg p-4 max-w-md w-full mx-4 transition-transform transform hover:scale-105 duration-300">
+          <div className="text-center mb-4">
             <Link to="/">
               <img src={logo} alt="Logo" className="w-20 h-auto mx-auto" />
             </Link>
           </div>
 
-          <h3 className="text-2xl font-semibold text-center text-gray-700 mb-6">
+          <h3 className="text-2xl font-semibold text-center text-white mb-4">
             User Sign Up
           </h3>
-          <p className="text-center text-gray-500 mb-6">
+          <p className="text-center text-white mb-4">
             Enter your details to create your account
           </p>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
             {/* Name Field */}
             <input
-              className={`w-full px-4 py-2 border rounded-lg bg-gray-100 border-gray-300 focus:outline-none focus:border-blue-500 ${
+              className={`w-full px-3 py-2 border rounded-lg bg-gray-900 border-gray-300 focus:outline-none focus:border-blue-500 ${
                 errors.name ? "border-red-500" : ""
-              }`}
+              }rounded-lg py-2 px-3 block w-full focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-white`}
               type="text"
               placeholder="Enter your name"
               {...register("name", {
@@ -110,9 +107,9 @@ const UserSignUp = () => {
 
             {/* Email Field */}
             <input
-              className={`w-full px-4 py-2 border rounded-lg bg-gray-100 border-gray-300 focus:outline-none focus:border-blue-500 ${
+              className={`w-full px-3 py-2 border rounded-lg bg-gray-900 border-gray-300 focus:outline-none focus:border-blue-500 ${
                 errors.email ? "border-red-500" : ""
-              }`}
+              }rounded-lg py-2 px-3 block w-full focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-white`}
               type="email"
               placeholder="Enter your email"
               {...register("email", {
@@ -129,9 +126,9 @@ const UserSignUp = () => {
 
             {/* Mobile Field */}
             <input
-              className={`w-full px-4 py-2 border rounded-lg bg-gray-100 border-gray-300 focus:outline-none focus:border-blue-500 ${
+              className={`w-full px-3 py-2 border rounded-lg bg-gray-900 border-gray-300 focus:outline-none focus:border-blue-500 ${
                 errors.mobile ? "border-red-500" : ""
-              }`}
+              }rounded-lg py-2 px-3 block w-full focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-white`}
               type="tel"
               placeholder="Enter your mobile number"
               {...register("mobile", {
@@ -148,9 +145,9 @@ const UserSignUp = () => {
 
             {/* Password Field */}
             <input
-              className={`w-full px-4 py-2 border rounded-lg bg-gray-100 border-gray-300 focus:outline-none focus:border-blue-500 ${
+              className={`w-full px-3 py-2 border rounded-lg bg-gray-900 border-gray-300 focus:outline-none focus:border-blue-500 ${
                 errors.password ? "border-red-500" : ""
-              }`}
+              }rounded-lg py-2 px-3 block w-full focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-white`}
               type="password"
               placeholder="Enter your password"
               {...register("password", {
@@ -169,9 +166,9 @@ const UserSignUp = () => {
 
             {/* Confirm Password Field */}
             <input
-              className={`w-full px-4 py-2 border rounded-lg bg-gray-100 border-gray-300 focus:outline-none focus:border-blue-500 ${
+              className={`w-full px-3 py-2 border rounded-lg bg-gray-900 border-gray-300 focus:outline-none focus:border-blue-500 ${
                 errors.confirmPassword ? "border-red-500" : ""
-              }`}
+              }rounded-lg py-2 px-3 block w-full focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-white`}
               type="password"
               placeholder="Confirm your password"
               {...register("confirmPassword", {
@@ -190,7 +187,7 @@ const UserSignUp = () => {
             <button
               disabled={loading}
               type="submit"
-              className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out flex items-center justify-center"
+              className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out flex items-center justify-center"
             >
               {loading ? (
                 <FaSpinner className="animate-spin mr-2" />
@@ -200,7 +197,7 @@ const UserSignUp = () => {
             </button>
 
             {/* Sign In Link */}
-            <p className="mt-4 text-center text-gray-600">
+            <p className="mt-4 text-center text-white">
               Already have an account?{" "}
               <Link
                 to="/user/verify-login"

@@ -41,7 +41,15 @@ const BlogList = () => {
   return (
     <>
       <UserNavbar />
-      <div className="min-h-screen p-8 bg-gray-100">
+      <div className="min-h-screen p-8 bg-gray-100 "style={{
+          padding: "40px 20px",
+          backgroundImage: "url('https://wallpapercave.com/wp/wp6403810.jpg')",
+          minHeight: "calc(100vh - 80px)",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          position: "relative",
+        }}>
         <div className="container mx-auto">
           <h1 className="text-3xl font-bold mb-8 text-gray-800">Blogs</h1>
           {blogs.length === 0 ? (

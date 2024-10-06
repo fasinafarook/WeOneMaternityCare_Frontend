@@ -55,25 +55,30 @@ const ServiceProviderOtp = () => {
       <div
         className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')`,
+          backgroundImage:
+            "url('https://img.freepik.com/premium-photo/smiling-woman-doctor-shows-pictures-tablet-pregnant-young-woman-hospital_358354-8964.jpg')",
         }}
       >
-        <div className="absolute inset-0 bg-black opacity-50"></div> {/* Dark overlay */}
 
-        <div className="relative z-10 p-6 sm:p-10 max-w-md w-full bg-white bg-opacity-90 backdrop-blur-sm rounded-lg shadow-lg">
+         {/* Dark Overlay */}
+         <div className="absolute inset-0 bg-black opacity-50"></div>
+
+        {/* Form Container */}
+        <div className="relative z-10 bg-grey bg-opacity-30 backdrop-blur-md border border-gray-200 shadow-lg rounded-lg p-6 max-w-md w-full mx-4 transition-transform transform hover:scale-105 duration-300">
           <Link to="/">
             <img
               src={logo}
               alt="Logo"
-              className="block mx-auto mb-6"
-              style={{ width: '100px', height: '70px' }}
+              className="block mx-auto mb-4"
+              style={{ width: "80px", height: "60px" }}
             />
           </Link>
 
-          <h1 className="text-3xl font-bold text-center text-gray-800 mb-4">
+
+          <h1 className="text-3xl font-bold text-center text-white mb-4">
             OTP Verification
           </h1>
-          <p className="text-center text-gray-600 mb-6">
+          <p className="text-center text-white mb-6">
             Enter the OTP you received to verify your account.
           </p>
 
@@ -91,14 +96,14 @@ const ServiceProviderOtp = () => {
           </div>
 
           <div className="flex justify-between items-center mb-4">
-            <p className="text-gray-700">
+            <p className="text-white">
               Time remaining:{" "}
               <span className="font-semibold">{counter}</span> sec
             </p>
             {counter === 0 && (
               <button
                 onClick={handleResendOtp}
-                className="text-blue-600 font-medium hover:underline"
+                className="text-white font-medium hover:underline"
               >
                 Resend OTP
               </button>

@@ -1,5 +1,3 @@
-;
-
 import { useEffect, useState, useCallback } from "react";
 import {
   getSchedulesBookings,
@@ -164,7 +162,7 @@ const ScheduledBookings = () => {
       <AppNavbar />
       <div
         style={{
-          backgroundImage: `url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')`,
+          backgroundImage: `url('https://i.pinimg.com/originals/50/3f/f0/503ff087cf186814be004303e754fcdf.png')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           minHeight: "100vh",
@@ -174,58 +172,50 @@ const ScheduledBookings = () => {
           justifyContent: "space-between",
         }}
       >
-        {" "}
         <div className="max-w-6xl mx-auto">
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-            <div className="px-6 py-8">
-              <h1 className="text-4xl font-bold text-gray-800 mb-2">
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8  ">
+            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 rounded-t-lg">
+              <h1 className="text-4xl font-bold text-white mb-2">
                 Scheduled Bookings
               </h1>
-              <p className="text-gray-600">
+              <p className="text-gray-200">
                 See information about all Bookings
               </p>
+            </div>
+            <div className="px-6 py-8">
+              {/* Content of the bookings can go here */}
             </div>
           </div>
 
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <table className="w-full">
-              <thead className="bg-gray-50">
+            <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden ">
+              <thead className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-md">
                 <tr>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider border-b border-gray-300 hover:bg-blue-600 transition duration-150 ease-in-out">
                     Date
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    From-To
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider border-b border-gray-300 hover:bg-blue-600 transition duration-150 ease-in-out">
+                    From - To
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider border-b border-gray-300 hover:bg-blue-600 transition duration-150 ease-in-out">
                     Service
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider border-b border-gray-300 hover:bg-blue-600 transition duration-150 ease-in-out">
                     Status
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  ></th>
+                  <th className="px-6 py-3 text-right text-xs font-bold uppercase tracking-wider border-b border-gray-300 hover:bg-blue-600 transition duration-150 ease-in-out">
+                    Actions
+                  </th>
                 </tr>
               </thead>
 
               {loading ? (
                 <TableShimmer columns={5} />
               ) : (
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody
+                  className="bg-white divide-y divide-gray-200"
+                  style={{ borderBottom: "2px solid #333" }}
+                >
                   {scheduledBookings.map((booking) => {
                     const currentTime = new Date();
                     const fromTime = new Date(booking.fromTime);
@@ -237,7 +227,12 @@ const ScheduledBookings = () => {
                     return (
                       <tr
                         key={booking._id}
-                        className="hover:bg-gray-50 transition-colors duration-200"
+                        className={`hover:bg-gray-50 transition-colors duration-200  ${
+                          isExpired ? "bg-gray-100" : ""
+                        }`}
+                        style={{
+                          border: "2px solid #323", // Dark border for the table
+                        }}
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm font-medium text-gray-900">
@@ -272,7 +267,7 @@ const ScheduledBookings = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="px-3 py-1 inline-flex text-sm font-medium rounded-full">
+                          <span className="px-3 py-1 inline-flex text-sm font-medium text-blue-700 bg-blue-100 rounded-full">
                             {booking.title}
                           </span>
                         </td>
@@ -285,8 +280,6 @@ const ScheduledBookings = () => {
                                 ? "bg-green-100 text-green-800"
                                 : booking.status === "Cancelled"
                                 ? "bg-red-100 text-red-800"
-                                : booking.status === "Scheduled"
-                                ? "bg-green-100 text-green-800"
                                 : "bg-yellow-100 text-yellow-800"
                             }`}
                           >
@@ -303,91 +296,80 @@ const ScheduledBookings = () => {
                                       setSelectedBooking(booking);
                                       setShowReasonModal(true);
                                     }}
-                                    className="ml-2 underline cursor-pointer"
+                                    className="ml-2 underline text-blue-600 cursor-pointer"
                                   >
                                     View Reason
                                   </button>
                                 </p>
-                                <button
-                                  onClick={() => {
-                                    setSelectedBooking(booking);
-                                    setShowRefundModal(true);
-                                  }}
-                                  className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-150 ease-in-out"
-                                >
-                                  Refund
-                                </button>
                               </div>
                             )}
                         </td>
 
-                        <td className="px-6 py-4 whitespace-nowrap text-right">
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
                           {booking.status === "Scheduled" && !isExpired ? (
-                            <>
+                            <div className="flex items-center space-x-2">
                               <Button
                                 onClick={() => {
                                   setSelectedBooking(booking);
                                   handleCancelBooking();
                                 }}
-                                style={{
-                                  backgroundColor: "red", // Button background color
-                                  color: "white", // Text color
-                                  padding: "10px 20px", // Padding around the text
-                                  border: "none", // No border
-                                  borderRadius: "5px", // Rounded corners
-                                  cursor: "pointer", // Pointer cursor on hover
-                                  marginLeft: "8px", // Equivalent to className "ml-2"
-                                }}
+                                className="inline-flex items-center px-3 py-1.5 bg-red-600 text-white rounded-md font-semibold text-xs hover:bg-red-700 transition duration-150 ease-in-out"
                               >
                                 Emergency
                               </Button>
-                              {/* <Button
+                              <Button
                                 onClick={() =>
                                   handleStartCall(
                                     booking.roomId,
                                     booking.serviceProviderId
                                   )
                                 }
-                                color="green"
                                 disabled={!isWithinSchedule}
-                                className={`inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm ${
+                                className={`inline-flex items-center px-3 py-1.5 text-xs font-medium text-white border border-transparent rounded-md shadow-sm transition duration-150 ease-in-out ${
                                   !isWithinSchedule
                                     ? "bg-gray-300 cursor-not-allowed"
                                     : "bg-green-600 hover:bg-green-700"
                                 }`}
                               >
-                                <MdVideoCameraBack className="h-5 w-5 mr-2" />
-                                Start Call
-                              </Button> */}
-
-<Button
-  onClick={() =>
-    handleStartCall(booking.roomId, booking.serviceProviderId)
-  }
-  color="green"
-  className="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-green-600 hover:bg-green-700"
->
-  <MdVideoCameraBack className="h-5 w-5 mr-2" />
-  Start Call
-</Button>
+                                <MdVideoCameraBack className="h-4 w-4 mr-1" />
+                                Start
+                              </Button>
 
                               <Button
                                 onClick={() => {
                                   setSelectedBooking(booking);
                                   setShowCompletedModal(true);
                                 }}
-                                color="blue"
                                 disabled={!isWithinSchedule}
-                                className={`inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm ${
+                                className={`inline-flex items-center px-3 py-1.5 text-xs font-medium text-white border border-transparent rounded-md shadow-sm transition duration-150 ease-in-out ${
                                   !isWithinSchedule
                                     ? "bg-gray-300 cursor-not-allowed"
                                     : "bg-blue-600 hover:bg-blue-700"
                                 }`}
                               >
-                                Mark as Completed
+                                Mark Completed
                               </Button>
-                            </>
-                          ) : null}
+                            </div>
+                          ) : booking.status === "Cancelled" ? (
+                            <div className="flex flex-col items-center">
+                              <span className="text-gray-500 text-center">
+                                {booking.status}
+                              </span>
+                              <button
+                                onClick={() => {
+                                  setSelectedBooking(booking);
+                                  setShowRefundModal(true);
+                                }}
+                                className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition duration-150 ease-in-out"
+                              >
+                                Refund
+                              </button>
+                            </div>
+                          ) : (
+                            <span className="text-gray-500">
+                              {booking.status}
+                            </span>
+                          )}
                         </td>
                       </tr>
                     );
@@ -395,6 +377,7 @@ const ScheduledBookings = () => {
                 </tbody>
               )}
             </table>
+
             <div className="px-6 py-4">
               <Pagination
                 currentPage={currentPage}
@@ -449,8 +432,6 @@ const ScheduledBookings = () => {
               </Button>
             </DialogFooter>
           </Dialog>
-
-
 
           {/* Completed Modal */}
           <Dialog

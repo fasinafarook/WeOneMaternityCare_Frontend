@@ -60,20 +60,36 @@ const ForgotPasswords: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-100 to-indigo-100">
+    <div
+    className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
+    style={{
+      backgroundImage:
+        "url('https://img.freepik.com/premium-photo/smiling-woman-doctor-shows-pictures-tablet-pregnant-young-woman-hospital_358354-8964.jpg')",
+    }}
+  >
+    <Link to="/">
+        <img
+          src={logo}
+          alt="Logo"
+          className="absolute top-6 left-6 w-24 h-auto"
+        />
+      </Link>
+
+     {/* Dark Overlay */}
+     <div className="absolute inset-0 bg-black opacity-50"></div>
       <Link to="/">
         <img src={logo} alt="Logo" style={{ width: "100px", height: "70px" }} />
       </Link>{" "}
       <div className="flex items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
         <div className="w-full relative mt-20 max-w-md space-y-8">
-          <div className="bg-white rounded-2xl shadow-2xl p-8">
+        <div className="relative z-10 bg-grey bg-opacity-30 backdrop-blur-md border border-gray-200 shadow-lg rounded-lg p-6 max-w-md w-full mx-4 transition-transform transform hover:scale-105 duration-300">
             <div className="text-center">
               <h2 className="mt-6 text-3xl font-extrabold text-[#142057]">
                 {showResetForm
                   ? "Reset Your Password"
                   : "Forgot your password?"}
               </h2>
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="mt-2 text-sm text-white">
                 {showResetForm
                   ? "Enter the OTP and your new password"
                   : "No worries! We will send you reset instructions."}
@@ -101,7 +117,7 @@ const ForgotPasswords: React.FC = () => {
             <div className="mt-6 text-center">
               <Link
                 to="/serviceProvider/verify-login"
-                className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                className="text-sm font-medium text-white hover:text-indigo-500"
               >
                 Remember your password? Log in
               </Link>
@@ -125,7 +141,7 @@ const EmailForm: React.FC<{
     <div>
       <label
         htmlFor="email"
-        className="block text-sm font-medium text-gray-700"
+        className="block text-sm font-medium text-white"
       >
         Email address
       </label>
@@ -202,7 +218,7 @@ const InputField: React.FC<{
   validationRules: any;
 }> = ({ id, type, label, register, errors, validationRules }) => (
   <div>
-    <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+    <label htmlFor={id} className="block text-sm font-medium text-white">
       {label}
     </label>
     <div className="mt-1">

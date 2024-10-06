@@ -65,8 +65,12 @@ const WebinarsList: React.FC = () => {
       <div
         style={{
           padding: "40px 20px",
-          backgroundColor: "#f5f5f5",
+          backgroundImage: "url('https://wallpapercave.com/wp/wp6403810.jpg')",
           minHeight: "calc(100vh - 80px)",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          position: "relative",
         }}
       >
         <h1

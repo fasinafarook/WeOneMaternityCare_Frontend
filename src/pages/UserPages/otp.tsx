@@ -49,22 +49,26 @@ const OtpVerification = () => {
   return (
     <>
       <div
-        className="min-h-screen flex flex-col justify-center items-center bg-cover bg-center"
+        className="relative flex items-center justify-center w-full h-screen bg-cover bg-center"
         style={{
-          backgroundImage: `url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')`,
+          backgroundImage: `url('https://static.independent.co.uk/2023/07/12/11/12103020-d9e4b2e1-ff2f-478f-8bda-783b950117b3.jpg?quality=75&width=1200&auto=webp')`,
         }}
       >
-        {/* Logo */}
-        <Link to="/" className="flex justify-center mb-10">
-          <img src={logo} alt="Logo" className="w-28 h-auto" />
-        </Link>
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black opacity-50"></div>
 
-        {/* OTP Form Container */}
-        <div className="bg-white shadow-lg rounded-lg w-full max-w-md p-8 lg:p-10 space-y-6 ring-1 ring-gray-200 transition-transform transform hover:scale-105 duration-300">
-          <h2 className="text-center text-3xl font-bold text-gray-900">
+        {/* Glassy Form Container */}
+        <div className="relative z-10 bg-grey bg-opacity-30 backdrop-blur-md border border-gray-200 shadow-lg rounded-lg p-6 max-w-md w-full mx-4 transition-transform transform hover:scale-105 duration-300">
+          {/* Logo */}
+          <div className="text-center mb-4">
+            <Link to="/">
+              <img src={logo} alt="Logo" className="w-28 h-auto mx-auto" />
+            </Link>
+          </div>
+          <h2 className="text-center text-3xl font-bold text-white">
             OTP Verification
           </h2>
-          <p className="text-center text-gray-600">
+          <p className="text-center text-white">
             Enter the OTP sent to your mobile number
           </p>
 
@@ -84,14 +88,14 @@ const OtpVerification = () => {
 
           {/* Timer & Resend OTP */}
           <div className="mt-4 text-center flex justify-between items-center">
-            <p className="text-gray-700">
+            <p className="text-white">
               Time remaining:{" "}
               <span className="text-blue-600 font-semibold">{counter}</span>s
             </p>
             {counter === 0 && (
               <button
                 onClick={handleResendOtp}
-                className="text-blue-600 font-medium hover:underline"
+                className="text-white font-medium hover:underline"
               >
                 Resend OTP
               </button>
@@ -109,7 +113,7 @@ const OtpVerification = () => {
           </div>
 
           {/* Contact Support Link */}
-          <p className="text-center text-gray-600 mt-6">
+          <p className="text-center text-white mt-6">
             Didn't receive the OTP?{" "}
             <Link
               to="/"

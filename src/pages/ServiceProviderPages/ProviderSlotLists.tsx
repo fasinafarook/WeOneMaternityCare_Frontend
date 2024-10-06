@@ -56,8 +56,8 @@ const SlotsList = () => {
   };
 
   const handleEditSlot = (slotId: string) => {
-    console.log('slotId',slotId);
-    
+    console.log("slotId", slotId);
+
     navigate(`/serviceProvider/edit-slot/${slotId}`);
   };
 
@@ -122,7 +122,7 @@ const SlotsList = () => {
 
       <div
         style={{
-          backgroundImage: `url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')`,
+          backgroundImage: `url('https://i.pinimg.com/originals/50/3f/f0/503ff087cf186814be004303e754fcdf.png')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           minHeight: "100vh",
@@ -132,194 +132,147 @@ const SlotsList = () => {
           justifyContent: "space-between",
         }}
       >
-        {/* <div className="absolute inset-0 bg-black opacity-60"></div>         */}
-        <h1
-          style={{
-            fontSize: "1.5rem",
-            fontWeight: "bold",
-            marginBottom: "1rem",
-          }}
-        >
-          Slots List
-        </h1>
-        <button
-          onClick={handleAddSlot}
-          style={{
-            padding: "0.75rem 1.5rem",
-            color: "#fff",
-            backgroundColor: "#007bff",
-            border: "none",
-            borderRadius: "0.25rem",
-            cursor: "pointer",
-            marginBottom: "1rem",
-          }}
-        >
-          Add Slot
-        </button>
-        <input
-          type="text"
-          placeholder="Search by title or date..."
-          value={searchQuery}
-          onChange={handleSearch}
-          style={{
-            width: "100%",
-            padding: "0.5rem",
-            border: "1px solid #ddd",
-            borderRadius: "0.25rem",
-            marginBottom: "1rem",
-          }}
-        />
-        {loading ? (
-          <TableShimmer />
-        ) : (
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              marginBottom: "5rem",
-              fontFamily: "sans-serif",
-              fontSize: "large",
-            }}
-          >
-            <thead>
-              <tr>
-                <th
-                  style={{ borderBottom: "1px solid #ddd", padding: "0.75rem" }}
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+            <div className="px-6 py-8">
+              <h1 className="text-2xl font-semibold text-gray-800 mb-4">
+                Slots List
+              </h1>
+              <div className="flex space-x-4 mb-4">
+                <button
+                  onClick={handleAddSlot}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
                 >
-                  Title
-                </th>
-                <th
-                  style={{ borderBottom: "1px solid #ddd", padding: "0.75rem" }}
-                >
-                  From
-                </th>
-                <th
-                  style={{ borderBottom: "1px solid #ddd", padding: "0.75rem" }}
-                >
-                  To
-                </th>
-                <th
-                  style={{ borderBottom: "1px solid #ddd", padding: "0.75rem" }}
-                >
-                  Price
-                </th>
-                <th
-                  style={{ borderBottom: "1px solid #ddd", padding: "0.75rem" }}
-                >
-                  Status
-                </th>
-                <th
-                  style={{ borderBottom: "1px solid #ddd", padding: "0.75rem" }}
-                >
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {slotsList.length > 0 ? (
-                slotsList.map((slot) =>
-                  slot.schedule.map((schedule, index) => (
-                    <tr key={`${slot._id}-${index}`}>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #ddd",
-                          padding: "0.75rem",
-                        }}
-                      >
-                        {schedule.title}
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #ddd",
-                          padding: "0.75rem",
-                        }}
-                      >
-                        {new Date(schedule.from).toLocaleString()}
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #ddd",
-                          padding: "0.75rem",
-                        }}
-                      >
-                        {new Date(schedule.to).toLocaleString()}
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #ddd",
-                          padding: "0.75rem",
-                        }}
-                      >
-                        ${schedule.price}
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #ddd",
-                          padding: "0.75rem",
-                          color: isExpired(
-                            new Date(schedule.from),
-                            schedule.status
-                          )
-                            ? "grey"
-                            : schedule.status === "open"
-                            ? "green"
-                            : "red",
-                        }}
-                      >
-                        {isExpired(new Date(schedule.from), schedule.status)
-                          ? "Expired"
-                          : schedule.status}
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #ddd",
-                          padding: "0.75rem",
-                        }}
-                      >
-                        {!isExpired(new Date(schedule.from), schedule.status) &&
-                          schedule.status === "open" && (
-                            <button
-                              onClick={() => handleEditSlot(slot._id)}
-                              style={{
-                                padding: "0.5rem 1rem",
-                                color: "#fff",
-                                backgroundColor: "#007bff",
-                                border: "none",
-                                borderRadius: "0.25rem",
-                                cursor: "pointer",
-                              }}
-                            >
-                              Edit
-                            </button>
-                          )}
-                      </td>
-                    </tr>
-                  ))
-                )
+                  Add Slot
+                </button>
+                {/* <input
+      type="text"
+      placeholder="Search by title or date..."
+      value={searchQuery}
+      onChange={handleSearch}
+      className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-150 ease-in-out"
+    /> */}
+              </div>
+
+              {loading ? (
+                <TableShimmer />
               ) : (
-                <tr>
-                  <td
-                    colSpan={6}
-                    style={{ textAlign: "center", padding: "1rem" }}
-                  >
-                    No slots available
-                  </td>
-                </tr>
+                <table
+                  style={{
+                    width: "100%",
+                    borderCollapse: "collapse",
+                    marginBottom: "5rem",
+                    fontFamily: "sans-serif",
+                    fontSize: "large",
+                  }}
+                >
+                  <thead className="bg-gray-100">
+                    <tr className="text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                      <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 hover:bg-gray-200 transition duration-150 ease-in-out">
+                        Title
+                      </th>
+                      <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 hover:bg-gray-200 transition duration-150 ease-in-out">
+                        From
+                      </th>
+                      <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 hover:bg-gray-200 transition duration-150 ease-in-out">
+                        To
+                      </th>
+                      <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 hover:bg-gray-200 transition duration-150 ease-in-out">
+                        Price
+                      </th>
+                      <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 hover:bg-gray-200 transition duration-150 ease-in-out">
+                        Status
+                      </th>
+                      <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 hover:bg-gray-200 transition duration-150 ease-in-out">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {slotsList.length > 0 ? (
+                      slotsList.map((slot) =>
+                        slot.schedule.map((schedule, index) => (
+                          <tr
+                            key={`${slot._id}-${index}`}
+                            className="hover:bg-gray-100 transition duration-150 ease-in-out"
+                          >
+                            <td className="border-b border-gray-200 px-6 py-4 text-left text-sm font-medium text-gray-800">
+                              {schedule.services}
+                            </td>
+                            <td className="border-b border-gray-200 px-6 py-4 text-left text-sm text-gray-600">
+                              {new Date(schedule.from).toLocaleString()}
+                            </td>
+                            <td className="border-b border-gray-200 px-6 py-4 text-left text-sm text-gray-600">
+                              {new Date(schedule.to).toLocaleString()}
+                            </td>
+                            <td className="border-b border-gray-200 px-6 py-4 text-left text-sm font-semibold text-gray-800">
+                              ${schedule.price.toFixed(2)}
+                            </td>
+                            <td
+                              className={`border-b border-gray-200 px-6 py-4 text-left text-sm font-semibold ${
+                                isExpired(
+                                  new Date(schedule.from),
+                                  schedule.status
+                                )
+                                  ? "text-gray-400"
+                                  : schedule.status === "open"
+                                  ? "text-green-600"
+                                  : "text-red-600"
+                              }`}
+                            >
+                              {isExpired(
+                                new Date(schedule.from),
+                                schedule.status
+                              )
+                                ? "Expired"
+                                : schedule.status}
+                            </td>
+                            <td className="border-b border-gray-200 px-6 py-4 text-center">
+                              {!isExpired(
+                                new Date(schedule.from),
+                                schedule.status
+                              ) && schedule.status === "open" ? (
+                                <button
+                                  onClick={() => handleEditSlot(slot._id)}
+                                  className="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700 transition duration-150 ease-in-out"
+                                >
+                                  Edit
+                                </button>
+                              ) : (
+                                <span className="text-gray-400">N/A</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))
+                      )
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan={6}
+                          className="text-center py-4 text-gray-500"
+                        >
+                          No slots available
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               )}
-            </tbody>
-          </table>
-        )}
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={(page) => {
-            setSearchParams({
-              page: page.toString(),
-              limit: limit.toString(),
-              search: searchQuery,
-            });
-          }}
-        />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={(page) => {
+                  setSearchParams({
+                    page: page.toString(),
+                    limit: limit.toString(),
+                    search: searchQuery,
+                  });
+                }}
+              />
+            </div>
+          </div>
+        </div>
       </div>
       <Footer />
       {showPopUp && (

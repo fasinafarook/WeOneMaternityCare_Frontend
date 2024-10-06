@@ -52,75 +52,74 @@ const UserLogin = () => {
       <div
         className="relative flex items-center justify-center w-full h-screen bg-cover bg-center"
         style={{
-          backgroundImage: `url('https://www.hmsmirdifhospital.ae/images/banner/500/what-is-a-gynecologist-min.jpg')`,
+          backgroundImage: `url('https://static.independent.co.uk/2023/07/12/11/12103020-d9e4b2e1-ff2f-478f-8bda-783b950117b3.jpg?quality=75&width=1200&auto=webp')`,
         }}
       >
         {/* Dark Overlay */}
-        {/* <div className="absolute inset-0 bg-black opacity-60"></div> */}
+        <div className="absolute inset-0 bg-black opacity-50"></div>
 
-        {/* Form Container */}
-        <div className="relative z-10 bg-white shadow-lg rounded-lg p-8 max-w-md w-full mx-4 transition-transform transform hover:scale-105 duration-300">
+        {/* Glassy Form Container */}
+        <div className="relative z-10 bg-grey bg-opacity-30 backdrop-blur-md border border-gray-200 shadow-lg rounded-lg p-6 max-w-md w-full mx-4 transition-transform transform hover:scale-105 duration-300">
           {/* Logo */}
-          <div className="text-center mb-6">
+          <div className="text-center mb-4">
             <Link to="/">
-              <img src={logo} alt="Logo" className="w-24 h-auto mx-auto" />
+              <img src={logo} alt="Logo" className="w-28 h-auto mx-auto" />
             </Link>
           </div>
 
           {/* Login Form */}
-          <p className="text-2xl font-bold text-center text-gray-800 mb-6">
+          <h2 className="text-2xl font-bold text-white text-center mb-4">
             Login as User
-          </p>
+          </h2>
 
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* Email Field */}
-            <div className="mb-6">
-              <label className="block text-gray-700 text-sm font-medium mb-2">
+            <div className="mb-4">
+              <label className="block text-white text-sm font-medium mb-1">
                 Email Address
               </label>
               <input
-                className={`text-gray-700 border ${
+                className={`text-gray-900 border ${
                   errors.email ? "border-red-500" : "border-gray-300"
-                } rounded-lg py-3 px-4 block w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
+                } rounded-lg py-2 px-3 block w-full focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all`}
                 type="email"
                 {...register("email", { required: "Email is required" })}
+                placeholder="Enter your email"
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.email.message}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
               )}
+              
             </div>
 
             {/* Password Field */}
-            <div className="mb-6">
-              <label className="block text-gray-700 text-sm font-medium mb-2">
+            <div className="mb-4">
+              <label className="block text-white text-sm font-medium mb-1">
                 Password
               </label>
               <input
-                className={`text-gray-700 border ${
+                className={`text-gray-900 border ${
                   errors.password ? "border-red-500" : "border-gray-300"
-                } rounded-lg py-3 px-4 block w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
+                } rounded-lg py-2 px-3 block w-full focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all`}
                 type="password"
                 {...register("password", { required: "Password is required" })}
+                placeholder="Enter your password"
               />
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.password.message}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
               )}
 
               {/* Links */}
               <div className="flex justify-between text-sm mt-2">
                 <Link
                   to="/serviceProvider/verify-login"
-                  className="text-gray-500 hover:text-blue-500 transition-colors"
+                  className="text-white hover:text-blue-500 transition-colors"
                 >
                   Login as Service Provider
                 </Link>
                 <Link
                   to="/user/forgot-password"
-                  className="text-gray-500 hover:text-blue-500 transition-colors"
+                  className="text-white hover:text-blue-500 transition-colors"
                 >
                   Forgot Password?
                 </Link>
@@ -128,8 +127,8 @@ const UserLogin = () => {
             </div>
 
             {/* Submit Button */}
-            <div className="mb-6">
-              <button className="bg-blue-600 text-white font-bold py-3 px-4 w-full rounded-lg hover:bg-blue-700 transition-transform transform hover:scale-105 duration-200">
+            <div className="mb-4">
+              <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-2 px-4 w-full rounded-lg shadow-md hover:from-blue-700 hover:to-blue-800 transition-transform transform hover:scale-105 duration-200">
                 Login
               </button>
             </div>
@@ -138,7 +137,7 @@ const UserLogin = () => {
             <div className="text-center">
               <Link
                 to="/user/client-register"
-                className="text-sm text-gray-500 hover:text-blue-600 transition-colors"
+                className="text-sm text-white hover:text-blue-600 transition-colors"
               >
                 Don&apos;t have an account yet?{" "}
                 <span className="text-blue-600 hover:underline">Sign Up</span>

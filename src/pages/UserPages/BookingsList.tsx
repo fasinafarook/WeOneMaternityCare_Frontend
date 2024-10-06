@@ -105,11 +105,16 @@ const OutsourcedBookings = () => {
     setSelectedBooking(booking);
     setOpenModal(true);
   };
-console.log('j');
+  console.log("j");
 
   const handleJoinCall = () => {
     if (selectedBooking) {
-      console.log("Room IDs:", selectedBooking.roomId, "User IDs:", selectedBooking.userId);
+      console.log(
+        "Room IDs:",
+        selectedBooking.roomId,
+        "User IDs:",
+        selectedBooking.userId
+      );
 
       navigate(
         `/user/video-call/${selectedBooking.roomId}/${selectedBooking.userId}`
@@ -142,7 +147,7 @@ console.log('j');
       <UserNavbar />
       <div
         style={{
-          backgroundImage: `url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')`,
+          backgroundImage: `url('https://i.pinimg.com/originals/50/3f/f0/503ff087cf186814be004303e754fcdf.png')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           minHeight: "100vh",
@@ -176,7 +181,8 @@ console.log('j');
                           "SCHEDULED ON",
                           "PRICE",
                           "STATUS",
-                          "ACTION",
+                          "Details",
+                          "Action",
                         ].map((header) => (
                           <th
                             key={header}
@@ -198,10 +204,10 @@ console.log('j');
                             className="hover:bg-blue-50 transition-colors duration-200 ease-in-out cursor-pointer"
                             onClick={() => handleOpenModal(booking)}
                           >
-                            <td className="px-2 py-3 text-xs md:text-sm font-medium text-gray-800 whitespace-nowrap">
+                            <td className="px-4 py-4 text-sm md:text-base font-medium text-gray-800 whitespace-nowrap">
                               {booking.title}
                             </td>
-                            <td className="px-2 py-3 text-xs md:text-sm text-gray-600 whitespace-nowrap">
+                            <td className="px-4 py-4 text-sm md:text-base text-gray-600 whitespace-nowrap">
                               {new Date(booking.date).toLocaleDateString(
                                 "en-US",
                                 {
@@ -211,13 +217,15 @@ console.log('j');
                                 }
                               )}
                             </td>
-                            <td className="px-2 py-3 text-xs md:text-sm text-gray-600 whitespace-nowrap">
+                            <td className="px-4 py-4 text-sm md:text-base text-gray-600 whitespace-nowrap">
                               <div className="flex items-center">
                                 <MdOutlineCurrencyRupee className="text-blue-500 mr-1" />
-                                <span>{booking.price}</span>
+                                <span className="font-semibold">
+                                  {booking.price}
+                                </span>
                               </div>
                             </td>
-                            <td className="px-2 py-3 whitespace-nowrap">
+                            <td className="px-4 py-4 whitespace-nowrap">
                               <span
                                 className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
                                   booking.status === "Completed"
@@ -230,25 +238,27 @@ console.log('j');
                                     ? "bg-gray-100 text-gray-800"
                                     : booking.status === "Refunded"
                                     ? "bg-red-100 text-red-800"
-                                    : ""
+                                    : "bg-gray-200 text-gray-600"
                                 }`}
                               >
                                 {booking.status}
                               </span>
-                              <td>
-                                <button
-                                  onClick={() => handleOpenModal(booking)}
-                                  className="px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition duration-150 ease-in-out"
-                                >
-                                  Booking Details
-                                </button>
-                              </td>
                             </td>
-                            <td className="px-2 py-3 whitespace-nowrap">
+                            <td className="px-4 py-4 whitespace-nowrap">
+                              <button
+                                onClick={() => handleOpenModal(booking)}
+                                className="px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition duration-150 ease-in-out shadow-md"
+                              >
+                                Booking Details
+                              </button>
+                            </td>
+                            <td className="px-4 py-4 whitespace-nowrap text-center">
                               {booking.status === "Refunded" ? (
-                                <span className="text-red-600">Refunded</span>
+                                <span className="text-blue-gray-800 font-semibold">
+                                  Refunded
+                                </span>
                               ) : booking.status === "Cancelled" ? (
-                                <span className="text-red-600">
+                                <span className="text-blue-gray-200 font-semibold">
                                   You are eligible for a refund
                                 </span>
                               ) : booking.status === "Expired" ? (
@@ -258,6 +268,10 @@ console.log('j');
                                 >
                                   Expired
                                 </button>
+                              ) : booking.status === "Completed" ? (
+                                <span className="text-green-700 font-semibold">
+                                  Booking Completed
+                                </span>
                               ) : (
                                 isCancellationAllowed(booking.fromTime) && (
                                   <button
@@ -266,7 +280,7 @@ console.log('j');
                                       setSelectedBooking(booking);
                                       setShowConfirmationModal(true);
                                     }}
-                                    className="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50 transition duration-150 ease-in-out"
+                                    className="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50 transition duration-150 ease-in-out shadow-md"
                                   >
                                     Cancel Slot
                                   </button>
@@ -329,6 +343,14 @@ console.log('j');
               Price: <MdOutlineCurrencyRupee className="inline" />{" "}
               {selectedBooking?.price}
             </p>
+            {!isTimeWithinSlot(
+              selectedBooking.fromTime,
+              selectedBooking.toTime
+            ) ? (
+              <div className="text-red-500 mb-2">
+                You can join the call only during the booking time.
+              </div>
+            ) : null}
           </div>
         </DialogBody>
         <DialogFooter>
@@ -340,25 +362,20 @@ console.log('j');
             Close
           </Button>
           {selectedBooking?.status === "Scheduled" && (
-            // <Button
-            //   color="green"
-            //   onClick={handleJoinCall}
-            //   disabled={
-            //     !isTimeWithinSlot(
-            //       selectedBooking.fromTime,
-            //       selectedBooking.toTime
-            //     )
-            //   } // Disable button outside the slot time
-            // >
-            //   Join Call
-            // </Button>
-            <Button
-  color="green"
-  onClick={handleJoinCall}
->
-  Join Call
-</Button>
-
+            <div>
+              <Button
+                color="green"
+                onClick={handleJoinCall}
+                disabled={
+                  !isTimeWithinSlot(
+                    selectedBooking.fromTime,
+                    selectedBooking.toTime
+                  ) // Disable button outside the slot time
+                }
+              >
+                Join Call
+              </Button>
+            </div>
           )}
         </DialogFooter>
       </Dialog>

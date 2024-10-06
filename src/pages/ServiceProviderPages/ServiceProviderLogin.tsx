@@ -51,29 +51,29 @@ const SericeProviderLogin = () => {
     <>
       {/* Main container with full-screen background image */}
       <div
-        className="relative flex items-center justify-center h-screen bg-cover bg-center"
+        className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage:
-            'url("https://www.hmsmirdifhospital.ae/images/banner/500/what-is-a-gynecologist-min.jpg")',
+            "url('https://img.freepik.com/premium-photo/smiling-woman-doctor-shows-pictures-tablet-pregnant-young-woman-hospital_358354-8964.jpg')",
         }}
       >
-        {/* Overlay for dimming the background */}
-        {/* <div className="absolute inset-0 bg-black opacity-50"></div> */}
 
-        {/* Centered content */}
-        <div className="relative z-10 w-full max-w-md p-8 bg-white/90 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300">
-          {/* Logo at the top */}
+         {/* Dark Overlay */}
+         <div className="absolute inset-0 bg-black opacity-50"></div>
+
+        {/* Form Container */}
+        <div className="relative z-10 bg-grey bg-opacity-30 backdrop-blur-md border border-gray-200 shadow-lg rounded-lg p-6 max-w-md w-full mx-4 transition-transform transform hover:scale-105 duration-300">
           <Link to="/">
             <img
               src={logo}
               alt="Logo"
-              className="block mx-auto mb-6"
-              style={{ width: "100px", height: "70px" }}
+              className="block mx-auto mb-4"
+              style={{ width: "80px", height: "60px" }}
             />
           </Link>
 
           {/* Title */}
-          <p className="text-2xl text-gray-800 font-semibold text-center mb-6">
+          <p className="text-2xl text-white font-semibold text-center mb-6">
             Login as Service Provider
           </p>
 
@@ -81,7 +81,7 @@ const SericeProviderLogin = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* Email field */}
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label className="block text-white text-sm font-bold mb-2">
                 Email Address
               </label>
               <input
@@ -96,7 +96,7 @@ const SericeProviderLogin = () => {
 
             {/* Password field */}
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label className="block text-white text-sm font-bold mb-2">
                 Password
               </label>
               <input
@@ -112,13 +112,13 @@ const SericeProviderLogin = () => {
               <div className="flex justify-between mt-2 text-sm">
                 <Link
                   to="/user/verify-login"
-                  className="text-gray-500 hover:text-gray-900"
+                  className="text-white hover:text-gray-900"
                 >
                   Login As User
                 </Link>
                 <Link
                   to="/serviceProvider/forgot-password"
-                  className="text-gray-500 hover:text-gray-900"
+                  className="text-white hover:text-gray-900"
                 >
                   Forgot Password?
                 </Link>
@@ -140,7 +140,7 @@ const SericeProviderLogin = () => {
           <div className="mt-4 text-center">
             <Link
               to="/serviceProvider/serviceProvider-register"
-              className="text-sm text-gray-500 hover:text-blue-700"
+              className="text-sm text-white hover:text-blue-700"
             >
               Don&apos;t have an account yet?{" "}
               <span className="text-blue-600">Sign Up</span>

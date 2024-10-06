@@ -2,15 +2,11 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { verifyDetails, fetchCategories } from "../../api/serviceProviderAPI";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Footer from "../../components/common_pages/Footer";
-import logo from "../../../src/public/images/logo.jpeg";
 import AppNavbar from "../../components/common_pages/ProviderHeader";
 
 interface IFormInput {
-  // name: string;
-  // email: string;
-  // mobile: number;
   service: string;
   specialization: string;
   qualification: string;
@@ -56,17 +52,17 @@ const ServiceProviderDetails = () => {
   return (
     <>
     <AppNavbar/>
-      <div
-        className="min-h-screen bg-cover bg-center bg-no-repeat flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8"
+    <div
+        className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage:
-            "url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')",
+            "url('https://img.freepik.com/premium-photo/smiling-woman-doctor-shows-pictures-tablet-pregnant-young-woman-hospital_358354-8964.jpg')",
         }}
       >
-        <Link to="/" className="mb-8">
-          <img src={logo} alt="Logo" className="mx-auto h-20 w-auto" />
-        </Link>
-        <div className="bg-white bg-opacity-90 shadow-xl rounded-lg overflow-hidden w-full max-w-4xl">
+      
+      <div className="relative z-10 bg-grey bg-opacity-30 backdrop-blur-md border border-gray-200 shadow-lg rounded-lg w-full max-w-4xl transition-transform transform hover:scale-105 duration-300">
+
+        {/* <div className="bg-white bg-opacity-90 shadow-xl rounded-lg overflow-hidden w-full max-w-4xl"> */}
           <div className="px-4 py-5 bg-gradient-to-r from-[#2A2A72] to-[#009FFD] sm:px-6">
             <h2 className="text-center text-3xl font-extrabold text-white">
               Set Your Profile
@@ -81,44 +77,11 @@ const ServiceProviderDetails = () => {
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              {/* <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-                <input
-                  id="name"
-                  type="text"
-                  {...register("name", { required: true })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  placeholder="Name"
-                />
-                {errors.name && <p className="mt-2 text-sm text-red-600">This field is required</p>}
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                <input
-                  id="email"
-                  type="email"
-                  {...register("email", { required: true })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  placeholder="Email"
-                />
-                {errors.email && <p className="mt-2 text-sm text-red-600">This field is required</p>}
-              </div>
-              <div>
-                <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">Mobile</label>
-                <input
-                  id="mobile"
-                  type="tel"
-                  {...register("mobile", { required: true, pattern: /^\d+$/ })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  placeholder="Mobile Number"
-                />
-                {errors.mobile && <p className="mt-2 text-sm text-red-600">This field is required and should be a number</p>}
-              </div> */}
-
+              
               <div>
                 <label
                   htmlFor="service"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-black"
                 >
                   Service
                 </label>
@@ -148,7 +111,7 @@ const ServiceProviderDetails = () => {
               <div>
                 <label
                   htmlFor="specialization"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-black"
                 >
                   Specialization
                 </label>
@@ -168,7 +131,7 @@ const ServiceProviderDetails = () => {
               <div>
                 <label
                   htmlFor="qualification"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-black"
                 >
                   Qualification
                 </label>
@@ -188,7 +151,7 @@ const ServiceProviderDetails = () => {
               <div>
                 <label
                   htmlFor="expYear"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-black"
                 >
                   Years of Experience
                 </label>
@@ -208,7 +171,7 @@ const ServiceProviderDetails = () => {
               <div>
                 <label
                   htmlFor="location"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-black"
                 >
                   Location
                 </label>
@@ -230,7 +193,7 @@ const ServiceProviderDetails = () => {
               <div>
                 <label
                   htmlFor="profilePicture"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-black"
                 >
                   Profile Picture
                 </label>
@@ -249,7 +212,7 @@ const ServiceProviderDetails = () => {
               <div>
                 <label
                   htmlFor="experienceCrt"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-black"
                 >
                   Experience Certificate
                 </label>
@@ -268,7 +231,7 @@ const ServiceProviderDetails = () => {
               <div>
                 <label
                   htmlFor="rate"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   Rate (₹ per hour)
                 </label>

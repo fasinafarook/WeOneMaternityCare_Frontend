@@ -43,10 +43,10 @@ const AdminLogin = () => {
         }}
       >
         {/* Overlay for dark effect */}
-        {/* <div className="absolute inset-0 bg-black opacity-50"></div> */}
+        <div className="absolute inset-0 bg-black opacity-50"></div>
 
         {/* Form container */}
-        <div className="relative z-10 max-w-md w-full p-8 bg-white bg-opacity-20 backdrop-blur-md rounded-lg shadow-lg border border-white">
+        <div className="relative z-10 bg-grey bg-opacity-30 backdrop-blur-md border border-gray-200 shadow-lg rounded-lg p-6 max-w-md w-full mx-4 transition-transform transform hover:scale-105 duration-300">
           {/* Logo */}
           <Link to="/" className="flex justify-center mb-6">
             <img

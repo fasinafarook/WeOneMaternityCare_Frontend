@@ -48,11 +48,15 @@ const ServiceProviderSignUp = () => {
         className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage:
-            "url('https://www.hmsmirdifhospital.ae/images/banner/500/what-is-a-gynecologist-min.jpg')",
+            "url('https://img.freepik.com/premium-photo/smiling-woman-doctor-shows-pictures-tablet-pregnant-young-woman-hospital_358354-8964.jpg')",
         }}
       >
+
+         {/* Dark Overlay */}
+         <div className="absolute inset-0 bg-black opacity-50"></div>
+
         {/* Form Container */}
-        <div className="relative z-10 bg-white bg-opacity-90 backdrop-blur-sm p-6 rounded-lg shadow-lg w-full sm:max-w-md md:max-w-lg lg:w-1/2 transition-transform transform hover:scale-105 duration-300">
+        <div className="relative z-10 bg-grey bg-opacity-30 backdrop-blur-md border border-gray-200 shadow-lg rounded-lg p-6 max-w-md w-full mx-4 transition-transform transform hover:scale-105 duration-300">
           <Link to="/">
             <img
               src={logo}
@@ -61,10 +65,10 @@ const ServiceProviderSignUp = () => {
               style={{ width: "80px", height: "60px" }}
             />
           </Link>
-          <h3 className="text-xl md:text-2xl font-semibold text-center text-gray-700 mb-4">
+          <h3 className="text-xl md:text-2xl font-semibold text-center text-white mb-4">
             Service Provider Sign Up
           </h3>
-          <p className="text-sm text-gray-500 text-center mb-4">
+          <p className="text-sm text-white text-center mb-4">
             Hey, enter your details to create your account.
           </p>
 
@@ -72,7 +76,7 @@ const ServiceProviderSignUp = () => {
             <div className="flex flex-col gap-3">
               {/* Name Input */}
               <input
-                className="w-full px-4 py-2 md:py-3 rounded-lg font-medium bg-gray-100 border border-gray-300 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                className="w-full px-4 py-2 md:py-3 rounded-lg font-medium bg-gray-100 border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all "
                 type="text"
                 placeholder="Enter your name"
                 {...register("name", {
@@ -88,7 +92,7 @@ const ServiceProviderSignUp = () => {
 
               {/* Email Input */}
               <input
-                className="w-full px-4 py-2 md:py-3 rounded-lg font-medium bg-gray-100 border border-gray-300 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                className="w-full px-4 py-2 md:py-3 rounded-lg font-medium bg-gray-100 border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
                 type="email"
                 placeholder="Enter your email"
                 {...register("email", {
@@ -102,7 +106,7 @@ const ServiceProviderSignUp = () => {
 
               {/* Mobile Input */}
               <input
-                className="w-full px-4 py-2 md:py-3 rounded-lg font-medium bg-gray-100 border border-gray-300 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                className="w-full px-4 py-2 md:py-3 rounded-lg font-medium bg-gray-100 border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
                 type="tel"
                 placeholder="Enter your phone"
                 {...register("mobile", {
@@ -116,7 +120,7 @@ const ServiceProviderSignUp = () => {
 
               {/* Password Input */}
               <input
-                className="w-full px-4 py-2 md:py-3 rounded-lg font-medium bg-gray-100 border border-gray-300 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                className="w-full px-4 py-2 md:py-3 rounded-lg font-medium bg-gray-100 border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
                 type="password"
                 placeholder="Password"
                 {...register("password", {
@@ -146,7 +150,7 @@ const ServiceProviderSignUp = () => {
               </button>
 
               {/* Redirect to Login */}
-              <p className="mt-4 text-center text-gray-500 text-xs">
+              <p className="mt-4 text-center text-white text-xs">
                 Already have an account?{" "}
                 <Link to="/serviceProvider/verify-login">
                   <span className="text-blue-600 font-semibold">Sign in</span>

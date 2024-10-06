@@ -2,14 +2,29 @@ body, html {
     display: block !important;
   }
   
-.bg-image {
-    background-image: url('https://images.pexels.com/photos/7282632/pexels-photo-7282632.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
-    height: 100vh;
-    width: 100%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
+  .bg-image {
+    background-image: url('https://madisonwomenshealth.com/wp-content/uploads/2021/03/giving-birth-labor-delivery-tips-first-time-moms-newborn-baby.jpg');
+    height: 100vh; /* Full viewport height */
+    width: 100%; /* Full width */
+    background-repeat: no-repeat; /* Prevents repetition */
+    background-size: cover; /* Ensures the image covers the entire element */
+    background-attachment: fixed; /* Keeps the background image fixed while scrolling */
+    background-position: center; /* Centers the image */
 }
+
+@media (max-width: 768px) {
+    .bg-image {
+        background-attachment: scroll; /* Changes to scroll for smaller devices for better performance */
+        height: 80vh; /* Adjust height for smaller screens if needed */
+    }
+}
+
+@media (max-width: 576px) {
+    .bg-image {
+        height: 60vh; /* Further adjust height for mobile screens */
+    }
+}
+
 
 .dropdown ::after {
     display: none !important;
@@ -27,9 +42,7 @@ h2 {
     text-decoration: none;
 }
 
-.btn-get-start {
-    background-color: rgb(18, 14, 14, 0.566);
-}
+
 
 .service_description {
     text-align: justify;
@@ -40,3 +53,48 @@ h2 {
 
 }
 
+h1 {
+    font-family: 'Poppins', sans-serif; /* Or any other stylish font */
+    font-weight: 500; /* Medium weight */
+    font-size: 2rem; /* You can adjust the size */
+    line-height: 1.2; /* Adjust line spacing for better readability */
+  }
+  
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 1.5rem; /* Adjust font size for smaller screens */
+    }
+  }
+  
+  @media (max-width: 576px) {
+    h1 {
+      font-size: 1.2rem; /* Further adjust for mobile screens */
+    }
+  }
+  
+  .btn-get-start {
+    font-family: 'Poppins', sans-serif; /* Stylish font */
+    font-weight: 500; /* Medium font weight */
+    font-size: 1rem; /* Base font size */
+    background-color: #f5f5f5; /* Light hash background color */
+    border-color: #ddd; /* Light border */
+    padding: 0.75rem 1rem; /* Padding for a neat look */
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+  }
+  
+  .btn-get-start:hover {
+    background-color: #6a697f; /* Darker shade on hover */
+  }
+  
+  @media (max-width: 768px) {
+    .btn-get-start {
+      font-size: 0.875rem; /* Adjust font size for medium devices */
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .btn-get-start {
+      font-size: 0.75rem; /* Further adjust font size for small devices */
+    }
+  }
+  

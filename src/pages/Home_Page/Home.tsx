@@ -9,9 +9,11 @@ import img2 from "../../../src/public/images/img2.jpeg";
 import img7 from "../../../src/public/images/img3.jpeg";
 import img5 from "../../../src/public/images/img4.jpeg";
 import Footer from "../../components/common_pages/Footer";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleUser, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleUser,
+  faRightToBracket,
+} from "@fortawesome/free-solid-svg-icons";
 
 // Define any props here if needed
 interface HomeProps {}
@@ -44,7 +46,18 @@ const Home: React.FC<HomeProps> = () => {
               id="dropdown-basic"
             >
               <h1 className=" text-secondary">
-              <FontAwesomeIcon icon={faCircleUser}   style={{ height: "40px", width: "50px" }}/>
+                <FontAwesomeIcon
+                  icon={faCircleUser}
+                  style={{
+                    height: "40px",
+                    width: "50px",
+                    fontFamily: "Poppins, sans-serif",
+                    margin: "-8px 0",
+                    alignItems: "center",
+                    color: "black",
+                  }}
+                />
+                Login
               </h1>
             </Dropdown.Toggle>
             <Dropdown.Menu>
@@ -56,26 +69,71 @@ const Home: React.FC<HomeProps> = () => {
           </Dropdown>
         </div>
         <div className="d-flex justify-content-center align-items-center flex-column mt-5">
-          <h1 className=" righteous-regular text-light fw-bold mt-5">
-            Begin your child's journey with Us
+          <h1
+            className="text-light"
+            style={{
+              fontFamily: "Righteous, sans-serif", // Stylish font
+              fontWeight: 600, // Semibold weight
+              marginTop: "5rem", // Top margin
+              fontSize: "2rem", // Default font size
+              textAlign: "center", // Center the text
+              lineHeight: "1.4", // Line height for readability
+              color: "#ffffff", // Light text color
+            }}
+          >
+            <span
+              style={{
+                fontSize: "2.5rem", // Larger font size for the main title
+                display: "block", // Display block for line break
+              }}
+            >
+              Welcome to WeOne MaternityCare
+            </span>
+
+            <span
+              style={{
+                fontSize: "1.5rem", // Medium font size for the subtitle
+                display: "block", // Display block for line break
+              }}
+            >
+              Your trusted partner in pregnancy care and women's health.
+            </span>
+
+            <span
+              style={{
+                fontSize: "2rem", // Default size for the third line
+                display: "block", // Display block for line break
+              }}
+            >
+              Begin your child's journey with Us
+            </span>
           </h1>
+
           <Link
             to="/user/verify-login"
             className="d-flex justify-content-center align-items-center login-link"
           >
-            <button className="btn border text-light w-100 btn-get-start mt-3">
-            Get Started <FontAwesomeIcon icon={faRightToBracket} />
+            <button
+              className="btn text-light w-100 btn-get-start mt-3"
+              style={{
+                backgroundColor: "#6a697f",
+                borderColor: "#ddd",
+                fontFamily: "Poppins, sans-serif",
+                fontSize: "1rem",
+              }}
+            >
+              Get Started <FontAwesomeIcon icon={faRightToBracket} />
             </button>
           </Link>
         </div>
       </div>
 
-      <div className="container mt-5 mb-5  " >
+      <div className="container mt-5 mb-5  ">
         <Row>
           <Col md={6}>
             <img
               src="https://images.pexels.com/photos/3398674/pexels-photo-3398674.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-              style={{ height: "400px", width: "100%", borderRadius: "40px"  }}
+              style={{ height: "400px", width: "100%", borderRadius: "40px" }}
               alt="about us"
             />
           </Col>
@@ -292,7 +350,6 @@ const Home: React.FC<HomeProps> = () => {
         </Container>
         </div> */}
       <Footer />
-
     </>
   );
 };

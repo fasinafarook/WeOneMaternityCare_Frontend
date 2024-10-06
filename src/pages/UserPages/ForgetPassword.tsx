@@ -56,11 +56,13 @@ const ForgotPassword: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center"
-      style={{
-        backgroundImage: `url('https://www.healthymummy.com/wp-content/uploads/2016/10/Pregnant-woman-in-hospital-1.jpg')`,
-      }}
-    >
+        className="relative flex items-center justify-center w-full h-screen bg-cover bg-center"
+        style={{
+          backgroundImage: `url('https://static.independent.co.uk/2023/07/12/11/12103020-d9e4b2e1-ff2f-478f-8bda-783b950117b3.jpg?quality=75&width=1200&auto=webp')`,
+        }}
+      >
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black opacity-50"></div>
       <Link to="/">
         <img
           src={logo}
@@ -68,12 +70,12 @@ const ForgotPassword: React.FC = () => {
           className="absolute top-6 left-6 w-24 h-auto"
         />
       </Link>
-      <div className="bg-white bg-opacity-90 rounded-2xl shadow-2xl p-8 max-w-md w-full">
-        <div className="text-center">
+      <div className="relative z-10 bg-grey bg-opacity-30 backdrop-blur-md border border-gray-200 shadow-lg rounded-lg p-6 max-w-md w-full mx-4 transition-transform transform hover:scale-105 duration-300">
+      <div className="text-center">
           <h2 className="mt-6 text-3xl font-extrabold text-[#142057]">
             {showResetForm ? "Reset Your Password" : "Forgot your password?"}
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-white">
             {showResetForm
               ? "Enter the OTP and your new password"
               : "No worries! We will send you reset instructions."}
@@ -101,7 +103,7 @@ const ForgotPassword: React.FC = () => {
         <div className="mt-6 text-center">
           <Link
             to="/user/verify-login"
-            className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+            className="text-sm font-medium text-white hover:text-indigo-500"
           >
             Remember your password? Log in
           </Link>
@@ -123,7 +125,7 @@ const EmailForm: React.FC<{
     <div>
       <label
         htmlFor="email"
-        className="block text-sm font-medium text-gray-700"
+        className="block text-sm font-medium text-white"
       >
         Email address
       </label>
@@ -200,7 +202,7 @@ const InputField: React.FC<{
   validationRules: any;
 }> = ({ id, type, label, register, errors, validationRules }) => (
   <div>
-    <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+    <label htmlFor={id} className="block text-sm font-medium text-white">
       {label}
     </label>
     <div className="mt-1">
