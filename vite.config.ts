@@ -1,8 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-console.log('okk');
-
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
@@ -12,7 +10,7 @@ export default defineConfig({
   },
   
 })
-console.log('done');
+console.log('done...');
 
 
 // import { defineConfig } from 'vite';
