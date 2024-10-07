@@ -343,14 +343,6 @@ const OutsourcedBookings = () => {
               Price: <MdOutlineCurrencyRupee className="inline" />{" "}
               {selectedBooking?.price}
             </p>
-            {!isTimeWithinSlot(
-              selectedBooking.fromTime,
-              selectedBooking.toTime
-            ) ? (
-              <div className="text-red-500 mb-2">
-                You can join the call only during the booking time.
-              </div>
-            ) : null}
           </div>
         </DialogBody>
         <DialogFooter>
@@ -373,9 +365,14 @@ const OutsourcedBookings = () => {
                   ) // Disable button outside the slot time
                 }
               >
+                 <div className="text-red-500 mb-2">
+                You can join the call only during the booking time.
+              </div>
                 Join Call
               </Button>
+             
             </div>
+            
           )}
         </DialogFooter>
       </Dialog>
