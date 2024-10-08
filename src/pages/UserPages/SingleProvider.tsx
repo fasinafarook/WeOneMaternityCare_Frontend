@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import {
   FiUser,
   FiMail,
-  FiPhone,
+  // FiPhone,
   FiBriefcase,
   FiClock,
   FiBook,
@@ -114,11 +114,11 @@ const ProfileSidebar: React.FC<{ serviceProvider: ServiceProviderDetails }> = ({
     />
     <DetailItem icon={<FiUser />} label="Name" value={serviceProvider.name} />
     <DetailItem icon={<FiMail />} label="Email" value={serviceProvider.email} />
-    <DetailItem
+    {/* <DetailItem
       icon={<FiPhone />}
       label="Mobile"
       value={serviceProvider.mobile.toString()}
-    />
+    /> */}
   </div>
 );
 

@@ -104,6 +104,13 @@ interface userDetails {
   name: string;
   mobile: string;
   email?: string;
+  bp?: string;
+  sugar?: string;
+  weight?: number;
+  age?: number;
+  blood?: string;
+  userAddress?: string;
+  additionalNotes?: string;
 }
 export const editProfile = async (details: userDetails) => {
   try {
@@ -346,5 +353,44 @@ export const resetPassword = async (otp: string, password: string) => {
   } catch (error: any) {
     console.log("inseide catch in api: ", error.response.data);
     return error.response.data;
+  }
+};
+interface UserDetails {
+  userAddress?: string;
+  profilePicture?: []; 
+  bp?: string;
+  sugar?: string;
+  weight?: number;
+  age?: number;
+  blood?: string;
+  additionalNotes?: string;
+}
+
+export const verfiyUserDetails = async (userDetails: UserDetails) => {
+  try {
+    const formData = new FormData();
+    for (const key in userDetails) {
+      console.log("user:", userDetails);
+
+      if (userDetails.hasOwnProperty(key)) {
+        const value = userDetails[key as keyof UserDetails];
+        if (key === "profilePicture") {
+          formData.append(key, (value as File[])[0]);
+        } else {
+          formData.append(key, value as string);
+        }
+      }
+    }
+
+    const response = await Api.post(userEndpoint.verifyDetails, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    console.log("resp:", response);
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
   }
 };

@@ -2,17 +2,22 @@ import React, { useEffect, useState } from "react";
 import {
   fetchApprovedAndUnblockedProviders,
   fetchCategories,
+  getProfileDetails
 } from "../../api/userAPI";
 import { ServiceProvider } from "../../types/SeviceProviders";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../components/common_pages/Footer";
 import UserNavbar from "../../components/common_pages/UserHeader";
+import { updateUserInfo } from "../../redux/slice/authSlice";
+import { useDispatch } from "react-redux";
+
 
 const ApprovedProviders: React.FC = () => {
   const [providers, setProviders] = useState<ServiceProvider[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const dispatch = useDispatch();
   const [filteredProviders, setFilteredProviders] = useState<ServiceProvider[]>(
     []
   );
@@ -72,8 +77,27 @@ const ApprovedProviders: React.FC = () => {
     navigate(`/user/serviceProviderDetails/${providerId}`);
   };
 
-  const handleViewSlots = (providerId: string) => {
-    navigate(`/user/get-service-providers-slots-details/${providerId}`);
+
+  const fetchUserInfo = async () => {
+    const response = await getProfileDetails();
+    if (response.success) {
+      dispatch(updateUserInfo(response.data));
+      return response.data;
+    }
+    return null;
+  };
+  // const handleViewSlots = (providerId: string) => {
+  //   navigate(`/user/get-service-providers-slots-details/${providerId}`);
+  // };
+  const handleViewSlots = async (providerId: string) => {
+    const userInfo = await fetchUserInfo();
+    console.log("userinfo", userInfo);
+
+    if (userInfo.hasCompletedDetails !== true) {
+      navigate(`/user/details`);
+    } else {
+      navigate(`/user/get-service-providers-slots-details/${providerId}`);
+    }
   };
 
   // Pagination logic

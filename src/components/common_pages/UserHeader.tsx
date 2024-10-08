@@ -11,6 +11,7 @@ import { getProfileDetails, getUserCompletedBookings } from "../../api/userAPI";
 import Swal from 'sweetalert2';
 
 interface ProfileData {
+  profilePicture:string;
   name: string;
   userId: string; // Add userId here
 }
@@ -124,8 +125,15 @@ const UserNavbar: React.FC = () => {
           </Nav>
           <Nav className="d-flex align-items-center">
             <Nav.Link as={Link} to="/user/get-profile" style={{ display: "flex", alignItems: "center", color: "white" }}>
-              <FaUserCircle size={30} /> {/* Adjusted icon size */}
-              <span style={{ marginLeft: "10px", color: "white" }}>
+            {profileData?.profilePicture ? (
+        <img
+          src={profileData.profilePicture}
+          alt="Profile"
+          style={{ width: 30, height: 30, borderRadius: '50%' }} // Adjust image size
+        />
+      ) : (
+        <FaUserCircle size={30} /> // Fallback icon with size 30
+      )}              <span style={{ marginLeft: "10px", color: "white" }}>
                 {profileData?.name || "Profile"}
               </span>
             </Nav.Link>

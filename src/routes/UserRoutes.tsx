@@ -20,6 +20,7 @@ import ClientDashboard from "../pages/UserPages/UserDashboard";
 import BlogList from "../pages/UserPages/Blogs";
 import WebinarsList from "../pages/UserPages/Webinars";
 import UserVideoCall from "../pages/UserPages/videoCall";
+import UserDetails from "../pages/UserPages/UserDetails";
 import { UserProtectedRoute, PublicUserProtectedRoute } from "../components/PrivetProtected";
 
 const UserRoutes: React.FC = () => {
@@ -36,6 +37,7 @@ const UserRoutes: React.FC = () => {
 
       <Route element={<UserProtectedRoute />}>
         <Route path="/user/home" element={<ClientDashboard />} />
+        <Route path="/user/details" element={<UserDetails />} />
         <Route path="/webinars" element={<WebinarsList />} />
         <Route path="/blogs" element={<BlogList />} />
         <Route path="/user/about" element={<About />} />

@@ -34,6 +34,8 @@ const userEndpoint = {
     submitComplaint: '/api/user/complaints',
     getComplaints: '/api/user/complaints', 
 
+    verifyDetails:'/api/user/Details'
+
     
 };
 

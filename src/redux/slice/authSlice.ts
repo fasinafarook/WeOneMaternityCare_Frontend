@@ -28,6 +28,13 @@ const authSlice = createSlice({
       localStorage.removeItem("userInfo");
     },
 
+    updateUserInfo: (state, action) => {
+      state.userInfo = {
+        ...state.userInfo,
+        ...action.payload,
+      };
+      localStorage.setItem("userInfo", JSON.stringify(state.userInfo));
+    },
     // setBlockedStatus: (state, action) => {
     //     // state.isBlocked = action.payload
     // }
@@ -72,5 +79,6 @@ export const {
   setServiceProviderCredentials,
   serviceProviderLogout,
   updateServiceProviderInfo,
+  updateUserInfo
 } = authSlice.actions;
 export default authSlice.reducer;
