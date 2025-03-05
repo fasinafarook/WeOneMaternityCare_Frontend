@@ -40,7 +40,7 @@ const useSocket = () => {
     if (userId) {
       console.log('Initializing socket with userId:', userId);  
       
-      const socket = io('https://weone-maternitycare.online', {
+      const socket = io('https://weonematernitycare.onrender.com', {
         query: { userId },
         transports: ['websocket'],
       });
