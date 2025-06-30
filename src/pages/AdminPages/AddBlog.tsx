@@ -12,6 +12,7 @@ interface BlogData {
   content: string;
 }
 
+
 const AddBlog = () => {
   const navigate = useNavigate();
   const {
